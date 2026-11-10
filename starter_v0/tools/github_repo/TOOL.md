@@ -19,4 +19,4 @@ about a repo's popularity or activity. To read the README or page content, use
 
 Optional env: `GITHUB_TOKEN` raises the rate limit from 60 to 5000 requests per hour.
 
-Status: skeleton (returns a NotImplementedError dict).
+Status: implemented. Tests: `tests/test_tool_github_repo.py` (offline, mocked HTTP).

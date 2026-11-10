@@ -1,7 +1,113 @@
 {
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "description": "Case do NHÓM tự viết thêm: 5 single-turn + 5 multi-turn, kiểm tra định tuyến hn_search, citations, phân biệt Hacker News vs Twitter, và xử lý tham số.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_hn_search_dev_community",
+      "phase": "B",
+      "suite": "group",
+      "query": "Dân Hacker News đang bàn gì về Rust?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "hn_search", "args": {"query": "Rust"}}]},
+      "metadata": {"skill": "routing_hn_search", "difficulty": "easy", "what_it_tests": "Dân HN/dev bàn gì -> hn_search, không phải social_search."}
+    },
+    {
+      "id": "G02_hn_search_recent_sort",
+      "phase": "B",
+      "suite": "group",
+      "query": "Bài mới nhất trên HN về Llama",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "hn_search", "args": {"query": "Llama", "sort": "recent"}}]},
+      "metadata": {"skill": "arg_sort_recent", "difficulty": "medium", "what_it_tests": "'Bài mới nhất trên HN' -> hn_search sort='recent'."}
+    },
+    {
+      "id": "G03_citations_arxiv_lookup",
+      "phase": "B",
+      "suite": "group",
+      "query": "Paper 2106.09685 được cite bao nhiêu lần?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "citations", "args": {"paper": "2106.09685"}}]},
+      "metadata": {"skill": "routing_citations_arxiv", "difficulty": "easy", "what_it_tests": "Hỏi số trích dẫn của paper theo arXiv id -> citations, không phải papers."}
+    },
+    {
+      "id": "G04_citations_by_title",
+      "phase": "B",
+      "suite": "group",
+      "query": "Bài báo Attention Is All You Need có bao nhiêu lượt trích dẫn?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "citations", "args": {"paper": "Attention Is All You Need"}}]},
+      "metadata": {"skill": "routing_citations_title", "difficulty": "medium", "what_it_tests": "Hỏi số trích dẫn theo tiêu đề bài báo cụ thể -> citations."}
+    },
+    {
+      "id": "G05_out_of_scope_cooking",
+      "phase": "B",
+      "suite": "group",
+      "query": "Hướng dẫn mình cách nấu món phở bò truyền thống Hà Nội.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "out_of_scope_cooking", "difficulty": "easy", "what_it_tests": "Câu hỏi nấu ăn ngoài phạm vi research -> không gọi tool, từ chối lịch sự."}
+    },
+    {
+      "id": "GM01_papers_then_citations",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tìm paper về LoRA"},
+        {"role": "user", "content": "Paper 2106.09685 được cite bao nhiêu lần?"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "citations", "args": {"paper": "2106.09685"}}]},
+      "metadata": {"skill": "multiturn_paper_to_citations", "difficulty": "hard", "what_it_tests": "Lượt 1 tìm paper, lượt 2 hỏi số cite của paper -> gọi citations."}
+    },
+    {
+      "id": "GM02_hn_search_switch_sort",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tìm các thảo luận nổi bật về Mojo trên Hacker News"},
+        {"role": "user", "content": "Lấy bài mới nhất thôi, đừng lấy bài cũ"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "hn_search", "args": {"query": "Mojo", "sort": "recent"}}]},
+      "metadata": {"skill": "multiturn_hn_switch_sort", "difficulty": "hard", "what_it_tests": "Multi-turn: chuyển sort từ popular sang recent khi user yêu cầu bài mới nhất."}
+    },
+    {
+      "id": "GM03_hn_search_limit_update",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Cho mình xem thảo luận về AI agents trên Hacker News"},
+        {"role": "user", "content": "Chỉ lấy đúng 3 bài thôi nhé"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "hn_search", "args": {"query": "AI agents", "limit": 3}}]},
+      "metadata": {"skill": "multiturn_hn_limit", "difficulty": "hard", "what_it_tests": "Multi-turn: cập nhật limit=3 cho hn_search."}
+    },
+    {
+      "id": "GM04_clarify_then_hn_query",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tìm thảo luận trên Hacker News giúp mình"},
+        {"role": "user", "content": "Về chủ đề Python 3.13"}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "hn_search", "args": {"query": "Python 3.13"}}]},
+      "metadata": {"skill": "multiturn_clarify_then_hn", "difficulty": "medium", "what_it_tests": "Lượt 1 thiếu từ khóa, lượt 2 bổ sung từ khóa -> gọi hn_search."}
+    },
+    {
+      "id": "GM05_citations_doi_correction",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Paper 1706.03762 được trích dẫn bao nhiêu lần?"},
+        {"role": "user", "content": "À mình gõ nhầm, tra paper 2106.09685 mới đúng"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "citations", "args": {"paper": "2106.09685"}}]},
+      "metadata": {"skill": "multiturn_citations_correction", "difficulty": "hard", "what_it_tests": "Multi-turn: đính chính arXiv id từ 1706.03762 thành 2106.09685."}
+    }
+  ]
 }

@@ -5,15 +5,14 @@ kind: live_api
 provider: OpenAlex API
 requires_env: []
 inputs: [paper]
-outputs: [items]
+outputs: [paper, items]
 side_effect: false
+requires_confirmation: false
 ---
-# citations
 
-Owner: TV4.
+# Tool: citations
 
-Returns the citation count, year and venue of one paper from OpenAlex.
-`paper` is a title or an arXiv id. Use it when the user asks how often a
-specific paper is cited. To find papers on a topic, use `papers`.
+Tra cứu số trích dẫn (citation count), năm xuất bản, nơi công bố (venue), và độ ảnh hưởng của một paper khoa học qua OpenAlex API.
+Dùng khi: Hỏi paper cụ thể được trích dẫn bao nhiêu, đăng ở đâu.
+Không dùng khi: Tìm paper theo chủ đề (dùng papers).
 
-Status: skeleton (returns a NotImplementedError dict).

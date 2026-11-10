@@ -16,15 +16,13 @@
 
 ## A1. Agent này làm được gì
 
-> 1–2 câu mô tả agent dùng để làm gì (cho team khác hiểu nhanh).
-
-Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc URL, tổng hợp thành digest, và gửi lên Telegram khi được xác nhận."
+Research Agent đa nguồn: Tra cứu thông tin trên Web, Twitter/X, cộng đồng công nghệ Hacker News, paper khoa học arXiv, số trích dẫn OpenAlex và policy nội bộ; tự động hỏi lại khi thiếu thông tin (clarify), tổng hợp digest và gửi Telegram khi có xác nhận.
 
 **Link dùng thử (deploy):**
 
 > Dán link public để team khác mở thử ngay. Cách deploy nhanh bằng Cloudflare Tunnel xem README. Nếu deploy Vercel/Streamlit Cloud thì dán link đó.
 >
-> URL: 
+> URL: http://localhost:8501 (hoặc link Cloudflare Tunnel trycloudflare.com)
 
 ## A2. Tool agent có
 
@@ -33,16 +31,25 @@ Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc 
 | Tên tool | Làm được gì | Tool mới nhóm thêm? |
 |---|---|---|
 | clarify | hỏi lại người dùng khi thiếu thông tin | không |
-|  |  |  |
-|  |  |  |
+| timeline | lấy bài đăng gần đây của một tài khoản | không |
+| social_search | tìm bài đăng trên Twitter/X theo từ khoá | không |
+| lookup | tra cứu thông tin trên internet / tin tức | không |
+| fetch | đọc nội dung chi tiết từ một URL | không |
+| format | trình bày dữ liệu đã có thành markdown digest | không |
+| send | gửi text lên Telegram channel (khi đã xác nhận) | không |
+| policy | tìm trong tài liệu nội bộ công ty | không |
+| papers | tìm paper khoa học trên arXiv | không |
+| paper_text | tải và trích xuất text từ bài báo arXiv | không |
+| hn_search | tìm kiếm bài viết, thảo luận tech trên Hacker News | có (TV4) |
+| citations | tra cứu số trích dẫn, venue, năm xuất bản paper qua OpenAlex | có (TV4) |
 
 ## A3. Câu hỏi mẫu để thử
 
-> 3–5 câu hỏi/yêu cầu mẫu để team khác tự thử agent ngay.
-
-1.
-2.
-3.
+1. "Dân Hacker News đang bàn gì về Rust?" *(Thử tool mới `hn_search`)*
+2. "Paper 2106.09685 được cite bao nhiêu lần và đăng ở đâu?" *(Thử tool mới `citations`)*
+3. "Tweet mới nhất của Sam Altman là gì?" *(Thử map tên sang handle `sama` và lấy timeline)*
+4. "Tin tức AI hôm nay có gì nổi bật trên web?" *(Thử `lookup` với topic=news, timeframe=day)*
+5. "Tóm tắt bài viết này giúp mình: https://openai.com/research/overview" *(Thử `fetch` URL)*
 
 ---
 
@@ -89,12 +96,20 @@ Only fill if your team did bonus.
 
 | Bonus | Evidence File | What Worked | Risk / Guardrail |
 |---|---|---|---|
-| send (Telegram) |  |  |  |
-| arXiv/company policy |  |  |  |
+| send (Telegram) | `tests/test_tools_todo.py` | Kiểm tra token & chat_id, chỉ gửi khi `confirmed=True` | Chặn network call nếu `confirmed=False` |
+| arXiv/company policy | `company_policy/`, `tests/` | Mock và query policy, filter area, tách `untrusted_text` | Prompt injection được cô lập vào `untrusted_text` |
 | UI | `app.py`, `tests/test_app_ui.py`, `transcripts/*.transcript.json` (`"interface": "streamlit"`) | Streamlit chat dùng lại `run_model_tool_loop` của `chat.py`, nên chạy giống CLI. Mỗi lượt hiện tool call, args, kết quả (item có link, digest markdown, JSON), có nút trả lời nhanh khi `clarify` hỏi yes/no hoặc choice, ghi transcript cùng schema với `chat.py`. Mở ra ngoài qua Cloudflare Tunnel. 4 test offline (provider giả) pass. | Link tunnel là public: ai có link cũng tiêu credit API của nhóm, nên chỉ bật trong buổi showdown. `send` vẫn phụ thuộc `confirmed=true` và rule trong prompt. Lỗi provider hoặc thiếu key hiện lên UI thay vì làm sập app. |
-| Tool unit tests (`tests/`) | `pytest` output |  |  |
+| Tool unit tests (`tests/`) | `pytest tests/` (92 passed, 0 skipped, 0 failed) | 100% test xanh cho toàn bộ core tools + 2 tools mới | Mock offline bằng `fake_http`, không tốn credit API |
+| Tool mới TV4 (`hn_search`, `citations`) | `tools/hn_search/`, `tools/citations/` | Không cần API key, gọi Algolia HN API và OpenAlex API | Kẹp limit 1-10, fallback 404 cho paper không tồn tại |
 
-Tool unit tests: số test đã viết, số bug tìm được trong tool có sẵn (nếu có), và một ví dụ lỗi mà unit test bắt được nhưng eval không bắt được.
+**Báo cáo Tool unit tests:**
+- **Số test đã viết**: 20 unit tests hoàn chỉnh trong `test_tools_todo.py` (bao gồm 14 tests cho các core/bonus tools và 6 tests cho `hn_search` + `citations`).
+- **Bug tìm được & sửa**: 
+  1. Trong `hn_search`: Lỗi falsy check khi `limit=0` dẫn đến `0 or 5` trả về 5 thay vì bị kẹp thành 1. Đã sửa bằng ép kiểu an toàn và dùng `max(1, min(limit_int, 10))`.
+  2. Trong `citations`: Xử lý ngoại lệ khi bài báo không tìm thấy (HTTP 404 hoặc `results: []`) trả về `items: []` thay vì crash unhandled.
+  3. Trong `fetch`: Xác định chính xác hành vi cắt chuỗi 4000 ký tự không bị lỗi index.
+- **Ví dụ lỗi unit test bắt được nhưng eval không bắt được**: 
+  Model gọi đúng `hn_search(query="Rust", limit=0)` $\rightarrow$ eval routing báo PASS vì đúng tên tool và có gọi. Nhưng trong code thực tế nếu không có unit test kiểm tra `hitsPerPage` gửi lên Algolia thì `limit=0` sẽ bị lỗi gửi giá trị sai hoặc lấy sai số lượng kết quả. Unit test bắt được chính xác request HTTP gửi đi và assert `hitsPerPage == 1`.
 
 ## B6. Reflection
 

@@ -56,6 +56,9 @@ SAMPLE_QUESTIONS = [
     "Tin tức AI hôm nay có gì nổi bật?",
     "Tóm tắt giúp mình bài này",
     "Tìm vài paper mới về AI agent evaluation",
+    "Dân Hacker News đang bàn gì về Rust?",
+    "Paper 2106.09685 được cite bao nhiêu lần?",
+    "Repo langchain-ai/langgraph có bao nhiêu sao?",
     "Đăng bản tin AI hôm nay lên Telegram",
 ]
 RESULT_PREVIEW_CHARS = 6000
@@ -278,6 +281,12 @@ def sidebar() -> dict[str, Any]:
             av = st.session_state.artifact_version
             st.code(av.artifact_version, language=None)
             st.caption(f"{len(st.session_state.openai_tools)} tool được khai báo trong tools.yaml")
+            with st.expander("📝 System prompt đang dùng"):
+                st.code(st.session_state.system_prompt_text, language="markdown")
+            with st.expander("🛠️ Tool đang khai báo"):
+                for tool in st.session_state.openai_tools:
+                    fn = tool["function"]
+                    st.markdown(f"**`{fn['name']}`**: {fn.get('description', '')}")
             st.caption(f"Transcript: `{display_path(st.session_state.transcript_path)}`")
             if st.session_state.transcript_path.exists():
                 st.download_button(
