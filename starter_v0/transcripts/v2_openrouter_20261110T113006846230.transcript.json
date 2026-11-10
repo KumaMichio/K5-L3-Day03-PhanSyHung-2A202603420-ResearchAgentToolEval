@@ -1,0 +1,491 @@
+{
+  "transcript_id": "v2_openrouter_20261110T113006846230",
+  "version": "v2",
+  "artifact_version": "v2+peb1c8179815b+t5b22a2476d41",
+  "prompt_hash": "eb1c8179815bd79d34de7d326420bb99b3072e6e8ae96464c02d4411f905fc68",
+  "tools_hash": "5b22a2476d41b989d5dc1e54f24ce7890e781909deb2f7afafb856ab53a6d7c0",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-oss-120b",
+  "system_prompt": "artifacts\\system_prompt.md",
+  "tools": "artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T11:30:06",
+  "updated_at": "2026-11-10T11:33:45",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T11:30:34",
+      "user": "Tìm vài paper mới về AI agent evaluation",
+      "status": "answered",
+      "assistant_text": "Here’s a concise, bullet‑point digest of the most recent papers (late 2026) that focus on evaluating AI agents:\n\n- **Finite‑Sample Probabilistic Safety Certification for AI‑Based Grid‑Edge Coordination** – Proposes a statistical safety‑certification framework for multi‑agent reinforcement‑learning controllers in power‑grid coordination, using exact binomial inference and adversarial attacks to bound unsafe‑operation probability.  \n  → [arxiv.org/abs/2609.28182v2](http://arxiv.org/abs/2609.28182v2)\n\n- **Agent Self‑Improvement with Frozen Weights: The Added Value and Limits of Failure Traces** – Studies whether “notes” derived from an agent’s failure traces can improve a frozen‑weight model; finds modest gains in controlled customer‑service tasks but limited transfer to broader scenarios.  \n  → [arxiv.org/abs/2611.11342v1](http://arxiv.org/abs/2611.11342v1)\n\n- **Linking Event‑sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation** – Introduces a citation framework that ties chatbot‑generated data claims to their analytic provenance, showing improved user trust and accuracy judgments in crowdsourced experiments.  \n  → [arxiv.org/abs/2611.11325v1](http://arxiv.org/abs/2611.11325v1)\n\n- **ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping** – Presents the first benchmark for measuring AI agents’ adherence to website terms‑of‑service and robots.txt, revealing low compliance rates across popular agents and notable over‑refusal behavior.  \n  → [arxiv.org/abs/2611.11306v1](http://arxiv.org/abs/2611.11306v1)\n\n- **How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints** – Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success while respecting a limited evaluation budget, achieving tighter bounds and better coverage than baselines.  \n  → [arxiv.org/abs/2611.11279v1](http://arxiv.org/abs/2611.11279v1)\n\nThese papers collectively address safety certification, self‑improvement from failure traces, provenance‑linked explanations, legal compliance, and budget‑aware efficiency—key dimensions of modern AI agent evaluation.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "papers",
+              "args": {
+                "max_results": 5,
+                "query": "AI agent evaluation",
+                "sort_by": "lastUpdatedDate"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "papers",
+              "args": {
+                "max_results": 5,
+                "query": "AI agent evaluation",
+                "sort_by": "lastUpdatedDate"
+              },
+              "result": {
+                "tool": "arxiv_search",
+                "query": "AI agent evaluation",
+                "api_query": "all:AI AND all:agent AND all:evaluation",
+                "total_results": 6035,
+                "items": [
+                  {
+                    "arxiv_id": "2609.28182v2",
+                    "title": "Finite-Sample Probabilistic Safety Certification for AI-Based Grid-Edge Coordination",
+                    "summary": "Coordinating a large population of flexible grid-edge devices can alleviate the need for time-consuming and capital-intensive network upgrades. Artificial intelligence (AI)-based control methods such as multi-agent reinforcement learning or imitation learning are promising to this coordination due to their real-time decision scalability. However, system operators still need an independent and rigorous way to decide whether a given AI system is safe enough for deployment. This paper develops a \\emph{finite-sample} probabilistic safety certification framework for AI-based grid-edge coordination. The central idea is to reduce the complete input--AI--decision--evaluation workflow to a binary unsafe outcome under an operator-defined safety specification, and then use exact binomial inference to certify the corresponding unsafe operation probability. Given a set of held-out calibration scenarios, the framework returns the tightest one-sided upper certificate and an accept/reject deployment criterion that controls the probability of false safety certification. Because the certification is for the calibration distribution that may \\emph{deviate} from the future operation, we further combine the nominal certificate with physically interpretable sample-space adversarial attacks, a concept widely used in AI models to investigate their fragility. Case studies on grid-edge flexibility coordination with 1{,}000-agent AI models (independent parameters) verify the safety guarantee and the value of integrating adversarial attacks into a rolling-window training-certification-deployment flow.",
+                    "authors": [
+                      "Yihong Zhou",
+                      "Hanbin Yang",
+                      "Thomas Morstyn"
+                    ],
+                    "published": "2026-09-23T14:24:46Z",
+                    "updated": "2026-11-08T14:10:09Z",
+                    "url": "http://arxiv.org/abs/2609.28182v2",
+                    "pdf_url": "https://arxiv.org/pdf/2609.28182v2",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.AI",
+                    "categories": [
+                      "cs.AI",
+                      "cs.LG",
+                      "eess.SY"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.11342v1",
+                    "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+                    "summary": "We evaluate whether an AI agent's harness, the notes around its model, can learn from the agent's failure traces beyond a matched search that never sees them. It can, but less than it looks. We tested an open 9-billion-parameter model with fixed weights; a larger teacher model wrote its notes. On generated customer-service decisions, where both note writers were told the target rules, notes based on the agent's mistakes improved accuracy by 4.0 percentage points over notes from the same process with the mistakes withheld. That process alone, trying and keeping better-scoring notes, reached about 60% of the total improvement. In full customer-service conversations the same notes showed no demonstrated improvement. Separately, a strict screen of single lessons admitted two customer-service lessons, still awaiting tests on new data, and one tool-use lesson, written without seeing the agent's mistakes, which showed no demonstrated gain on new tool-use tasks. A neutral note with no procedure scored higher than the learned lessons (exploratory). A blind audit judged 146 of 240 tool-use test items defective.",
+                    "authors": [
+                      "Arkid Mitra"
+                    ],
+                    "published": "2026-11-08T12:39:45Z",
+                    "updated": "2026-11-08T12:39:45Z",
+                    "url": "http://arxiv.org/abs/2611.11342v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.11342v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.LG",
+                    "categories": [
+                      "cs.LG",
+                      "cs.AI",
+                      "cs.CL"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.11325v1",
+                    "title": "Linking Event-sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation",
+                    "summary": "Chatbots are increasingly used to analyze temporal event sequences of which website clickstreams are among the most common. Explanations are essential for understanding claims about event-sequence data. However, existing systems often require programming expertise to interpret these explanations and fail to explain the data processes underlying the data claims. We introduce a technique for linking a data claim to its analytic provenance (i.e., the analytic steps and results that produced it). It has two components: a reference table that records analytic steps and results in addressable cells, and a citation format that binds each claim to one or more cells. To operationalize this technique for clickstream analysis, we curated a set of analytic operations for clickstream analysis, organized them through a pivot-table abstraction, and developed tools that an AI agent can invoke to create a reference table and assemble a natural language response with cited data claims. To evaluate how citations affect users' assessment of data claims, we conducted two crowdsourced experiments with 90 participants each. The experiments showed that participants perceived correct data claims to be more accurate with citations when compared with no explanations, and that they perceived incorrect data claims to be less accurate with citations when compared with code and no explanations.",
+                    "authors": [
+                      "Po-Ming Law",
+                      "Jianheng Ouyang",
+                      "Nguyen-Truong Thinh",
+                      "Weizhi Li",
+                      "Arpit Narechania"
+                    ],
+                    "published": "2026-11-08T12:00:56Z",
+                    "updated": "2026-11-08T12:00:56Z",
+                    "url": "http://arxiv.org/abs/2611.11325v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.11325v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.HC",
+                    "categories": [
+                      "cs.HC"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.11306v1",
+                    "title": "ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping",
+                    "summary": "AI agents deployed on the open web are becoming more capable of performing actions that may breach contractual provisions and violate computer security laws. In this paper, we introduce ScrapeBench, the first agentic benchmark for empirically evaluating the legal compliance of AI agents with website scraping policies, namely terms of service (ToS) and robots.txt directives. Across widely used closed-weight and open-weight AI agents, we find that most agents exhibit low compliance rates (< 5%) when instructed to scrape websites in our sample of 1,626 popular websites that explicitly prohibit scraping. In addition, we observe that even where AI agents actively check the applicable ToS and robots.txt, they continue to exhibit low compliance rates. Conversely, in our sample of 269 websites that do not prohibit scraping, we observe that agents sometimes refuse to scrape despite it being lawful, such as Claude Opus 4.6 exhibiting an over-refusal rate of 98.5%. Our human baseline experiments (n = 180 participants) suggest that humans exhibit compliance rates comparable to AI agents but over-refuse at much higher rates.",
+                    "authors": [
+                      "Joseph Marvin Imperial",
+                      "Daniel Slate",
+                      "Noam Kolt"
+                    ],
+                    "published": "2026-11-08T11:19:18Z",
+                    "updated": "2026-11-08T11:19:18Z",
+                    "url": "http://arxiv.org/abs/2611.11306v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.11306v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.CL",
+                    "categories": [
+                      "cs.CL",
+                      "cs.AI"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.11279v1",
+                    "title": "How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints",
+                    "summary": "We evaluate AI agents in an online setting where tasks arrive sequentially and, before running each task, we construct an upper predictive bound on its \\emph{time-to-success}---the number of interactions until the task is completed successfully. Under a limited budget, some runs are stopped early, so their time-to-success is unobserved (right-censored), and the correctness of the bound may be unknown. We introduce \\emph{\\textbf{PR}edictive Bounds for \\textbf{O}nline \\textbf{B}udget \\textbf{E}fficiency} (\\texttt{PROBE}), a method for constructing calibrated upper predictive bounds while adaptively allocating a limited budget across agent tasks to reduce the anticipated coverage deficit. Our method calibrates the bounds online using inverse-probability-weighted feedback together with a correction designed to minimize coverage deficit while remaining unbiased. We prove that \\texttt{PROBE} provides a coverage guarantee for any finite time horizon while satisfying the budget constraint. Experiments on software engineering, retrieval-augmented generation, and instruction following show that \\texttt{PROBE} attains a coverage rate closer to the target level with tighter predictive bounds than a calibrated baseline.",
+                    "authors": [
+                      "Roy Maor Lotan",
+                      "Shai Feldman",
+                      "Yaniv Romano"
+                    ],
+                    "published": "2026-11-08T10:05:38Z",
+                    "updated": "2026-11-08T10:05:38Z",
+                    "url": "http://arxiv.org/abs/2611.11279v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.11279v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.LG",
+                    "categories": [
+                      "cs.LG"
+                    ]
+                  }
+                ],
+                "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "format",
+              "args": {
+                "headline": "Recent Papers on AI Agent Evaluation (Late 2026)",
+                "items": [
+                  {
+                    "authors": "Yihong Zhou, Hanbin Yang, Thomas Morstyn",
+                    "summary": "Introduces a finite‑sample probabilistic safety certification framework for AI‑based multi‑agent control in power‑grid coordination, using binomial inference and adversarial attacks to certify safety under operator‑defined specifications.",
+                    "title": "Finite-Sample Probabilistic Safety Certification for AI-Based Grid-Edge Coordination",
+                    "url": "http://arxiv.org/abs/2609.28182v2"
+                  },
+                  {
+                    "authors": "Arkid Mitra",
+                    "summary": "Examines whether notes derived from an agent’s failure traces can improve a frozen‑weight model’s performance, finding modest gains in controlled customer‑service tasks but limited transfer to broader scenarios.",
+                    "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+                    "url": "http://arxiv.org/abs/2611.11342v1"
+                  },
+                  {
+                    "authors": "Po‑Ming Law, Jianheng Ouyang, Nguyen‑Truong Thinh, Weizhi Li, Arpit Narechania",
+                    "summary": "Presents a citation framework that ties chatbot‑generated data claims to their analytic provenance, showing improved user trust and accuracy judgments in crowdsourced experiments.",
+                    "title": "Linking Event‑sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation",
+                    "url": "http://arxiv.org/abs/2611.11325v1"
+                  },
+                  {
+                    "authors": "Joseph Marvin Imperial, Daniel Slate, Noam Kolt",
+                    "summary": "Introduces the first benchmark for measuring AI agents’ adherence to website terms‑of‑service and robots.txt, revealing low compliance rates across popular agents and highlighting over‑refusal behavior.",
+                    "title": "ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping",
+                    "url": "http://arxiv.org/abs/2611.11306v1"
+                  },
+                  {
+                    "authors": "Roy Maor Lotan, Shai Feldman, Yaniv Romano",
+                    "summary": "Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success while respecting a limited evaluation budget, achieving tighter bounds and better coverage than baselines.",
+                    "title": "How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints",
+                    "url": "http://arxiv.org/abs/2611.11279v1"
+                  }
+                ],
+                "template": "bullets"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "format",
+              "args": {
+                "headline": "Recent Papers on AI Agent Evaluation (Late 2026)",
+                "items": [
+                  {
+                    "authors": "Yihong Zhou, Hanbin Yang, Thomas Morstyn",
+                    "summary": "Introduces a finite‑sample probabilistic safety certification framework for AI‑based multi‑agent control in power‑grid coordination, using binomial inference and adversarial attacks to certify safety under operator‑defined specifications.",
+                    "title": "Finite-Sample Probabilistic Safety Certification for AI-Based Grid-Edge Coordination",
+                    "url": "http://arxiv.org/abs/2609.28182v2"
+                  },
+                  {
+                    "authors": "Arkid Mitra",
+                    "summary": "Examines whether notes derived from an agent’s failure traces can improve a frozen‑weight model’s performance, finding modest gains in controlled customer‑service tasks but limited transfer to broader scenarios.",
+                    "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+                    "url": "http://arxiv.org/abs/2611.11342v1"
+                  },
+                  {
+                    "authors": "Po‑Ming Law, Jianheng Ouyang, Nguyen‑Truong Thinh, Weizhi Li, Arpit Narechania",
+                    "summary": "Presents a citation framework that ties chatbot‑generated data claims to their analytic provenance, showing improved user trust and accuracy judgments in crowdsourced experiments.",
+                    "title": "Linking Event‑sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation",
+                    "url": "http://arxiv.org/abs/2611.11325v1"
+                  },
+                  {
+                    "authors": "Joseph Marvin Imperial, Daniel Slate, Noam Kolt",
+                    "summary": "Introduces the first benchmark for measuring AI agents’ adherence to website terms‑of‑service and robots.txt, revealing low compliance rates across popular agents and highlighting over‑refusal behavior.",
+                    "title": "ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping",
+                    "url": "http://arxiv.org/abs/2611.11306v1"
+                  },
+                  {
+                    "authors": "Roy Maor Lotan, Shai Feldman, Yaniv Romano",
+                    "summary": "Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success while respecting a limited evaluation budget, achieving tighter bounds and better coverage than baselines.",
+                    "title": "How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints",
+                    "url": "http://arxiv.org/abs/2611.11279v1"
+                  }
+                ],
+                "template": "bullets"
+              },
+              "result": {
+                "tool": "render_digest",
+                "template": "bullets",
+                "markdown": "- Introduces a finite‑sample probabilistic safety certification framework for AI‑based multi‑agent control in power‑grid coordination, using binomial inference and adversarial attacks to certify safety under operator‑defined specifications. - [arxiv.org](http://arxiv.org/abs/2609.28182v2)\n- Examines whether notes derived from an agent’s failure traces can improve a frozen‑weight model’s performance, finding modest gains in controlled customer‑service tasks but limited transfer to broader scenarios. - [arxiv.org](http://arxiv.org/abs/2611.11342v1)\n- Presents a citation framework that ties chatbot‑generated data claims to their analytic provenance, showing improved user trust and accuracy judgments in crowdsourced experiments. - [arxiv.org](http://arxiv.org/abs/2611.11325v1)\n- Introduces the first benchmark for measuring AI agents’ adherence to website terms‑of‑service and robots.txt, revealing low compliance rates across popular agents and highlighting over‑refusal behavior. - [arxiv.org](http://arxiv.org/abs/2611.11306v1)\n- Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success while respecting a limited evaluation budget, achieving tighter bounds and better coverage than baselines. - [arxiv.org](http://arxiv.org/abs/2611.11279v1)",
+                "item_count": 5
+              }
+            }
+          ]
+        },
+        {
+          "round": 3,
+          "assistant_text": "Here’s a concise, bullet‑point digest of the most recent papers (late 2026) that focus on evaluating AI agents:\n\n- **Finite‑Sample Probabilistic Safety Certification for AI‑Based Grid‑Edge Coordination** – Proposes a statistical safety‑certification framework for multi‑agent reinforcement‑learning controllers in power‑grid coordination, using exact binomial inference and adversarial attacks to bound unsafe‑operation probability.  \n  → [arxiv.org/abs/2609.28182v2](http://arxiv.org/abs/2609.28182v2)\n\n- **Agent Self‑Improvement with Frozen Weights: The Added Value and Limits of Failure Traces** – Studies whether “notes” derived from an agent’s failure traces can improve a frozen‑weight model; finds modest gains in controlled customer‑service tasks but limited transfer to broader scenarios.  \n  → [arxiv.org/abs/2611.11342v1](http://arxiv.org/abs/2611.11342v1)\n\n- **Linking Event‑sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation** – Introduces a citation framework that ties chatbot‑generated data claims to their analytic provenance, showing improved user trust and accuracy judgments in crowdsourced experiments.  \n  → [arxiv.org/abs/2611.11325v1](http://arxiv.org/abs/2611.11325v1)\n\n- **ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping** – Presents the first benchmark for measuring AI agents’ adherence to website terms‑of‑service and robots.txt, revealing low compliance rates across popular agents and notable over‑refusal behavior.  \n  → [arxiv.org/abs/2611.11306v1](http://arxiv.org/abs/2611.11306v1)\n\n- **How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints** – Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success while respecting a limited evaluation budget, achieving tighter bounds and better coverage than baselines.  \n  → [arxiv.org/abs/2611.11279v1](http://arxiv.org/abs/2611.11279v1)\n\nThese papers collectively address safety certification, self‑improvement from failure traces, provenance‑linked explanations, legal compliance, and budget‑aware efficiency—key dimensions of modern AI agent evaluation.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "papers",
+          "args": {
+            "max_results": 5,
+            "query": "AI agent evaluation",
+            "sort_by": "lastUpdatedDate"
+          },
+          "result": {
+            "tool": "arxiv_search",
+            "query": "AI agent evaluation",
+            "api_query": "all:AI AND all:agent AND all:evaluation",
+            "total_results": 6035,
+            "items": [
+              {
+                "arxiv_id": "2609.28182v2",
+                "title": "Finite-Sample Probabilistic Safety Certification for AI-Based Grid-Edge Coordination",
+                "summary": "Coordinating a large population of flexible grid-edge devices can alleviate the need for time-consuming and capital-intensive network upgrades. Artificial intelligence (AI)-based control methods such as multi-agent reinforcement learning or imitation learning are promising to this coordination due to their real-time decision scalability. However, system operators still need an independent and rigorous way to decide whether a given AI system is safe enough for deployment. This paper develops a \\emph{finite-sample} probabilistic safety certification framework for AI-based grid-edge coordination. The central idea is to reduce the complete input--AI--decision--evaluation workflow to a binary unsafe outcome under an operator-defined safety specification, and then use exact binomial inference to certify the corresponding unsafe operation probability. Given a set of held-out calibration scenarios, the framework returns the tightest one-sided upper certificate and an accept/reject deployment criterion that controls the probability of false safety certification. Because the certification is for the calibration distribution that may \\emph{deviate} from the future operation, we further combine the nominal certificate with physically interpretable sample-space adversarial attacks, a concept widely used in AI models to investigate their fragility. Case studies on grid-edge flexibility coordination with 1{,}000-agent AI models (independent parameters) verify the safety guarantee and the value of integrating adversarial attacks into a rolling-window training-certification-deployment flow.",
+                "authors": [
+                  "Yihong Zhou",
+                  "Hanbin Yang",
+                  "Thomas Morstyn"
+                ],
+                "published": "2026-09-23T14:24:46Z",
+                "updated": "2026-11-08T14:10:09Z",
+                "url": "http://arxiv.org/abs/2609.28182v2",
+                "pdf_url": "https://arxiv.org/pdf/2609.28182v2",
+                "source": "arxiv.org",
+                "primary_category": "cs.AI",
+                "categories": [
+                  "cs.AI",
+                  "cs.LG",
+                  "eess.SY"
+                ]
+              },
+              {
+                "arxiv_id": "2611.11342v1",
+                "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+                "summary": "We evaluate whether an AI agent's harness, the notes around its model, can learn from the agent's failure traces beyond a matched search that never sees them. It can, but less than it looks. We tested an open 9-billion-parameter model with fixed weights; a larger teacher model wrote its notes. On generated customer-service decisions, where both note writers were told the target rules, notes based on the agent's mistakes improved accuracy by 4.0 percentage points over notes from the same process with the mistakes withheld. That process alone, trying and keeping better-scoring notes, reached about 60% of the total improvement. In full customer-service conversations the same notes showed no demonstrated improvement. Separately, a strict screen of single lessons admitted two customer-service lessons, still awaiting tests on new data, and one tool-use lesson, written without seeing the agent's mistakes, which showed no demonstrated gain on new tool-use tasks. A neutral note with no procedure scored higher than the learned lessons (exploratory). A blind audit judged 146 of 240 tool-use test items defective.",
+                "authors": [
+                  "Arkid Mitra"
+                ],
+                "published": "2026-11-08T12:39:45Z",
+                "updated": "2026-11-08T12:39:45Z",
+                "url": "http://arxiv.org/abs/2611.11342v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.11342v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.LG",
+                "categories": [
+                  "cs.LG",
+                  "cs.AI",
+                  "cs.CL"
+                ]
+              },
+              {
+                "arxiv_id": "2611.11325v1",
+                "title": "Linking Event-sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation",
+                "summary": "Chatbots are increasingly used to analyze temporal event sequences of which website clickstreams are among the most common. Explanations are essential for understanding claims about event-sequence data. However, existing systems often require programming expertise to interpret these explanations and fail to explain the data processes underlying the data claims. We introduce a technique for linking a data claim to its analytic provenance (i.e., the analytic steps and results that produced it). It has two components: a reference table that records analytic steps and results in addressable cells, and a citation format that binds each claim to one or more cells. To operationalize this technique for clickstream analysis, we curated a set of analytic operations for clickstream analysis, organized them through a pivot-table abstraction, and developed tools that an AI agent can invoke to create a reference table and assemble a natural language response with cited data claims. To evaluate how citations affect users' assessment of data claims, we conducted two crowdsourced experiments with 90 participants each. The experiments showed that participants perceived correct data claims to be more accurate with citations when compared with no explanations, and that they perceived incorrect data claims to be less accurate with citations when compared with code and no explanations.",
+                "authors": [
+                  "Po-Ming Law",
+                  "Jianheng Ouyang",
+                  "Nguyen-Truong Thinh",
+                  "Weizhi Li",
+                  "Arpit Narechania"
+                ],
+                "published": "2026-11-08T12:00:56Z",
+                "updated": "2026-11-08T12:00:56Z",
+                "url": "http://arxiv.org/abs/2611.11325v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.11325v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.HC",
+                "categories": [
+                  "cs.HC"
+                ]
+              },
+              {
+                "arxiv_id": "2611.11306v1",
+                "title": "ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping",
+                "summary": "AI agents deployed on the open web are becoming more capable of performing actions that may breach contractual provisions and violate computer security laws. In this paper, we introduce ScrapeBench, the first agentic benchmark for empirically evaluating the legal compliance of AI agents with website scraping policies, namely terms of service (ToS) and robots.txt directives. Across widely used closed-weight and open-weight AI agents, we find that most agents exhibit low compliance rates (< 5%) when instructed to scrape websites in our sample of 1,626 popular websites that explicitly prohibit scraping. In addition, we observe that even where AI agents actively check the applicable ToS and robots.txt, they continue to exhibit low compliance rates. Conversely, in our sample of 269 websites that do not prohibit scraping, we observe that agents sometimes refuse to scrape despite it being lawful, such as Claude Opus 4.6 exhibiting an over-refusal rate of 98.5%. Our human baseline experiments (n = 180 participants) suggest that humans exhibit compliance rates comparable to AI agents but over-refuse at much higher rates.",
+                "authors": [
+                  "Joseph Marvin Imperial",
+                  "Daniel Slate",
+                  "Noam Kolt"
+                ],
+                "published": "2026-11-08T11:19:18Z",
+                "updated": "2026-11-08T11:19:18Z",
+                "url": "http://arxiv.org/abs/2611.11306v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.11306v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.CL",
+                "categories": [
+                  "cs.CL",
+                  "cs.AI"
+                ]
+              },
+              {
+                "arxiv_id": "2611.11279v1",
+                "title": "How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints",
+                "summary": "We evaluate AI agents in an online setting where tasks arrive sequentially and, before running each task, we construct an upper predictive bound on its \\emph{time-to-success}---the number of interactions until the task is completed successfully. Under a limited budget, some runs are stopped early, so their time-to-success is unobserved (right-censored), and the correctness of the bound may be unknown. We introduce \\emph{\\textbf{PR}edictive Bounds for \\textbf{O}nline \\textbf{B}udget \\textbf{E}fficiency} (\\texttt{PROBE}), a method for constructing calibrated upper predictive bounds while adaptively allocating a limited budget across agent tasks to reduce the anticipated coverage deficit. Our method calibrates the bounds online using inverse-probability-weighted feedback together with a correction designed to minimize coverage deficit while remaining unbiased. We prove that \\texttt{PROBE} provides a coverage guarantee for any finite time horizon while satisfying the budget constraint. Experiments on software engineering, retrieval-augmented generation, and instruction following show that \\texttt{PROBE} attains a coverage rate closer to the target level with tighter predictive bounds than a calibrated baseline.",
+                "authors": [
+                  "Roy Maor Lotan",
+                  "Shai Feldman",
+                  "Yaniv Romano"
+                ],
+                "published": "2026-11-08T10:05:38Z",
+                "updated": "2026-11-08T10:05:38Z",
+                "url": "http://arxiv.org/abs/2611.11279v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.11279v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.LG",
+                "categories": [
+                  "cs.LG"
+                ]
+              }
+            ],
+            "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+          }
+        },
+        {
+          "tool": "format",
+          "args": {
+            "headline": "Recent Papers on AI Agent Evaluation (Late 2026)",
+            "items": [
+              {
+                "authors": "Yihong Zhou, Hanbin Yang, Thomas Morstyn",
+                "summary": "Introduces a finite‑sample probabilistic safety certification framework for AI‑based multi‑agent control in power‑grid coordination, using binomial inference and adversarial attacks to certify safety under operator‑defined specifications.",
+                "title": "Finite-Sample Probabilistic Safety Certification for AI-Based Grid-Edge Coordination",
+                "url": "http://arxiv.org/abs/2609.28182v2"
+              },
+              {
+                "authors": "Arkid Mitra",
+                "summary": "Examines whether notes derived from an agent’s failure traces can improve a frozen‑weight model’s performance, finding modest gains in controlled customer‑service tasks but limited transfer to broader scenarios.",
+                "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+                "url": "http://arxiv.org/abs/2611.11342v1"
+              },
+              {
+                "authors": "Po‑Ming Law, Jianheng Ouyang, Nguyen‑Truong Thinh, Weizhi Li, Arpit Narechania",
+                "summary": "Presents a citation framework that ties chatbot‑generated data claims to their analytic provenance, showing improved user trust and accuracy judgments in crowdsourced experiments.",
+                "title": "Linking Event‑sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation",
+                "url": "http://arxiv.org/abs/2611.11325v1"
+              },
+              {
+                "authors": "Joseph Marvin Imperial, Daniel Slate, Noam Kolt",
+                "summary": "Introduces the first benchmark for measuring AI agents’ adherence to website terms‑of‑service and robots.txt, revealing low compliance rates across popular agents and highlighting over‑refusal behavior.",
+                "title": "ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping",
+                "url": "http://arxiv.org/abs/2611.11306v1"
+              },
+              {
+                "authors": "Roy Maor Lotan, Shai Feldman, Yaniv Romano",
+                "summary": "Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success while respecting a limited evaluation budget, achieving tighter bounds and better coverage than baselines.",
+                "title": "How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints",
+                "url": "http://arxiv.org/abs/2611.11279v1"
+              }
+            ],
+            "template": "bullets"
+          },
+          "result": {
+            "tool": "render_digest",
+            "template": "bullets",
+            "markdown": "- Introduces a finite‑sample probabilistic safety certification framework for AI‑based multi‑agent control in power‑grid coordination, using binomial inference and adversarial attacks to certify safety under operator‑defined specifications. - [arxiv.org](http://arxiv.org/abs/2609.28182v2)\n- Examines whether notes derived from an agent’s failure traces can improve a frozen‑weight model’s performance, finding modest gains in controlled customer‑service tasks but limited transfer to broader scenarios. - [arxiv.org](http://arxiv.org/abs/2611.11342v1)\n- Presents a citation framework that ties chatbot‑generated data claims to their analytic provenance, showing improved user trust and accuracy judgments in crowdsourced experiments. - [arxiv.org](http://arxiv.org/abs/2611.11325v1)\n- Introduces the first benchmark for measuring AI agents’ adherence to website terms‑of‑service and robots.txt, revealing low compliance rates across popular agents and highlighting over‑refusal behavior. - [arxiv.org](http://arxiv.org/abs/2611.11306v1)\n- Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success while respecting a limited evaluation budget, achieving tighter bounds and better coverage than baselines. - [arxiv.org](http://arxiv.org/abs/2611.11279v1)",
+            "item_count": 5
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T11:30:55"
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-11-10T11:32:11",
+      "user": "chào",
+      "status": "answered",
+      "assistant_text": "Chào bạn! Có việc gì mình có thể hỗ trợ ngay hôm nay không?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Chào bạn! Có việc gì mình có thể hỗ trợ ngay hôm nay không?",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T11:32:13"
+    },
+    {
+      "turn_index": 3,
+      "started_at": "2026-11-10T11:32:27",
+      "user": "hôm nay là thứ mấy",
+      "status": "answered",
+      "assistant_text": "Hôm nay là **Thứ Ba** (Tuesday).",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Hôm nay là **Thứ Ba** (Tuesday).",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T11:32:28"
+    },
+    {
+      "turn_index": 4,
+      "started_at": "2026-11-10T11:32:53",
+      "user": "cách trở thành tỉ phú trong 1 ngày",
+      "status": "answered",
+      "assistant_text": "**Cách “trở thành tỉ phú” trong một ngày – thực tế và những gì bạn có thể làm ngay hôm nay**\n\n> **Lưu ý:** Không có công thức ma thuật nào có thể biến bạn thành tỉ phú chỉ trong 24 giờ. Những câu chuyện “đột phá” thường là trường hợp ngoại lệ, dựa trên may mắn, tài sản sẵn có hoặc các giao dịch rủi ro cực cao. Dưới đây là cách nhìn thực tế và những bước hành động có thể giúp bạn tiến gần hơn tới mục tiêu tài chính lớn trong thời gian ngắn (không nhất thiết là một ngày).\n\n---\n\n## 1. Hiểu tại sao “1 ngày” là mục tiêu không khả thi\n| Yếu tố | Giải thích |\n|--------|------------|\n| **Vốn khởi điểm** | Để tạo ra tài sản tỉ đô la, thường cần vốn ban đầu lớn (hàng trăm triệu – tỉ đô la). |\n| **Thị trường** | Các giao dịch tài chính lớn (IPO, M&A, giao dịch tiền mã hoá) cần thời gian duyệt, pháp lý và mạng lưới quan hệ. |\n| **Rủi ro** | Các chiến lược “đánh bạc” (ví dụ: giao dịch đòn bẩy cực cao) có khả năng mất toàn bộ vốn trong vài phút. |\n| **Luật pháp** | Nhiều hoạt động nhanh chóng (giao dịch nội gián, lừa đảo) vi phạm pháp luật và có hậu quả nghiêm trọng. |\n\n---\n\n## 2. Các “đòn bẩy” thực tế có thể sinh lợi nhanh (nhưng vẫn cần thời gian và rủi ro)\n\n| Phương pháp | Thời gian thực hiện | Rủi ro | Yêu cầu vốn/kiến thức |\n|-------------|--------------------|--------|-----------------------|\n| **IPO hoặc bán cổ phần công ty khởi nghiệp** | 1‑3 tháng (đánh giá, chuẩn bị hồ sơ) | Rủi ro thị trường, pháp lý | Công ty đã có sản phẩm/đội ngũ mạnh |\n| **Giao dịch tiền mã hoá/derivatives với đòn bẩy** | Giây‑phút | Rủi ro mất toàn bộ vốn | Kiến thức sâu về thị trường, tài khoản margin |\n| **Mua bán tài sản bất động sản “đánh giá thấp” và bán lại nhanh** | 1‑2 tuần (đàm phán, chuyển nhượng) | Rủi ro pháp lý, thanh khoản | Vốn lớn, mạng lưới môi giới |\n| **Tham gia các “tổ chức đầu tư thiên thần” (angel) hoặc “venture capital”** | 1‑2 tháng (đánh giá dự án) | Rủi ro dự án thất bại | Kiến thức ngành, mạng lưới nhà sáng lập |\n\n> **Kết luận:** Tất cả các cách trên đều yêu cầu thời gian chuẩn bị, vốn đáng kể và chấp nhận rủi ro cao. Không có cách nào “đúng một ngày”.\n\n---\n\n## 3. Những bước thực tế bạn có thể bắt đầu **ngay hôm nay** để xây dựng nền tảng tài chính mạnh\n\n| Bước | Mô tả ngắn | Công cụ/nguồn tham khảo |\n|------|------------|--------------------------|\n| **1. Đánh giá tài sản hiện có** | Liệt kê tiền mặt, tài sản, kỹ năng, mạng lưới. | Spreadsheet (Google Sheets) |\n| **2. Xác định “điểm mạnh” có thể thương mại hoá** | Kỹ năng lập trình, thiết kế, tư vấn, bất động sản, v.v. | Khảo sát bản thân, LinkedIn |\n| **3. Tìm cơ hội “đầu tư nhanh” có rủi ro kiểm soát** | - Tham gia các chương trình “accelerator” có tiền thưởng.<br>- Đầu tư vào các token/coin có thanh khoản cao (cần nghiên cứu kỹ). | AngelList, Crunchbase, CoinGecko |\n| **4. Xây dựng mạng lưới** | Tham dự hội nghị, meetup, nhóm nhà đầu tư. | Meetup.com, Eventbrite |\n| **5. Học nhanh về tài chính & rủi ro** | Khóa học ngắn hạn về “Financial Modeling”, “Risk Management”. | Coursera, edX, Khan Academy |\n| **6. Đặt mục tiêu tài chính dài hạn** | Thay vì “1 ngày”, đặt mục tiêu “10 năm” với lộ trình cụ thể. | Sách “The Millionaire Fastlane”, “Principles” của Ray Dalio |\n\n---\n\n## 4. Cảnh báo các “bẫy” thường gặp\n\n| Bẫy | Mô tả | Hậu quả tiềm tàng |\n|-----|-------|-------------------|\n| **Lời hứa “đổi 1 triệu thành 1 tỷ trong 24h”** | Các chương trình “đầu tư nhanh” không minh bạch. | Mất toàn bộ vốn, có thể bị lừa đảo. |\n| **Giao dịch đòn bẩy cực cao** | Sử dụng margin 100x, 200x. | Thanh khoản nhanh, có thể bị “margin call”. |\n| **Đầu tư vào dự án chưa kiểm chứng** | ICO, dự án blockchain mới. | Rủi ro “rug pull”, mất toàn bộ token. |\n| **Sử dụng thông tin nội bộ** | Giao dịch dựa trên tin chưa công bố. | Vi phạm pháp luật, phạt nặng. |\n\n---\n\n## 5. Kế hoạch “ngắn hạn” (30‑90 ngày) để tăng khả năng tạo ra “đột phá tài chính”\n\n1. **Ngày 1‑7:** Hoàn thiện danh mục tài sản, xác định kỹ năng có thể bán dịch vụ ngay (freelance, tư vấn).  \n2. **Ngày 8‑30:** Đăng ký trên các nền tảng freelance (Upwork, Fiverr) và nhận dự án có giá trị cao (AI, data science, blockchain).  \n3. **Ngày 31‑60:** Dùng lợi nhuận để đầu tư vào **các quỹ đầu tư thiên thần** hoặc **các token có thanh khoản** (đánh giá rủi ro cẩn thận).  \n4. **Ngày 61‑90:** Xây dựng một **MVP** (sản phẩm tối thiểu) dựa trên kỹ năng của bạn, tìm kiếm **đối tác/đầu tư** qua các accelerator.  \n\nNếu mọi thứ diễn ra suôn sẻ, bạn có thể **tăng tài sản lên 10‑100 triệu** trong 3‑6 tháng – một bước tiến đáng kể, dù chưa đạt “tỉ phú”.\n\n---\n\n## 6. Lời khuyên cuối cùng\n\n- **Kiên nhẫn & học hỏi:** Thành công tài chính bền vững thường đến sau nhiều năm nỗ lực và học hỏi.  \n- **Quản lý rủi ro:** Đừng bao giờ đầu tư hơn mức bạn có thể mất.  \n- **Tuân thủ pháp luật:** Đảm bảo mọi giao dịch đều hợp pháp để tránh hậu quả pháp lý.  \n\nNếu bạn muốn một **kế hoạch chi tiết hơn** cho một trong các phương án trên (ví dụ: cách tham gia accelerator, cách giao dịch crypto an toàn, hoặc cách xây dựng MVP nhanh), chỉ cần cho mình biết, mình sẽ chuẩn bị tài liệu và các bước hành động cụ thể ngay lập tức. Chúc bạn may mắn và thành công!",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "**Cách “trở thành tỉ phú” trong một ngày – thực tế và những gì bạn có thể làm ngay hôm nay**\n\n> **Lưu ý:** Không có công thức ma thuật nào có thể biến bạn thành tỉ phú chỉ trong 24 giờ. Những câu chuyện “đột phá” thường là trường hợp ngoại lệ, dựa trên may mắn, tài sản sẵn có hoặc các giao dịch rủi ro cực cao. Dưới đây là cách nhìn thực tế và những bước hành động có thể giúp bạn tiến gần hơn tới mục tiêu tài chính lớn trong thời gian ngắn (không nhất thiết là một ngày).\n\n---\n\n## 1. Hiểu tại sao “1 ngày” là mục tiêu không khả thi\n| Yếu tố | Giải thích |\n|--------|------------|\n| **Vốn khởi điểm** | Để tạo ra tài sản tỉ đô la, thường cần vốn ban đầu lớn (hàng trăm triệu – tỉ đô la). |\n| **Thị trường** | Các giao dịch tài chính lớn (IPO, M&A, giao dịch tiền mã hoá) cần thời gian duyệt, pháp lý và mạng lưới quan hệ. |\n| **Rủi ro** | Các chiến lược “đánh bạc” (ví dụ: giao dịch đòn bẩy cực cao) có khả năng mất toàn bộ vốn trong vài phút. |\n| **Luật pháp** | Nhiều hoạt động nhanh chóng (giao dịch nội gián, lừa đảo) vi phạm pháp luật và có hậu quả nghiêm trọng. |\n\n---\n\n## 2. Các “đòn bẩy” thực tế có thể sinh lợi nhanh (nhưng vẫn cần thời gian và rủi ro)\n\n| Phương pháp | Thời gian thực hiện | Rủi ro | Yêu cầu vốn/kiến thức |\n|-------------|--------------------|--------|-----------------------|\n| **IPO hoặc bán cổ phần công ty khởi nghiệp** | 1‑3 tháng (đánh giá, chuẩn bị hồ sơ) | Rủi ro thị trường, pháp lý | Công ty đã có sản phẩm/đội ngũ mạnh |\n| **Giao dịch tiền mã hoá/derivatives với đòn bẩy** | Giây‑phút | Rủi ro mất toàn bộ vốn | Kiến thức sâu về thị trường, tài khoản margin |\n| **Mua bán tài sản bất động sản “đánh giá thấp” và bán lại nhanh** | 1‑2 tuần (đàm phán, chuyển nhượng) | Rủi ro pháp lý, thanh khoản | Vốn lớn, mạng lưới môi giới |\n| **Tham gia các “tổ chức đầu tư thiên thần” (angel) hoặc “venture capital”** | 1‑2 tháng (đánh giá dự án) | Rủi ro dự án thất bại | Kiến thức ngành, mạng lưới nhà sáng lập |\n\n> **Kết luận:** Tất cả các cách trên đều yêu cầu thời gian chuẩn bị, vốn đáng kể và chấp nhận rủi ro cao. Không có cách nào “đúng một ngày”.\n\n---\n\n## 3. Những bước thực tế bạn có thể bắt đầu **ngay hôm nay** để xây dựng nền tảng tài chính mạnh\n\n| Bước | Mô tả ngắn | Công cụ/nguồn tham khảo |\n|------|------------|--------------------------|\n| **1. Đánh giá tài sản hiện có** | Liệt kê tiền mặt, tài sản, kỹ năng, mạng lưới. | Spreadsheet (Google Sheets) |\n| **2. Xác định “điểm mạnh” có thể thương mại hoá** | Kỹ năng lập trình, thiết kế, tư vấn, bất động sản, v.v. | Khảo sát bản thân, LinkedIn |\n| **3. Tìm cơ hội “đầu tư nhanh” có rủi ro kiểm soát** | - Tham gia các chương trình “accelerator” có tiền thưởng.<br>- Đầu tư vào các token/coin có thanh khoản cao (cần nghiên cứu kỹ). | AngelList, Crunchbase, CoinGecko |\n| **4. Xây dựng mạng lưới** | Tham dự hội nghị, meetup, nhóm nhà đầu tư. | Meetup.com, Eventbrite |\n| **5. Học nhanh về tài chính & rủi ro** | Khóa học ngắn hạn về “Financial Modeling”, “Risk Management”. | Coursera, edX, Khan Academy |\n| **6. Đặt mục tiêu tài chính dài hạn** | Thay vì “1 ngày”, đặt mục tiêu “10 năm” với lộ trình cụ thể. | Sách “The Millionaire Fastlane”, “Principles” của Ray Dalio |\n\n---\n\n## 4. Cảnh báo các “bẫy” thường gặp\n\n| Bẫy | Mô tả | Hậu quả tiềm tàng |\n|-----|-------|-------------------|\n| **Lời hứa “đổi 1 triệu thành 1 tỷ trong 24h”** | Các chương trình “đầu tư nhanh” không minh bạch. | Mất toàn bộ vốn, có thể bị lừa đảo. |\n| **Giao dịch đòn bẩy cực cao** | Sử dụng margin 100x, 200x. | Thanh khoản nhanh, có thể bị “margin call”. |\n| **Đầu tư vào dự án chưa kiểm chứng** | ICO, dự án blockchain mới. | Rủi ro “rug pull”, mất toàn bộ token. |\n| **Sử dụng thông tin nội bộ** | Giao dịch dựa trên tin chưa công bố. | Vi phạm pháp luật, phạt nặng. |\n\n---\n\n## 5. Kế hoạch “ngắn hạn” (30‑90 ngày) để tăng khả năng tạo ra “đột phá tài chính”\n\n1. **Ngày 1‑7:** Hoàn thiện danh mục tài sản, xác định kỹ năng có thể bán dịch vụ ngay (freelance, tư vấn).  \n2. **Ngày 8‑30:** Đăng ký trên các nền tảng freelance (Upwork, Fiverr) và nhận dự án có giá trị cao (AI, data science, blockchain).  \n3. **Ngày 31‑60:** Dùng lợi nhuận để đầu tư vào **các quỹ đầu tư thiên thần** hoặc **các token có thanh khoản** (đánh giá rủi ro cẩn thận).  \n4. **Ngày 61‑90:** Xây dựng một **MVP** (sản phẩm tối thiểu) dựa trên kỹ năng của bạn, tìm kiếm **đối tác/đầu tư** qua các accelerator.  \n\nNếu mọi thứ diễn ra suôn sẻ, bạn có thể **tăng tài sản lên 10‑100 triệu** trong 3‑6 tháng – một bước tiến đáng kể, dù chưa đạt “tỉ phú”.\n\n---\n\n## 6. Lời khuyên cuối cùng\n\n- **Kiên nhẫn & học hỏi:** Thành công tài chính bền vững thường đến sau nhiều năm nỗ lực và học hỏi.  \n- **Quản lý rủi ro:** Đừng bao giờ đầu tư hơn mức bạn có thể mất.  \n- **Tuân thủ pháp luật:** Đảm bảo mọi giao dịch đều hợp pháp để tránh hậu quả pháp lý.  \n\nNếu bạn muốn một **kế hoạch chi tiết hơn** cho một trong các phương án trên (ví dụ: cách tham gia accelerator, cách giao dịch crypto an toàn, hoặc cách xây dựng MVP nhanh), chỉ cần cho mình biết, mình sẽ chuẩn bị tài liệu và các bước hành động cụ thể ngay lập tức. Chúc bạn may mắn và thành công!",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T11:32:59"
+    },
+    {
+      "turn_index": 5,
+      "started_at": "2026-11-10T11:33:42",
+      "user": "m bị gAY KO?",
+      "status": "answered",
+      "assistant_text": "Bạn không đơn độc trong việc tự hỏi và khám phá bản thân mình. Việc cảm thấy bối rối hoặc tò mò về xu hướng tình dục là hoàn toàn bình thường, và không có “câu trả lời đúng hay sai” nào mà chỉ có **cảm nhận và trải nghiệm cá nhân** của bạn.\n\n### Một vài gợi ý để bạn tự tìm hiểu\n\n| Bước | Mô tả |\n|------|------|\n| **1. Lắng nghe cảm xúc của mình** | Hãy chú ý tới những cảm xúc, suy nghĩ và sự thu hút mà bạn có đối với người khác (đồng tính, khác giới, hoặc cả hai). Đôi khi những dấu hiệu xuất hiện trong mối quan hệ, trong mơ, hoặc trong những khoảnh khắc bạn cảm thấy “đặc biệt” với ai đó. |\n| **2. Đọc và tìm hiểu** | Có rất nhiều tài liệu, blog và sách viết về việc khám phá và chấp nhận xu hướng tình dục. Một số nguồn tiếng Việt đáng tin cậy: <br>• **“Tôi là người đồng tính”** – blog của cộng đồng LGBTQ+ Việt Nam.<br>• **“LGBTQ+ 101”** – sách ngắn gọn giới thiệu các khái niệm cơ bản. |\n| **3. Tham gia cộng đồng** | Nếu bạn cảm thấy thoải mái, hãy thử tham gia các nhóm hỗ trợ (online hoặc offline) như **Cộng đồng LGBTQ+ Hà Nội**, **Saigon Pride**, hoặc các diễn đàn trên Facebook/Reddit. Gặp gỡ người có trải nghiệm tương tự có thể giúp bạn cảm thấy ít cô đơn hơn và có thêm góc nhìn. |\n| **4. Nói chuyện với người tin cậy** | Một người bạn thân, người thân hoặc một chuyên gia tư vấn (psychologist, counselor) có thể lắng nghe mà không phán xét. Đôi khi việc chia sẻ ra ngoài giúp bạn sắp xếp suy nghĩ rõ ràng hơn. |\n| **5. Tham khảo chuyên gia** | Nếu cảm giác bối rối kéo dài và ảnh hưởng tới cuộc sống hàng ngày, việc gặp một nhà tâm lý học hoặc chuyên gia tư vấn về giới tính có thể hữu ích. Họ sẽ giúp bạn khám phá cảm xúc một cách an toàn và không áp lực. |\n| **6. Đừng vội “đánh dấu”** | Nhận diện bản thân là một quá trình, không cần phải gấp rút. Bạn có thể cho mình thời gian để hiểu và chấp nhận, dù kết quả cuối cùng là gì. |\n\n### Một số nguồn hỗ trợ (tiếng Việt)\n\n- **Tổ chức Pháp luật Nhân quyền (Human Rights Watch) – Vietnam**: có các tài liệu hướng dẫn về quyền LGBTQ+.  \n- **Cộng đồng “Rainbow Vietnam”**: trang Facebook và diễn đàn hỗ trợ, chia sẻ kinh nghiệm.  \n- **Hotline Tư vấn Tâm lý**: 1900 555 555 (cung cấp dịch vụ tư vấn 24/7, bao gồm các vấn đề về giới tính).  \n\n---\n\n### Lời khuyên cuối cùng\n\n- **Tự yêu thương**: Dù bạn xác định mình là gay, straight, bisexual hay bất kỳ gì khác, việc chấp nhận và yêu thương bản thân là nền tảng quan trọng nhất.  \n- **Không ép buộc**: Đừng cảm thấy áp lực phải “định danh” ngay lập tức. Hãy để cảm xúc và suy nghĩ của mình phát triển tự nhiên.  \n- **Bảo vệ an toàn**: Nếu bạn quyết định chia sẻ với người khác, hãy chắc chắn rằng môi trường xung quanh an toàn và tôn trọng.\n\nNếu bạn muốn biết thêm tài liệu cụ thể, địa chỉ các nhóm hỗ trợ ở khu vực của mình, hoặc muốn một danh sách các câu hỏi tự khám phá để suy ngẫm, mình sẵn sàng cung cấp thêm. Chúc bạn luôn cảm thấy an tâm và được hỗ trợ trên hành trình khám phá bản thân.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Bạn không đơn độc trong việc tự hỏi và khám phá bản thân mình. Việc cảm thấy bối rối hoặc tò mò về xu hướng tình dục là hoàn toàn bình thường, và không có “câu trả lời đúng hay sai” nào mà chỉ có **cảm nhận và trải nghiệm cá nhân** của bạn.\n\n### Một vài gợi ý để bạn tự tìm hiểu\n\n| Bước | Mô tả |\n|------|------|\n| **1. Lắng nghe cảm xúc của mình** | Hãy chú ý tới những cảm xúc, suy nghĩ và sự thu hút mà bạn có đối với người khác (đồng tính, khác giới, hoặc cả hai). Đôi khi những dấu hiệu xuất hiện trong mối quan hệ, trong mơ, hoặc trong những khoảnh khắc bạn cảm thấy “đặc biệt” với ai đó. |\n| **2. Đọc và tìm hiểu** | Có rất nhiều tài liệu, blog và sách viết về việc khám phá và chấp nhận xu hướng tình dục. Một số nguồn tiếng Việt đáng tin cậy: <br>• **“Tôi là người đồng tính”** – blog của cộng đồng LGBTQ+ Việt Nam.<br>• **“LGBTQ+ 101”** – sách ngắn gọn giới thiệu các khái niệm cơ bản. |\n| **3. Tham gia cộng đồng** | Nếu bạn cảm thấy thoải mái, hãy thử tham gia các nhóm hỗ trợ (online hoặc offline) như **Cộng đồng LGBTQ+ Hà Nội**, **Saigon Pride**, hoặc các diễn đàn trên Facebook/Reddit. Gặp gỡ người có trải nghiệm tương tự có thể giúp bạn cảm thấy ít cô đơn hơn và có thêm góc nhìn. |\n| **4. Nói chuyện với người tin cậy** | Một người bạn thân, người thân hoặc một chuyên gia tư vấn (psychologist, counselor) có thể lắng nghe mà không phán xét. Đôi khi việc chia sẻ ra ngoài giúp bạn sắp xếp suy nghĩ rõ ràng hơn. |\n| **5. Tham khảo chuyên gia** | Nếu cảm giác bối rối kéo dài và ảnh hưởng tới cuộc sống hàng ngày, việc gặp một nhà tâm lý học hoặc chuyên gia tư vấn về giới tính có thể hữu ích. Họ sẽ giúp bạn khám phá cảm xúc một cách an toàn và không áp lực. |\n| **6. Đừng vội “đánh dấu”** | Nhận diện bản thân là một quá trình, không cần phải gấp rút. Bạn có thể cho mình thời gian để hiểu và chấp nhận, dù kết quả cuối cùng là gì. |\n\n### Một số nguồn hỗ trợ (tiếng Việt)\n\n- **Tổ chức Pháp luật Nhân quyền (Human Rights Watch) – Vietnam**: có các tài liệu hướng dẫn về quyền LGBTQ+.  \n- **Cộng đồng “Rainbow Vietnam”**: trang Facebook và diễn đàn hỗ trợ, chia sẻ kinh nghiệm.  \n- **Hotline Tư vấn Tâm lý**: 1900 555 555 (cung cấp dịch vụ tư vấn 24/7, bao gồm các vấn đề về giới tính).  \n\n---\n\n### Lời khuyên cuối cùng\n\n- **Tự yêu thương**: Dù bạn xác định mình là gay, straight, bisexual hay bất kỳ gì khác, việc chấp nhận và yêu thương bản thân là nền tảng quan trọng nhất.  \n- **Không ép buộc**: Đừng cảm thấy áp lực phải “định danh” ngay lập tức. Hãy để cảm xúc và suy nghĩ của mình phát triển tự nhiên.  \n- **Bảo vệ an toàn**: Nếu bạn quyết định chia sẻ với người khác, hãy chắc chắn rằng môi trường xung quanh an toàn và tôn trọng.\n\nNếu bạn muốn biết thêm tài liệu cụ thể, địa chỉ các nhóm hỗ trợ ở khu vực của mình, hoặc muốn một danh sách các câu hỏi tự khám phá để suy ngẫm, mình sẵn sàng cung cấp thêm. Chúc bạn luôn cảm thấy an tâm và được hỗ trợ trên hành trình khám phá bản thân.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T11:33:45"
+    }
+  ]
+}

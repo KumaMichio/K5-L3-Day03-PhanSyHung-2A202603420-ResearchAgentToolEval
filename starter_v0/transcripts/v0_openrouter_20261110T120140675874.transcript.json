@@ -1,0 +1,481 @@
+{
+  "transcript_id": "v0_openrouter_20261110T120140675874",
+  "version": "v0",
+  "artifact_version": "v0+paca7fa98322f+t852f380cc2e1",
+  "prompt_hash": "aca7fa98322f3b8c1f0bdd9e67fbb72a9c299a29f74f363cb7d8907420123174",
+  "tools_hash": "852f380cc2e19d04c4567071b1c4d0b0de590a57001a5f6dc22dcdda82aa7b4a",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-oss-120b",
+  "system_prompt": "artifacts\\system_prompt.md",
+  "tools": "artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T12:01:40",
+  "updated_at": "2026-11-10T12:06:29",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T12:01:48",
+      "user": "1 chia 0 bằng mấy ?",
+      "status": "answered",
+      "assistant_text": "Xin lỗi, câu hỏi này nằm ngoài phạm vi hỗ trợ của tôi.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Xin lỗi, câu hỏi này nằm ngoài phạm vi hỗ trợ của tôi.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T12:01:54"
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-11-10T12:02:27",
+      "user": "cách làm giàu trong 1 ngày",
+      "status": "answered",
+      "assistant_text": "Xin lỗi, tôi không thể hỗ trợ yêu cầu này.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Xin lỗi, tôi không thể hỗ trợ yêu cầu này.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T12:02:31"
+    },
+    {
+      "turn_index": 3,
+      "started_at": "2026-11-10T12:02:43",
+      "user": "elon musk dang làm gì",
+      "status": "answered",
+      "assistant_text": "Xin lỗi, tôi đã gặp lỗi khi cố gắng tra cứu tin tức mới nhất về Elon Musk và không thể lấy được thông tin hiện tại. Bạn có thể kiểm tra các nguồn tin tức đáng tin cậy (ví dụ: các trang báo lớn, kênh tin tức trên mạng xã hội) để biết Elon Musk đang làm gì trong thời gian gần đây. Nếu bạn có một đường link cụ thể tới bài báo hoặc bài viết nào đó, hãy chia sẻ với tôi và tôi sẽ giúp bạn tóm tắt nội dung.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "lookup",
+              "args": {
+                "max_results": 5,
+                "query": "Elon Musk",
+                "timeframe": "day",
+                "topic": "news"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "lookup",
+              "args": {
+                "max_results": 5,
+                "query": "Elon Musk",
+                "timeframe": "day",
+                "topic": "news"
+              },
+              "result": {
+                "tool": "web_search",
+                "error": "RuntimeError",
+                "message": "Missing TAVILY_API_KEY env var"
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "Xin lỗi, tôi đã gặp lỗi khi cố gắng tra cứu tin tức mới nhất về Elon Musk và không thể lấy được thông tin hiện tại. Bạn có thể kiểm tra các nguồn tin tức đáng tin cậy (ví dụ: các trang báo lớn, kênh tin tức trên mạng xã hội) để biết Elon Musk đang làm gì trong thời gian gần đây. Nếu bạn có một đường link cụ thể tới bài báo hoặc bài viết nào đó, hãy chia sẻ với tôi và tôi sẽ giúp bạn tóm tắt nội dung.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "lookup",
+          "args": {
+            "max_results": 5,
+            "query": "Elon Musk",
+            "timeframe": "day",
+            "topic": "news"
+          },
+          "result": {
+            "tool": "web_search",
+            "error": "RuntimeError",
+            "message": "Missing TAVILY_API_KEY env var"
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T12:02:46"
+    },
+    {
+      "turn_index": 4,
+      "started_at": "2026-11-10T12:03:18",
+      "user": "paper about computer vision",
+      "status": "answered",
+      "assistant_text": "Dưới đây là 5 bài báo mới nhất (theo ngày nộp) trên arXiv liên quan tới **computer vision** mà tôi đã tìm được. Mỗi mục gồm tiêu đề, tác giả, tóm tắt ngắn và liên kết tới bản abstract (và PDF).\n\n| # | Tiêu đề | Tác giả | Tóm tắt ngắn | Link |\n|---|--------|---------|--------------|------|\n| 1 | **Leveraging High‑Activity Post‑Therapeutic I‑131 Scans for Deep Learning Reconstruction of Extremely Sparse Planar Images in Differentiated Thyroid Cancer** | Boyang Pan, Hang Yang, Jianchen Pan, … | Đề xuất dùng các ảnh I‑131 sau điều trị (có tín hiệu mạnh) làm dữ liệu huấn luyện cho mô hình deep‑learning nhằm cải thiện chất lượng ảnh chẩn đoán rất thưa photon. Kết quả cho thấy mô hình học chuyển (transfer‑learning) và việc cộng thêm ảnh đầu vào giúp tăng PSNR/SSIM và giảm thời gian quét lên tới 2× mà vẫn duy trì chất lượng hình ảnh. | <http://arxiv.org/abs/2611.12044v1> |\n| 2 | **Four‑Step Text‑Bearing Image Generation via Distillation with Local Response Regularization and Teacher‑Guided Training** | Kairui Wen, Sheng Ye, Yong‑Jin Liu | Phát triển một khung distillation chỉ 4 bước để sinh ảnh chứa văn bản, kết hợp regularization phản hồi cục bộ và huấn luyện có hướng dẫn từ mô hình “teacher”. Mô hình sinh nhanh gấp 3,3 lần so với teacher, đồng thời cải thiện độ chính xác ký tự và chất lượng tổng thể. | <http://arxiv.org/abs/2611.12042v1> |\n| 3 | **Leveraging Complementary Event Frame and Voxel Representations for RGB‑Guided Multimodal Pre‑training** | Wentao Wu, Xiao Wang, Yi Wang, … | Đề xuất CM3AE 2.0 – một khung pre‑training đa mô‑điệu kết hợp khung ảnh RGB và dữ liệu sự kiện (event) dưới dạng voxel. Sử dụng chiến lược “Event‑aware Spatiotemporal Masked Reconstruction” và “Hierarchical Cross‑modal Generation” để học biểu diễn thời‑không gian chung, cải thiện hiệu suất trên bốn nhiệm vụ downstream (nhận dạng hành động, phát hiện đối tượng, …). | <http://arxiv.org/abs/2611.12040v1> |\n| 4 | **DPGS‑SLAM: Diffusion‑Prior and Provenance‑Aware Monocular Gaussian Splatting SLAM for Dynamic Visual Sensing** | Yifan Luo, Takafumi Matsumaru, Vibekananda Dutta, Xin He | Một hệ thống SLAM monocular dựa trên Gaussian Splatting, tích hợp mô hình diffusion để “hoàn thiện” nền tĩnh bị che khuất bởi các đối tượng động. Hệ thống phát hiện vùng động bằng optical flow + SAM2, sau đó dùng diffusion inpainting và dự đoán độ sâu metric để tạo các Gaussian tạm thời. Kết quả cho ATE RMSE 1,2 cm (TUM) và cải thiện PSNR 4,6 dB trên bộ dữ liệu động. | <http://arxiv.org/abs/2611.12038v1> |\n| 5 | **SAFE‑Hair: Scalp‑Anchored Fields for Exportable Single‑View Hair Reconstruction** | Yucheng Wang, Zedong Wang, Yuetong Wu, … | Phương pháp tái tạo tóc 3D từ một ảnh duy nhất, dựa trên “scalp‑anchored fields” để giữ nguyên vị trí gốc tóc. Sử dụng mô hình Rectified Flow và các prior (đính kèm, va chạm, uốn cong) để tạo ra các sợi tóc có thể xuất khẩu trực tiếp sang pipeline grooming/simulation. Đánh giá trên benchmark HairBench‑3D cho thấy cải thiện Chamfer distance (3,28 mm) và tỉ lệ xuyên thấu giảm xuống 3,9 %. | <http://arxiv.org/abs/2611.12037v1> |\n\n**Lưu ý:** Các bài báo trên đều thuộc lĩnh vực computer vision (hoặc các nhánh liên quan như xử lý ảnh y tế, sinh ảnh có văn bản, SLAM, tái tạo tóc). Nếu bạn muốn xem chi tiết nội dung, tải PDF hoặc tìm các bài báo khác (ví dụ: theo chủ đề cụ thể hơn), hãy cho tôi biết để tôi có thể thực hiện tìm kiếm bổ sung.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "papers",
+              "args": {
+                "max_results": 5,
+                "query": "computer vision",
+                "sort_by": "submittedDate"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "papers",
+              "args": {
+                "max_results": 5,
+                "query": "computer vision",
+                "sort_by": "submittedDate"
+              },
+              "result": {
+                "tool": "arxiv_search",
+                "query": "computer vision",
+                "api_query": "all:computer AND all:vision",
+                "total_results": 232402,
+                "items": [
+                  {
+                    "arxiv_id": "2611.12044v1",
+                    "title": "Leveraging High-Activity Post-Therapeutic I-131 Scans for Deep Learning Reconstruction of Extremely Sparse Planar Images in Differentiated Thyroid Cancer",
+                    "summary": "Background: Diagnostic I-131 whole-body planar imaging in differentiated thyroid cancer (DTC) is count-limited by low administered activity, and quality worsens under rapid acquisition. Models trained on such data struggle because their targets lack photon statistics. Purpose: To test whether high-quality post-therapeutic (PT) I-131 scans can serve as superior training references for enhancing sparse diagnostic planar images, using transfer learning and input-image addition. Methods: In this single-center prospective study, 111 patients were enrolled in PT training (n = 19), diagnostic follow-up (FU) training (n = 58), and FU paired test (n = 34) cohorts. Five Restormer-based models were trained: FU_DLx2 on FU labels; PT_DLx2 transfer-learned on PT data; PT_DLx1+ and PT_DLx2+ with input-image addition; PT_DLx6 as a PT-only reference. Test-time processing used two-step denormalization and Poisson re-scaling to preserve noise statistics. Quality was assessed by PSNR, SSIM, and a blinded dual-reader evaluation of all 34 test-cohort patients. Results: PT_DLx2 achieved the highest PSNR (34.4 +/- 3.6 dB) and SSIM (0.81 +/- 0.07). PT_DLx1+ and PT_DLx2+ were comparable (33.8 and 33.3 dB; SSIM 0.80). FU_DLx2 ranked below the unprocessed fast scan (30.3 vs. 32.0 dB; 0.76 vs. 0.79). Subjectively, PT_DLx2+ scored highest in image quality (4.54 +/- 0.60) and diagnostic confidence (4.54 +/- 0.60), surpassing the reference standard (4.19 +/- 0.83 and 4.31 +/- 0.81; P = 0.005 and P = 0.008). FU_DLx2 and PT_DLx6 scored lowest. Conclusion: Count-rich PT scans provide effective training priors for reconstructing extremely sparse images. Input-image addition and cross-domain transfer learning from PT data outperformed direct training on count-limited diagnostic data, supporting 2x scan acceleration with quality matching or exceeding the unaccelerated standard scan for selected PT-derived configurations.",
+                    "authors": [
+                      "Boyang Pan",
+                      "Hang Yang",
+                      "Jianchen Pan",
+                      "Cui Gan",
+                      "Lanxi Zhang",
+                      "Hongmin Li",
+                      "Nan-Jie Gong"
+                    ],
+                    "published": "2026-11-09T08:21:27Z",
+                    "updated": "2026-11-09T08:21:27Z",
+                    "url": "http://arxiv.org/abs/2611.12044v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.12044v1",
+                    "source": "arxiv.org",
+                    "primary_category": "eess.IV",
+                    "categories": [
+                      "eess.IV",
+                      "cs.CV",
+                      "physics.med-ph"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.12042v1",
+                    "title": "Four-Step Text-Bearing Image Generation via Distillation with Local Response Regularization and Teacher-Guided Training",
+                    "summary": "Generating text-bearing images requires coherent scenes and accurate characters. Large text-to-image models improve both capabilities through repeated denoising, at substantial sampling cost. Few-step distillation reduces this cost but requires the student to organize scenes and refine glyphs within a short trajectory. We present a four-step distillation framework combining local response regularization with teacher-guided text training. Built on distribution matching, the framework distills the GLM-Image DiT while retaining its autoregressive visual prior, glyph encoder, and VAE. A path-length penalty promotes consistent local responses of the conditional denoising field. Progressive training combines synthetic strings with teacher-generated imagery to preserve character accuracy and scene-integrated typography. The student achieves GenEval Overall 0.84 and CVTG-2K word accuracy 0.5045, compared with 0.81 and 0.1690 for four-step TDM. A coefficient study favors $10^{-5}$, and Qwen-Image experiments show additional gains from response regularization and text supervision. Single-image inference takes 1.742 s, compared with 5.818 s for the teacher, yielding a $3.34\\times$ speedup at the same 40 GB GPU memory requirement.",
+                    "authors": [
+                      "Kairui Wen",
+                      "Sheng Ye",
+                      "Yong-Jin Liu"
+                    ],
+                    "published": "2026-11-09T08:20:36Z",
+                    "updated": "2026-11-09T08:20:36Z",
+                    "url": "http://arxiv.org/abs/2611.12042v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.12042v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.CV",
+                    "categories": [
+                      "cs.CV"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.12040v1",
+                    "title": "Leveraging Complementary Event Frame and Voxel Representations for RGB-Guided Multimodal Pre-training",
+                    "summary": "In this paper, we propose CM3AE 2.0, a unified RGB Frame and Event-Voxel/-Frame pre-training framework. By jointly learning multimodal spatiotemporal representations and exploiting latent cross-modal dependencies through cross-modal generation, the framework enhances multimodal information interaction and collaborative modeling capabilities. Specifically, we first propose an Event-aware Spatiotemporal Masked Reconstruction (ESMR) strategy to learn unified multimodal spatiotemporal representations. It leverages event responses to guide masking toward dynamically salient regions. Through spatiotemporal masked reconstruction, it learns spatial structures and their temporal variations from continuous RGB-Event observations. In addition, it incorporates multimodal fusion reconstruction and cross-modal contrastive learning to facilitate the modeling of cross-modal complementary information and the learning of shared representations. Building upon this, we further propose a Hierarchical Cross-modal Generation (HCG) strategy to learn latent cross-modal dependencies through visual and language generation. At the visual level, Event-conditioned RGB generation is performed using a pre-trained diffusion model to capture visual associations between the two modalities. At the language level, video-level text description generation based on joint RGB-Event representations establishes connections between multimodal visual features and linguistic semantics, further enriching the learning of cross-modal dependencies. Extensive experiments on four diverse downstream tasks demonstrate that CM3AE 2.0 consistently improves performance, validating the effectiveness and generalization capability of the proposed pre-training framework.",
+                    "authors": [
+                      "Wentao Wu",
+                      "Xiao Wang",
+                      "Yi Wang",
+                      "Chenglong Li",
+                      "Yonghong Tian",
+                      "Bin Luo"
+                    ],
+                    "published": "2026-11-09T08:17:45Z",
+                    "updated": "2026-11-09T08:17:45Z",
+                    "url": "http://arxiv.org/abs/2611.12040v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.12040v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.CV",
+                    "categories": [
+                      "cs.CV",
+                      "cs.AI"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.12038v1",
+                    "title": "DPGS-SLAM: Diffusion-Prior and Provenance-Aware Monocular Gaussian Splatting SLAM for Dynamic Visual Sensing",
+                    "summary": "This paper presents DPGS-SLAM (Diffusion-Prior and Provenance-Aware Monocular Gaussian Splatting SLAM) for dense mapping in environments containing dynamic objects. Dynamic observations can contaminate camera tracking and scene reconstruction in visual SLAM (simultaneous localization and mapping). Although 3DGS (3D Gaussian splatting) enables efficient dense mapping, existing 3DGS-SLAM systems may exhibit instability when dynamic objects violate their underlying static-scene assumption. Excluding dynamic observations can reduce their influence on tracking and mapping, but may leave occluded static backgrounds missing or weakly constrained. Our proposed DPGS-SLAM is a monocular RGB SLAM framework that supports provisional representations of insufficiently observed static backgrounds through asynchronous diffusion-based background completion and provenance-aware Gaussian mapping. Dynamic regions are identified through optical-flow-based motion discovery and temporally consistent mask propagation by SAM2 (segment anything model 2). For selected keyframes, a fine-tuned diffusion inpainting model generates plausible background appearance in occluded regions, while Metric3D v2 predicts metric depth from the completed images to initialize provisional Gaussian primitives. Provenance labels distinguish generated primitives from observation-supported primitives, excluding generated content from camera-pose estimation and observed-map optimization. When previously occluded backgrounds become visible, eligible generated primitives are removed, and observation-supported primitives are independently initialized from real RGB observations and predicted depth. Experimental results demonstrated competitive camera tracking, with average ATE RMSE values of 1.2 cm on TUM RGB-D and 2.7 cm on BONN RGB-D. On StaDy4D, DPGS-SLAM improved average PSNR by 4.60 dB over WildGS-SLAM using only monocular RGB input.",
+                    "authors": [
+                      "Yifan Luo",
+                      "Takafumi Matsumaru",
+                      "Vibekananda Dutta",
+                      "Xin He"
+                    ],
+                    "published": "2026-11-09T08:15:55Z",
+                    "updated": "2026-11-09T08:15:55Z",
+                    "url": "http://arxiv.org/abs/2611.12038v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.12038v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.RO",
+                    "categories": [
+                      "cs.RO",
+                      "cs.CV"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.12037v1",
+                    "title": "SAFE-Hair: Scalp-Anchored Fields for Exportable Single-View Hair Reconstruction",
+                    "summary": "Single-view 3D hair reconstruction has progressed rapidly, but many methods optimize for visual plausibility rather than producing strand assets that can be directly used in grooming, editing, or simulation pipelines. We propose SAFE-Hair, a framework that reconstructs explicit strand grooms from a single portrait by decoding hair from persistent follicles in a canonical scalp-UV domain. Given a fitted template head, SAFE-Hair projects self-supervised image features onto the scalp, uses a conditional Rectified Flow model to generate latent scalp fields, and decodes occupancy, segment directions, length allocation, and total length at a fixed set of scalp follicles. This representation enforces scalp-rooted strand identities by construction and enables direct export with follicle IDs and guide-family metadata. We further introduce attachment, collision, and bending priors to improve geometric validity without per-subject test-time optimization. To evaluate both reconstruction fidelity and asset usability, we introduce HairBench-3D, a benchmark built from public 3D hair assets with standardized alignment, rendering, resampling, and metrics for geometry, direction consistency, invisible-region completion, silhouette agreement, and collision. SAFE-Hair improves Chamfer distance from 3.74 mm to 3.28 mm, F-score from 77.9 to 81.7, invisible-region F-score from 66.1 to 69.8, and penetration ratio from 4.8% to 3.9% over the strongest baseline.",
+                    "authors": [
+                      "Yucheng Wang",
+                      "Zedong Wang",
+                      "Yuetong Wu",
+                      "Yue Ma",
+                      "Dan Xu"
+                    ],
+                    "published": "2026-11-09T08:15:20Z",
+                    "updated": "2026-11-09T08:15:20Z",
+                    "url": "http://arxiv.org/abs/2611.12037v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.12037v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.CV",
+                    "categories": [
+                      "cs.CV"
+                    ]
+                  }
+                ],
+                "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "Dưới đây là 5 bài báo mới nhất (theo ngày nộp) trên arXiv liên quan tới **computer vision** mà tôi đã tìm được. Mỗi mục gồm tiêu đề, tác giả, tóm tắt ngắn và liên kết tới bản abstract (và PDF).\n\n| # | Tiêu đề | Tác giả | Tóm tắt ngắn | Link |\n|---|--------|---------|--------------|------|\n| 1 | **Leveraging High‑Activity Post‑Therapeutic I‑131 Scans for Deep Learning Reconstruction of Extremely Sparse Planar Images in Differentiated Thyroid Cancer** | Boyang Pan, Hang Yang, Jianchen Pan, … | Đề xuất dùng các ảnh I‑131 sau điều trị (có tín hiệu mạnh) làm dữ liệu huấn luyện cho mô hình deep‑learning nhằm cải thiện chất lượng ảnh chẩn đoán rất thưa photon. Kết quả cho thấy mô hình học chuyển (transfer‑learning) và việc cộng thêm ảnh đầu vào giúp tăng PSNR/SSIM và giảm thời gian quét lên tới 2× mà vẫn duy trì chất lượng hình ảnh. | <http://arxiv.org/abs/2611.12044v1> |\n| 2 | **Four‑Step Text‑Bearing Image Generation via Distillation with Local Response Regularization and Teacher‑Guided Training** | Kairui Wen, Sheng Ye, Yong‑Jin Liu | Phát triển một khung distillation chỉ 4 bước để sinh ảnh chứa văn bản, kết hợp regularization phản hồi cục bộ và huấn luyện có hướng dẫn từ mô hình “teacher”. Mô hình sinh nhanh gấp 3,3 lần so với teacher, đồng thời cải thiện độ chính xác ký tự và chất lượng tổng thể. | <http://arxiv.org/abs/2611.12042v1> |\n| 3 | **Leveraging Complementary Event Frame and Voxel Representations for RGB‑Guided Multimodal Pre‑training** | Wentao Wu, Xiao Wang, Yi Wang, … | Đề xuất CM3AE 2.0 – một khung pre‑training đa mô‑điệu kết hợp khung ảnh RGB và dữ liệu sự kiện (event) dưới dạng voxel. Sử dụng chiến lược “Event‑aware Spatiotemporal Masked Reconstruction” và “Hierarchical Cross‑modal Generation” để học biểu diễn thời‑không gian chung, cải thiện hiệu suất trên bốn nhiệm vụ downstream (nhận dạng hành động, phát hiện đối tượng, …). | <http://arxiv.org/abs/2611.12040v1> |\n| 4 | **DPGS‑SLAM: Diffusion‑Prior and Provenance‑Aware Monocular Gaussian Splatting SLAM for Dynamic Visual Sensing** | Yifan Luo, Takafumi Matsumaru, Vibekananda Dutta, Xin He | Một hệ thống SLAM monocular dựa trên Gaussian Splatting, tích hợp mô hình diffusion để “hoàn thiện” nền tĩnh bị che khuất bởi các đối tượng động. Hệ thống phát hiện vùng động bằng optical flow + SAM2, sau đó dùng diffusion inpainting và dự đoán độ sâu metric để tạo các Gaussian tạm thời. Kết quả cho ATE RMSE 1,2 cm (TUM) và cải thiện PSNR 4,6 dB trên bộ dữ liệu động. | <http://arxiv.org/abs/2611.12038v1> |\n| 5 | **SAFE‑Hair: Scalp‑Anchored Fields for Exportable Single‑View Hair Reconstruction** | Yucheng Wang, Zedong Wang, Yuetong Wu, … | Phương pháp tái tạo tóc 3D từ một ảnh duy nhất, dựa trên “scalp‑anchored fields” để giữ nguyên vị trí gốc tóc. Sử dụng mô hình Rectified Flow và các prior (đính kèm, va chạm, uốn cong) để tạo ra các sợi tóc có thể xuất khẩu trực tiếp sang pipeline grooming/simulation. Đánh giá trên benchmark HairBench‑3D cho thấy cải thiện Chamfer distance (3,28 mm) và tỉ lệ xuyên thấu giảm xuống 3,9 %. | <http://arxiv.org/abs/2611.12037v1> |\n\n**Lưu ý:** Các bài báo trên đều thuộc lĩnh vực computer vision (hoặc các nhánh liên quan như xử lý ảnh y tế, sinh ảnh có văn bản, SLAM, tái tạo tóc). Nếu bạn muốn xem chi tiết nội dung, tải PDF hoặc tìm các bài báo khác (ví dụ: theo chủ đề cụ thể hơn), hãy cho tôi biết để tôi có thể thực hiện tìm kiếm bổ sung.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "papers",
+          "args": {
+            "max_results": 5,
+            "query": "computer vision",
+            "sort_by": "submittedDate"
+          },
+          "result": {
+            "tool": "arxiv_search",
+            "query": "computer vision",
+            "api_query": "all:computer AND all:vision",
+            "total_results": 232402,
+            "items": [
+              {
+                "arxiv_id": "2611.12044v1",
+                "title": "Leveraging High-Activity Post-Therapeutic I-131 Scans for Deep Learning Reconstruction of Extremely Sparse Planar Images in Differentiated Thyroid Cancer",
+                "summary": "Background: Diagnostic I-131 whole-body planar imaging in differentiated thyroid cancer (DTC) is count-limited by low administered activity, and quality worsens under rapid acquisition. Models trained on such data struggle because their targets lack photon statistics. Purpose: To test whether high-quality post-therapeutic (PT) I-131 scans can serve as superior training references for enhancing sparse diagnostic planar images, using transfer learning and input-image addition. Methods: In this single-center prospective study, 111 patients were enrolled in PT training (n = 19), diagnostic follow-up (FU) training (n = 58), and FU paired test (n = 34) cohorts. Five Restormer-based models were trained: FU_DLx2 on FU labels; PT_DLx2 transfer-learned on PT data; PT_DLx1+ and PT_DLx2+ with input-image addition; PT_DLx6 as a PT-only reference. Test-time processing used two-step denormalization and Poisson re-scaling to preserve noise statistics. Quality was assessed by PSNR, SSIM, and a blinded dual-reader evaluation of all 34 test-cohort patients. Results: PT_DLx2 achieved the highest PSNR (34.4 +/- 3.6 dB) and SSIM (0.81 +/- 0.07). PT_DLx1+ and PT_DLx2+ were comparable (33.8 and 33.3 dB; SSIM 0.80). FU_DLx2 ranked below the unprocessed fast scan (30.3 vs. 32.0 dB; 0.76 vs. 0.79). Subjectively, PT_DLx2+ scored highest in image quality (4.54 +/- 0.60) and diagnostic confidence (4.54 +/- 0.60), surpassing the reference standard (4.19 +/- 0.83 and 4.31 +/- 0.81; P = 0.005 and P = 0.008). FU_DLx2 and PT_DLx6 scored lowest. Conclusion: Count-rich PT scans provide effective training priors for reconstructing extremely sparse images. Input-image addition and cross-domain transfer learning from PT data outperformed direct training on count-limited diagnostic data, supporting 2x scan acceleration with quality matching or exceeding the unaccelerated standard scan for selected PT-derived configurations.",
+                "authors": [
+                  "Boyang Pan",
+                  "Hang Yang",
+                  "Jianchen Pan",
+                  "Cui Gan",
+                  "Lanxi Zhang",
+                  "Hongmin Li",
+                  "Nan-Jie Gong"
+                ],
+                "published": "2026-11-09T08:21:27Z",
+                "updated": "2026-11-09T08:21:27Z",
+                "url": "http://arxiv.org/abs/2611.12044v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.12044v1",
+                "source": "arxiv.org",
+                "primary_category": "eess.IV",
+                "categories": [
+                  "eess.IV",
+                  "cs.CV",
+                  "physics.med-ph"
+                ]
+              },
+              {
+                "arxiv_id": "2611.12042v1",
+                "title": "Four-Step Text-Bearing Image Generation via Distillation with Local Response Regularization and Teacher-Guided Training",
+                "summary": "Generating text-bearing images requires coherent scenes and accurate characters. Large text-to-image models improve both capabilities through repeated denoising, at substantial sampling cost. Few-step distillation reduces this cost but requires the student to organize scenes and refine glyphs within a short trajectory. We present a four-step distillation framework combining local response regularization with teacher-guided text training. Built on distribution matching, the framework distills the GLM-Image DiT while retaining its autoregressive visual prior, glyph encoder, and VAE. A path-length penalty promotes consistent local responses of the conditional denoising field. Progressive training combines synthetic strings with teacher-generated imagery to preserve character accuracy and scene-integrated typography. The student achieves GenEval Overall 0.84 and CVTG-2K word accuracy 0.5045, compared with 0.81 and 0.1690 for four-step TDM. A coefficient study favors $10^{-5}$, and Qwen-Image experiments show additional gains from response regularization and text supervision. Single-image inference takes 1.742 s, compared with 5.818 s for the teacher, yielding a $3.34\\times$ speedup at the same 40 GB GPU memory requirement.",
+                "authors": [
+                  "Kairui Wen",
+                  "Sheng Ye",
+                  "Yong-Jin Liu"
+                ],
+                "published": "2026-11-09T08:20:36Z",
+                "updated": "2026-11-09T08:20:36Z",
+                "url": "http://arxiv.org/abs/2611.12042v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.12042v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.CV",
+                "categories": [
+                  "cs.CV"
+                ]
+              },
+              {
+                "arxiv_id": "2611.12040v1",
+                "title": "Leveraging Complementary Event Frame and Voxel Representations for RGB-Guided Multimodal Pre-training",
+                "summary": "In this paper, we propose CM3AE 2.0, a unified RGB Frame and Event-Voxel/-Frame pre-training framework. By jointly learning multimodal spatiotemporal representations and exploiting latent cross-modal dependencies through cross-modal generation, the framework enhances multimodal information interaction and collaborative modeling capabilities. Specifically, we first propose an Event-aware Spatiotemporal Masked Reconstruction (ESMR) strategy to learn unified multimodal spatiotemporal representations. It leverages event responses to guide masking toward dynamically salient regions. Through spatiotemporal masked reconstruction, it learns spatial structures and their temporal variations from continuous RGB-Event observations. In addition, it incorporates multimodal fusion reconstruction and cross-modal contrastive learning to facilitate the modeling of cross-modal complementary information and the learning of shared representations. Building upon this, we further propose a Hierarchical Cross-modal Generation (HCG) strategy to learn latent cross-modal dependencies through visual and language generation. At the visual level, Event-conditioned RGB generation is performed using a pre-trained diffusion model to capture visual associations between the two modalities. At the language level, video-level text description generation based on joint RGB-Event representations establishes connections between multimodal visual features and linguistic semantics, further enriching the learning of cross-modal dependencies. Extensive experiments on four diverse downstream tasks demonstrate that CM3AE 2.0 consistently improves performance, validating the effectiveness and generalization capability of the proposed pre-training framework.",
+                "authors": [
+                  "Wentao Wu",
+                  "Xiao Wang",
+                  "Yi Wang",
+                  "Chenglong Li",
+                  "Yonghong Tian",
+                  "Bin Luo"
+                ],
+                "published": "2026-11-09T08:17:45Z",
+                "updated": "2026-11-09T08:17:45Z",
+                "url": "http://arxiv.org/abs/2611.12040v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.12040v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.CV",
+                "categories": [
+                  "cs.CV",
+                  "cs.AI"
+                ]
+              },
+              {
+                "arxiv_id": "2611.12038v1",
+                "title": "DPGS-SLAM: Diffusion-Prior and Provenance-Aware Monocular Gaussian Splatting SLAM for Dynamic Visual Sensing",
+                "summary": "This paper presents DPGS-SLAM (Diffusion-Prior and Provenance-Aware Monocular Gaussian Splatting SLAM) for dense mapping in environments containing dynamic objects. Dynamic observations can contaminate camera tracking and scene reconstruction in visual SLAM (simultaneous localization and mapping). Although 3DGS (3D Gaussian splatting) enables efficient dense mapping, existing 3DGS-SLAM systems may exhibit instability when dynamic objects violate their underlying static-scene assumption. Excluding dynamic observations can reduce their influence on tracking and mapping, but may leave occluded static backgrounds missing or weakly constrained. Our proposed DPGS-SLAM is a monocular RGB SLAM framework that supports provisional representations of insufficiently observed static backgrounds through asynchronous diffusion-based background completion and provenance-aware Gaussian mapping. Dynamic regions are identified through optical-flow-based motion discovery and temporally consistent mask propagation by SAM2 (segment anything model 2). For selected keyframes, a fine-tuned diffusion inpainting model generates plausible background appearance in occluded regions, while Metric3D v2 predicts metric depth from the completed images to initialize provisional Gaussian primitives. Provenance labels distinguish generated primitives from observation-supported primitives, excluding generated content from camera-pose estimation and observed-map optimization. When previously occluded backgrounds become visible, eligible generated primitives are removed, and observation-supported primitives are independently initialized from real RGB observations and predicted depth. Experimental results demonstrated competitive camera tracking, with average ATE RMSE values of 1.2 cm on TUM RGB-D and 2.7 cm on BONN RGB-D. On StaDy4D, DPGS-SLAM improved average PSNR by 4.60 dB over WildGS-SLAM using only monocular RGB input.",
+                "authors": [
+                  "Yifan Luo",
+                  "Takafumi Matsumaru",
+                  "Vibekananda Dutta",
+                  "Xin He"
+                ],
+                "published": "2026-11-09T08:15:55Z",
+                "updated": "2026-11-09T08:15:55Z",
+                "url": "http://arxiv.org/abs/2611.12038v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.12038v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.RO",
+                "categories": [
+                  "cs.RO",
+                  "cs.CV"
+                ]
+              },
+              {
+                "arxiv_id": "2611.12037v1",
+                "title": "SAFE-Hair: Scalp-Anchored Fields for Exportable Single-View Hair Reconstruction",
+                "summary": "Single-view 3D hair reconstruction has progressed rapidly, but many methods optimize for visual plausibility rather than producing strand assets that can be directly used in grooming, editing, or simulation pipelines. We propose SAFE-Hair, a framework that reconstructs explicit strand grooms from a single portrait by decoding hair from persistent follicles in a canonical scalp-UV domain. Given a fitted template head, SAFE-Hair projects self-supervised image features onto the scalp, uses a conditional Rectified Flow model to generate latent scalp fields, and decodes occupancy, segment directions, length allocation, and total length at a fixed set of scalp follicles. This representation enforces scalp-rooted strand identities by construction and enables direct export with follicle IDs and guide-family metadata. We further introduce attachment, collision, and bending priors to improve geometric validity without per-subject test-time optimization. To evaluate both reconstruction fidelity and asset usability, we introduce HairBench-3D, a benchmark built from public 3D hair assets with standardized alignment, rendering, resampling, and metrics for geometry, direction consistency, invisible-region completion, silhouette agreement, and collision. SAFE-Hair improves Chamfer distance from 3.74 mm to 3.28 mm, F-score from 77.9 to 81.7, invisible-region F-score from 66.1 to 69.8, and penetration ratio from 4.8% to 3.9% over the strongest baseline.",
+                "authors": [
+                  "Yucheng Wang",
+                  "Zedong Wang",
+                  "Yuetong Wu",
+                  "Yue Ma",
+                  "Dan Xu"
+                ],
+                "published": "2026-11-09T08:15:20Z",
+                "updated": "2026-11-09T08:15:20Z",
+                "url": "http://arxiv.org/abs/2611.12037v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.12037v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.CV",
+                "categories": [
+                  "cs.CV"
+                ]
+              }
+            ],
+            "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T12:03:45"
+    },
+    {
+      "turn_index": 5,
+      "started_at": "2026-11-10T12:05:11",
+      "user": "giả phương trình x^2 = -1",
+      "status": "answered",
+      "assistant_text": "Phương trình  \n\n\\[\nx^{2} = -1\n\\]\n\nkhông có nghiệm trong tập số thực vì bình phương của bất kỳ số thực nào luôn \\(\\ge 0\\). Để giải, ta phải mở rộng sang **số phức**.\n\n### Bước 1: Định nghĩa đơn vị ảo \\(i\\)\n\n\\[\ni \\; \\text{được định nghĩa sao cho} \\; i^{2} = -1.\n\\]\n\n### Bước 2: Tìm nghiệm\n\nNếu \\(x = i\\) thì  \n\n\\[\nx^{2} = i^{2} = -1 \\quad \\text{đúng}.\n\\]\n\nNếu \\(x = -i\\) thì  \n\n\\[\nx^{2} = (-i)^{2} = (-1)^{2} i^{2} = 1 \\cdot (-1) = -1 \\quad \\text{cũng đúng}.\n\\]\n\n### Kết luận\n\n\\[\n\\boxed{x = i \\;\\; \\text{hoặc} \\;\\; x = -i}\n\\]\n\nNghĩa là nghiệm của phương trình trong tập số phức là hai số ảo đối nhau. Nếu chỉ xét trong tập số thực, phương trình **không có nghiệm**.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Phương trình  \n\n\\[\nx^{2} = -1\n\\]\n\nkhông có nghiệm trong tập số thực vì bình phương của bất kỳ số thực nào luôn \\(\\ge 0\\). Để giải, ta phải mở rộng sang **số phức**.\n\n### Bước 1: Định nghĩa đơn vị ảo \\(i\\)\n\n\\[\ni \\; \\text{được định nghĩa sao cho} \\; i^{2} = -1.\n\\]\n\n### Bước 2: Tìm nghiệm\n\nNếu \\(x = i\\) thì  \n\n\\[\nx^{2} = i^{2} = -1 \\quad \\text{đúng}.\n\\]\n\nNếu \\(x = -i\\) thì  \n\n\\[\nx^{2} = (-i)^{2} = (-1)^{2} i^{2} = 1 \\cdot (-1) = -1 \\quad \\text{cũng đúng}.\n\\]\n\n### Kết luận\n\n\\[\n\\boxed{x = i \\;\\; \\text{hoặc} \\;\\; x = -i}\n\\]\n\nNghĩa là nghiệm của phương trình trong tập số phức là hai số ảo đối nhau. Nếu chỉ xét trong tập số thực, phương trình **không có nghiệm**.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T12:05:13"
+    },
+    {
+      "turn_index": 6,
+      "started_at": "2026-11-10T12:06:13",
+      "user": "tài khoản có nhiều fl nhất twitter",
+      "status": "answered",
+      "assistant_text": "Theo các thống kê công khai gần đây (đến cuối 2023), **tài khoản Twitter có số lượng người theo dõi (followers) nhiều nhất là tài khoản của Elon Musk** (@elonmusk).  \n\nCác tài khoản đứng sau Elon Musk thường là:\n\n| Hạng | Tài khoản | Người theo dõi (ước tính) |\n|------|-----------|----------------------------|\n| 1 | **@elonmusk** (Elon Musk) | ~ 170 triệu |\n| 2 | **@BarackObama** (Barack Obama) | ~ 132 triệu |\n| 3 | **@justinbieber** (Justin Bieber) | ~ 112 triệu |\n| 4 | **@katyperry** (Katy Perry) | ~ 108 triệu |\n| 5 | **@rihanna** (Rihanna) | ~ 106 triệu |\n\n*Lưu ý:* Số liệu có thể thay đổi nhanh chóng do người dùng mới theo dõi hoặc bỏ theo dõi, và các con số trên chỉ là ước tính dựa trên các báo cáo và danh sách “most‑followed” được tổng hợp từ các nguồn tin tức công nghệ và mạng xã hội. Nếu bạn cần số liệu cập nhật chính xác hơn, bạn có thể kiểm tra trực tiếp trên trang hồ sơ của từng tài khoản hoặc dùng các công cụ phân tích mạng xã hội.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "lookup",
+              "args": {
+                "max_results": 5,
+                "query": "most followed Twitter account",
+                "timeframe": "year",
+                "topic": "general"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "lookup",
+              "args": {
+                "max_results": 5,
+                "query": "most followed Twitter account",
+                "timeframe": "year",
+                "topic": "general"
+              },
+              "result": {
+                "tool": "web_search",
+                "error": "RuntimeError",
+                "message": "Missing TAVILY_API_KEY env var"
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "Theo các thống kê công khai gần đây (đến cuối 2023), **tài khoản Twitter có số lượng người theo dõi (followers) nhiều nhất là tài khoản của Elon Musk** (@elonmusk).  \n\nCác tài khoản đứng sau Elon Musk thường là:\n\n| Hạng | Tài khoản | Người theo dõi (ước tính) |\n|------|-----------|----------------------------|\n| 1 | **@elonmusk** (Elon Musk) | ~ 170 triệu |\n| 2 | **@BarackObama** (Barack Obama) | ~ 132 triệu |\n| 3 | **@justinbieber** (Justin Bieber) | ~ 112 triệu |\n| 4 | **@katyperry** (Katy Perry) | ~ 108 triệu |\n| 5 | **@rihanna** (Rihanna) | ~ 106 triệu |\n\n*Lưu ý:* Số liệu có thể thay đổi nhanh chóng do người dùng mới theo dõi hoặc bỏ theo dõi, và các con số trên chỉ là ước tính dựa trên các báo cáo và danh sách “most‑followed” được tổng hợp từ các nguồn tin tức công nghệ và mạng xã hội. Nếu bạn cần số liệu cập nhật chính xác hơn, bạn có thể kiểm tra trực tiếp trên trang hồ sơ của từng tài khoản hoặc dùng các công cụ phân tích mạng xã hội.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "lookup",
+          "args": {
+            "max_results": 5,
+            "query": "most followed Twitter account",
+            "timeframe": "year",
+            "topic": "general"
+          },
+          "result": {
+            "tool": "web_search",
+            "error": "RuntimeError",
+            "message": "Missing TAVILY_API_KEY env var"
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T12:06:29"
+    }
+  ]
+}

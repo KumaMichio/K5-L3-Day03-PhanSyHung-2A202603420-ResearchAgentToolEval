@@ -1,0 +1,567 @@
+{
+  "transcript_id": "v1_openrouter_20261110T114345004351",
+  "version": "v1",
+  "artifact_version": "v1+peb1c8179815b+t5b22a2476d41",
+  "prompt_hash": "eb1c8179815bd79d34de7d326420bb99b3072e6e8ae96464c02d4411f905fc68",
+  "tools_hash": "5b22a2476d41b989d5dc1e54f24ce7890e781909deb2f7afafb856ab53a6d7c0",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-oss-120b",
+  "system_prompt": "artifacts\\system_prompt.md",
+  "tools": "artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T11:43:45",
+  "updated_at": "2026-11-10T11:46:55",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T11:43:47",
+      "user": "Tweet mới nhất của Sam Altman là gì?",
+      "status": "answered",
+      "assistant_text": "I’m sorry—I wasn’t able to retrieve Sam Altman’s most recent tweet because the required external‑API keys aren’t available. To see his latest post, you can check his Twitter timeline directly at **twitter.com/SamAltman**.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "timeline",
+              "args": {
+                "limit": 1,
+                "screenname": "SamAltman"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "timeline",
+              "args": {
+                "limit": 1,
+                "screenname": "SamAltman"
+              },
+              "result": {
+                "tool": "get_user_tweets",
+                "error": "RuntimeError",
+                "message": "Missing RAPIDAPI_KEY env var"
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "social_search",
+              "args": {
+                "limit": 1,
+                "query": "Sam Altman",
+                "search_type": "Latest"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "social_search",
+              "args": {
+                "limit": 1,
+                "query": "Sam Altman",
+                "search_type": "Latest"
+              },
+              "result": {
+                "tool": "search_tweets",
+                "error": "RuntimeError",
+                "message": "Missing RAPIDAPI_KEY env var"
+              }
+            }
+          ]
+        },
+        {
+          "round": 3,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "lookup",
+              "args": {
+                "max_results": 5,
+                "query": "Sam Altman latest tweet November 2026",
+                "timeframe": "day",
+                "topic": "news"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "lookup",
+              "args": {
+                "max_results": 5,
+                "query": "Sam Altman latest tweet November 2026",
+                "timeframe": "day",
+                "topic": "news"
+              },
+              "result": {
+                "tool": "web_search",
+                "error": "RuntimeError",
+                "message": "Missing TAVILY_API_KEY env var"
+              }
+            }
+          ]
+        },
+        {
+          "round": 4,
+          "assistant_text": "I’m sorry—I wasn’t able to retrieve Sam Altman’s most recent tweet because the required external‑API keys aren’t available. To see his latest post, you can check his Twitter timeline directly at **twitter.com/SamAltman**.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "timeline",
+          "args": {
+            "limit": 1,
+            "screenname": "SamAltman"
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "error": "RuntimeError",
+            "message": "Missing RAPIDAPI_KEY env var"
+          }
+        },
+        {
+          "tool": "social_search",
+          "args": {
+            "limit": 1,
+            "query": "Sam Altman",
+            "search_type": "Latest"
+          },
+          "result": {
+            "tool": "search_tweets",
+            "error": "RuntimeError",
+            "message": "Missing RAPIDAPI_KEY env var"
+          }
+        },
+        {
+          "tool": "lookup",
+          "args": {
+            "max_results": 5,
+            "query": "Sam Altman latest tweet November 2026",
+            "timeframe": "day",
+            "topic": "news"
+          },
+          "result": {
+            "tool": "web_search",
+            "error": "RuntimeError",
+            "message": "Missing TAVILY_API_KEY env var"
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T11:43:53"
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-11-10T11:45:38",
+      "user": "Tìm vài paper mới về AI agent evaluation",
+      "status": "answered",
+      "assistant_text": "- Introduces a finite‑sample probabilistic safety certification framework for AI agents coordinating thousands of grid‑edge devices, using binomial inference and adversarial attacks to bound unsafe operation probability. – [arxiv.org](http://arxiv.org/abs/2609.28182v2)  \n- Examines whether notes (harness) around a frozen‑weight 9B model can learn from the agent’s failure traces, showing modest gains in customer‑service decision accuracy but limited transfer to full conversations. – [arxiv.org](http://arxiv.org/abs/2611.11342v1)  \n- Presents ScrapeBench, a benchmark measuring how often AI agents obey website terms‑of‑service and robots.txt; finds most agents have <5 % compliance on prohibited sites and over‑refuse on allowed sites. – [arxiv.org](http://arxiv.org/abs/2611.11306v1)  \n- Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success under a limited budget, achieving tighter bounds and better coverage than baselines. – [arxiv.org](http://arxiv.org/abs/2611.11279v1)  \n- Introduces a citation system that ties chatbot data claims to their analytic provenance; experiments show citations improve perceived accuracy of correct claims and reduce trust in incorrect ones. – [arxiv.org](http://arxiv.org/abs/2611.11325v1)",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "papers",
+              "args": {
+                "max_results": 5,
+                "query": "AI agent evaluation",
+                "sort_by": "lastUpdatedDate"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "papers",
+              "args": {
+                "max_results": 5,
+                "query": "AI agent evaluation",
+                "sort_by": "lastUpdatedDate"
+              },
+              "result": {
+                "tool": "arxiv_search",
+                "query": "AI agent evaluation",
+                "api_query": "all:AI AND all:agent AND all:evaluation",
+                "total_results": 6035,
+                "items": [
+                  {
+                    "arxiv_id": "2609.28182v2",
+                    "title": "Finite-Sample Probabilistic Safety Certification for AI-Based Grid-Edge Coordination",
+                    "summary": "Coordinating a large population of flexible grid-edge devices can alleviate the need for time-consuming and capital-intensive network upgrades. Artificial intelligence (AI)-based control methods such as multi-agent reinforcement learning or imitation learning are promising to this coordination due to their real-time decision scalability. However, system operators still need an independent and rigorous way to decide whether a given AI system is safe enough for deployment. This paper develops a \\emph{finite-sample} probabilistic safety certification framework for AI-based grid-edge coordination. The central idea is to reduce the complete input--AI--decision--evaluation workflow to a binary unsafe outcome under an operator-defined safety specification, and then use exact binomial inference to certify the corresponding unsafe operation probability. Given a set of held-out calibration scenarios, the framework returns the tightest one-sided upper certificate and an accept/reject deployment criterion that controls the probability of false safety certification. Because the certification is for the calibration distribution that may \\emph{deviate} from the future operation, we further combine the nominal certificate with physically interpretable sample-space adversarial attacks, a concept widely used in AI models to investigate their fragility. Case studies on grid-edge flexibility coordination with 1{,}000-agent AI models (independent parameters) verify the safety guarantee and the value of integrating adversarial attacks into a rolling-window training-certification-deployment flow.",
+                    "authors": [
+                      "Yihong Zhou",
+                      "Hanbin Yang",
+                      "Thomas Morstyn"
+                    ],
+                    "published": "2026-09-23T14:24:46Z",
+                    "updated": "2026-11-08T14:10:09Z",
+                    "url": "http://arxiv.org/abs/2609.28182v2",
+                    "pdf_url": "https://arxiv.org/pdf/2609.28182v2",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.AI",
+                    "categories": [
+                      "cs.AI",
+                      "cs.LG",
+                      "eess.SY"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.11342v1",
+                    "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+                    "summary": "We evaluate whether an AI agent's harness, the notes around its model, can learn from the agent's failure traces beyond a matched search that never sees them. It can, but less than it looks. We tested an open 9-billion-parameter model with fixed weights; a larger teacher model wrote its notes. On generated customer-service decisions, where both note writers were told the target rules, notes based on the agent's mistakes improved accuracy by 4.0 percentage points over notes from the same process with the mistakes withheld. That process alone, trying and keeping better-scoring notes, reached about 60% of the total improvement. In full customer-service conversations the same notes showed no demonstrated improvement. Separately, a strict screen of single lessons admitted two customer-service lessons, still awaiting tests on new data, and one tool-use lesson, written without seeing the agent's mistakes, which showed no demonstrated gain on new tool-use tasks. A neutral note with no procedure scored higher than the learned lessons (exploratory). A blind audit judged 146 of 240 tool-use test items defective.",
+                    "authors": [
+                      "Arkid Mitra"
+                    ],
+                    "published": "2026-11-08T12:39:45Z",
+                    "updated": "2026-11-08T12:39:45Z",
+                    "url": "http://arxiv.org/abs/2611.11342v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.11342v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.LG",
+                    "categories": [
+                      "cs.LG",
+                      "cs.AI",
+                      "cs.CL"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.11325v1",
+                    "title": "Linking Event-sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation",
+                    "summary": "Chatbots are increasingly used to analyze temporal event sequences of which website clickstreams are among the most common. Explanations are essential for understanding claims about event-sequence data. However, existing systems often require programming expertise to interpret these explanations and fail to explain the data processes underlying the data claims. We introduce a technique for linking a data claim to its analytic provenance (i.e., the analytic steps and results that produced it). It has two components: a reference table that records analytic steps and results in addressable cells, and a citation format that binds each claim to one or more cells. To operationalize this technique for clickstream analysis, we curated a set of analytic operations for clickstream analysis, organized them through a pivot-table abstraction, and developed tools that an AI agent can invoke to create a reference table and assemble a natural language response with cited data claims. To evaluate how citations affect users' assessment of data claims, we conducted two crowdsourced experiments with 90 participants each. The experiments showed that participants perceived correct data claims to be more accurate with citations when compared with no explanations, and that they perceived incorrect data claims to be less accurate with citations when compared with code and no explanations.",
+                    "authors": [
+                      "Po-Ming Law",
+                      "Jianheng Ouyang",
+                      "Nguyen-Truong Thinh",
+                      "Weizhi Li",
+                      "Arpit Narechania"
+                    ],
+                    "published": "2026-11-08T12:00:56Z",
+                    "updated": "2026-11-08T12:00:56Z",
+                    "url": "http://arxiv.org/abs/2611.11325v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.11325v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.HC",
+                    "categories": [
+                      "cs.HC"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.11306v1",
+                    "title": "ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping",
+                    "summary": "AI agents deployed on the open web are becoming more capable of performing actions that may breach contractual provisions and violate computer security laws. In this paper, we introduce ScrapeBench, the first agentic benchmark for empirically evaluating the legal compliance of AI agents with website scraping policies, namely terms of service (ToS) and robots.txt directives. Across widely used closed-weight and open-weight AI agents, we find that most agents exhibit low compliance rates (< 5%) when instructed to scrape websites in our sample of 1,626 popular websites that explicitly prohibit scraping. In addition, we observe that even where AI agents actively check the applicable ToS and robots.txt, they continue to exhibit low compliance rates. Conversely, in our sample of 269 websites that do not prohibit scraping, we observe that agents sometimes refuse to scrape despite it being lawful, such as Claude Opus 4.6 exhibiting an over-refusal rate of 98.5%. Our human baseline experiments (n = 180 participants) suggest that humans exhibit compliance rates comparable to AI agents but over-refuse at much higher rates.",
+                    "authors": [
+                      "Joseph Marvin Imperial",
+                      "Daniel Slate",
+                      "Noam Kolt"
+                    ],
+                    "published": "2026-11-08T11:19:18Z",
+                    "updated": "2026-11-08T11:19:18Z",
+                    "url": "http://arxiv.org/abs/2611.11306v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.11306v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.CL",
+                    "categories": [
+                      "cs.CL",
+                      "cs.AI"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2611.11279v1",
+                    "title": "How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints",
+                    "summary": "We evaluate AI agents in an online setting where tasks arrive sequentially and, before running each task, we construct an upper predictive bound on its \\emph{time-to-success}---the number of interactions until the task is completed successfully. Under a limited budget, some runs are stopped early, so their time-to-success is unobserved (right-censored), and the correctness of the bound may be unknown. We introduce \\emph{\\textbf{PR}edictive Bounds for \\textbf{O}nline \\textbf{B}udget \\textbf{E}fficiency} (\\texttt{PROBE}), a method for constructing calibrated upper predictive bounds while adaptively allocating a limited budget across agent tasks to reduce the anticipated coverage deficit. Our method calibrates the bounds online using inverse-probability-weighted feedback together with a correction designed to minimize coverage deficit while remaining unbiased. We prove that \\texttt{PROBE} provides a coverage guarantee for any finite time horizon while satisfying the budget constraint. Experiments on software engineering, retrieval-augmented generation, and instruction following show that \\texttt{PROBE} attains a coverage rate closer to the target level with tighter predictive bounds than a calibrated baseline.",
+                    "authors": [
+                      "Roy Maor Lotan",
+                      "Shai Feldman",
+                      "Yaniv Romano"
+                    ],
+                    "published": "2026-11-08T10:05:38Z",
+                    "updated": "2026-11-08T10:05:38Z",
+                    "url": "http://arxiv.org/abs/2611.11279v1",
+                    "pdf_url": "https://arxiv.org/pdf/2611.11279v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.LG",
+                    "categories": [
+                      "cs.LG"
+                    ]
+                  }
+                ],
+                "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "format",
+              "args": {
+                "headline": "Recent Papers on AI Agent Evaluation (Late 2026)",
+                "items": [
+                  {
+                    "source": "arxiv.org",
+                    "summary": "Introduces a finite‑sample probabilistic safety certification framework for AI agents coordinating thousands of grid‑edge devices, using binomial inference and adversarial attacks to bound unsafe operation probability.",
+                    "title": "Finite-Sample Probabilistic Safety Certification for AI-Based Grid-Edge Coordination",
+                    "url": "http://arxiv.org/abs/2609.28182v2"
+                  },
+                  {
+                    "source": "arxiv.org",
+                    "summary": "Examines whether notes (harness) around a frozen‑weight 9B model can learn from the agent’s failure traces, showing modest gains in customer‑service decision accuracy but limited transfer to full conversations.",
+                    "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+                    "url": "http://arxiv.org/abs/2611.11342v1"
+                  },
+                  {
+                    "source": "arxiv.org",
+                    "summary": "Presents ScrapeBench, a benchmark measuring how often AI agents obey website terms‑of‑service and robots.txt; finds most agents have <5 % compliance on prohibited sites and over‑refuse on allowed sites.",
+                    "title": "ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping",
+                    "url": "http://arxiv.org/abs/2611.11306v1"
+                  },
+                  {
+                    "source": "arxiv.org",
+                    "summary": "Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success under a limited budget, achieving tighter bounds and better coverage than baselines.",
+                    "title": "How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints",
+                    "url": "http://arxiv.org/abs/2611.11279v1"
+                  },
+                  {
+                    "source": "arxiv.org",
+                    "summary": "Introduces a citation system that ties chatbot data claims to their analytic provenance; experiments show citations improve perceived accuracy of correct claims and reduce trust in incorrect ones.",
+                    "title": "Linking Event‑sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation",
+                    "url": "http://arxiv.org/abs/2611.11325v1"
+                  }
+                ],
+                "template": "bullets"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "format",
+              "args": {
+                "headline": "Recent Papers on AI Agent Evaluation (Late 2026)",
+                "items": [
+                  {
+                    "source": "arxiv.org",
+                    "summary": "Introduces a finite‑sample probabilistic safety certification framework for AI agents coordinating thousands of grid‑edge devices, using binomial inference and adversarial attacks to bound unsafe operation probability.",
+                    "title": "Finite-Sample Probabilistic Safety Certification for AI-Based Grid-Edge Coordination",
+                    "url": "http://arxiv.org/abs/2609.28182v2"
+                  },
+                  {
+                    "source": "arxiv.org",
+                    "summary": "Examines whether notes (harness) around a frozen‑weight 9B model can learn from the agent’s failure traces, showing modest gains in customer‑service decision accuracy but limited transfer to full conversations.",
+                    "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+                    "url": "http://arxiv.org/abs/2611.11342v1"
+                  },
+                  {
+                    "source": "arxiv.org",
+                    "summary": "Presents ScrapeBench, a benchmark measuring how often AI agents obey website terms‑of‑service and robots.txt; finds most agents have <5 % compliance on prohibited sites and over‑refuse on allowed sites.",
+                    "title": "ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping",
+                    "url": "http://arxiv.org/abs/2611.11306v1"
+                  },
+                  {
+                    "source": "arxiv.org",
+                    "summary": "Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success under a limited budget, achieving tighter bounds and better coverage than baselines.",
+                    "title": "How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints",
+                    "url": "http://arxiv.org/abs/2611.11279v1"
+                  },
+                  {
+                    "source": "arxiv.org",
+                    "summary": "Introduces a citation system that ties chatbot data claims to their analytic provenance; experiments show citations improve perceived accuracy of correct claims and reduce trust in incorrect ones.",
+                    "title": "Linking Event‑sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation",
+                    "url": "http://arxiv.org/abs/2611.11325v1"
+                  }
+                ],
+                "template": "bullets"
+              },
+              "result": {
+                "tool": "render_digest",
+                "template": "bullets",
+                "markdown": "- Introduces a finite‑sample probabilistic safety certification framework for AI agents coordinating thousands of grid‑edge devices, using binomial inference and adversarial attacks to bound unsafe operation probability. - [arxiv.org](http://arxiv.org/abs/2609.28182v2)\n- Examines whether notes (harness) around a frozen‑weight 9B model can learn from the agent’s failure traces, showing modest gains in customer‑service decision accuracy but limited transfer to full conversations. - [arxiv.org](http://arxiv.org/abs/2611.11342v1)\n- Presents ScrapeBench, a benchmark measuring how often AI agents obey website terms‑of‑service and robots.txt; finds most agents have <5 % compliance on prohibited sites and over‑refuse on allowed sites. - [arxiv.org](http://arxiv.org/abs/2611.11306v1)\n- Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success under a limited budget, achieving tighter bounds and better coverage than baselines. - [arxiv.org](http://arxiv.org/abs/2611.11279v1)\n- Introduces a citation system that ties chatbot data claims to their analytic provenance; experiments show citations improve perceived accuracy of correct claims and reduce trust in incorrect ones. - [arxiv.org](http://arxiv.org/abs/2611.11325v1)",
+                "item_count": 5
+              }
+            }
+          ]
+        },
+        {
+          "round": 3,
+          "assistant_text": "- Introduces a finite‑sample probabilistic safety certification framework for AI agents coordinating thousands of grid‑edge devices, using binomial inference and adversarial attacks to bound unsafe operation probability. – [arxiv.org](http://arxiv.org/abs/2609.28182v2)  \n- Examines whether notes (harness) around a frozen‑weight 9B model can learn from the agent’s failure traces, showing modest gains in customer‑service decision accuracy but limited transfer to full conversations. – [arxiv.org](http://arxiv.org/abs/2611.11342v1)  \n- Presents ScrapeBench, a benchmark measuring how often AI agents obey website terms‑of‑service and robots.txt; finds most agents have <5 % compliance on prohibited sites and over‑refuse on allowed sites. – [arxiv.org](http://arxiv.org/abs/2611.11306v1)  \n- Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success under a limited budget, achieving tighter bounds and better coverage than baselines. – [arxiv.org](http://arxiv.org/abs/2611.11279v1)  \n- Introduces a citation system that ties chatbot data claims to their analytic provenance; experiments show citations improve perceived accuracy of correct claims and reduce trust in incorrect ones. – [arxiv.org](http://arxiv.org/abs/2611.11325v1)",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "papers",
+          "args": {
+            "max_results": 5,
+            "query": "AI agent evaluation",
+            "sort_by": "lastUpdatedDate"
+          },
+          "result": {
+            "tool": "arxiv_search",
+            "query": "AI agent evaluation",
+            "api_query": "all:AI AND all:agent AND all:evaluation",
+            "total_results": 6035,
+            "items": [
+              {
+                "arxiv_id": "2609.28182v2",
+                "title": "Finite-Sample Probabilistic Safety Certification for AI-Based Grid-Edge Coordination",
+                "summary": "Coordinating a large population of flexible grid-edge devices can alleviate the need for time-consuming and capital-intensive network upgrades. Artificial intelligence (AI)-based control methods such as multi-agent reinforcement learning or imitation learning are promising to this coordination due to their real-time decision scalability. However, system operators still need an independent and rigorous way to decide whether a given AI system is safe enough for deployment. This paper develops a \\emph{finite-sample} probabilistic safety certification framework for AI-based grid-edge coordination. The central idea is to reduce the complete input--AI--decision--evaluation workflow to a binary unsafe outcome under an operator-defined safety specification, and then use exact binomial inference to certify the corresponding unsafe operation probability. Given a set of held-out calibration scenarios, the framework returns the tightest one-sided upper certificate and an accept/reject deployment criterion that controls the probability of false safety certification. Because the certification is for the calibration distribution that may \\emph{deviate} from the future operation, we further combine the nominal certificate with physically interpretable sample-space adversarial attacks, a concept widely used in AI models to investigate their fragility. Case studies on grid-edge flexibility coordination with 1{,}000-agent AI models (independent parameters) verify the safety guarantee and the value of integrating adversarial attacks into a rolling-window training-certification-deployment flow.",
+                "authors": [
+                  "Yihong Zhou",
+                  "Hanbin Yang",
+                  "Thomas Morstyn"
+                ],
+                "published": "2026-09-23T14:24:46Z",
+                "updated": "2026-11-08T14:10:09Z",
+                "url": "http://arxiv.org/abs/2609.28182v2",
+                "pdf_url": "https://arxiv.org/pdf/2609.28182v2",
+                "source": "arxiv.org",
+                "primary_category": "cs.AI",
+                "categories": [
+                  "cs.AI",
+                  "cs.LG",
+                  "eess.SY"
+                ]
+              },
+              {
+                "arxiv_id": "2611.11342v1",
+                "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+                "summary": "We evaluate whether an AI agent's harness, the notes around its model, can learn from the agent's failure traces beyond a matched search that never sees them. It can, but less than it looks. We tested an open 9-billion-parameter model with fixed weights; a larger teacher model wrote its notes. On generated customer-service decisions, where both note writers were told the target rules, notes based on the agent's mistakes improved accuracy by 4.0 percentage points over notes from the same process with the mistakes withheld. That process alone, trying and keeping better-scoring notes, reached about 60% of the total improvement. In full customer-service conversations the same notes showed no demonstrated improvement. Separately, a strict screen of single lessons admitted two customer-service lessons, still awaiting tests on new data, and one tool-use lesson, written without seeing the agent's mistakes, which showed no demonstrated gain on new tool-use tasks. A neutral note with no procedure scored higher than the learned lessons (exploratory). A blind audit judged 146 of 240 tool-use test items defective.",
+                "authors": [
+                  "Arkid Mitra"
+                ],
+                "published": "2026-11-08T12:39:45Z",
+                "updated": "2026-11-08T12:39:45Z",
+                "url": "http://arxiv.org/abs/2611.11342v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.11342v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.LG",
+                "categories": [
+                  "cs.LG",
+                  "cs.AI",
+                  "cs.CL"
+                ]
+              },
+              {
+                "arxiv_id": "2611.11325v1",
+                "title": "Linking Event-sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation",
+                "summary": "Chatbots are increasingly used to analyze temporal event sequences of which website clickstreams are among the most common. Explanations are essential for understanding claims about event-sequence data. However, existing systems often require programming expertise to interpret these explanations and fail to explain the data processes underlying the data claims. We introduce a technique for linking a data claim to its analytic provenance (i.e., the analytic steps and results that produced it). It has two components: a reference table that records analytic steps and results in addressable cells, and a citation format that binds each claim to one or more cells. To operationalize this technique for clickstream analysis, we curated a set of analytic operations for clickstream analysis, organized them through a pivot-table abstraction, and developed tools that an AI agent can invoke to create a reference table and assemble a natural language response with cited data claims. To evaluate how citations affect users' assessment of data claims, we conducted two crowdsourced experiments with 90 participants each. The experiments showed that participants perceived correct data claims to be more accurate with citations when compared with no explanations, and that they perceived incorrect data claims to be less accurate with citations when compared with code and no explanations.",
+                "authors": [
+                  "Po-Ming Law",
+                  "Jianheng Ouyang",
+                  "Nguyen-Truong Thinh",
+                  "Weizhi Li",
+                  "Arpit Narechania"
+                ],
+                "published": "2026-11-08T12:00:56Z",
+                "updated": "2026-11-08T12:00:56Z",
+                "url": "http://arxiv.org/abs/2611.11325v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.11325v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.HC",
+                "categories": [
+                  "cs.HC"
+                ]
+              },
+              {
+                "arxiv_id": "2611.11306v1",
+                "title": "ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping",
+                "summary": "AI agents deployed on the open web are becoming more capable of performing actions that may breach contractual provisions and violate computer security laws. In this paper, we introduce ScrapeBench, the first agentic benchmark for empirically evaluating the legal compliance of AI agents with website scraping policies, namely terms of service (ToS) and robots.txt directives. Across widely used closed-weight and open-weight AI agents, we find that most agents exhibit low compliance rates (< 5%) when instructed to scrape websites in our sample of 1,626 popular websites that explicitly prohibit scraping. In addition, we observe that even where AI agents actively check the applicable ToS and robots.txt, they continue to exhibit low compliance rates. Conversely, in our sample of 269 websites that do not prohibit scraping, we observe that agents sometimes refuse to scrape despite it being lawful, such as Claude Opus 4.6 exhibiting an over-refusal rate of 98.5%. Our human baseline experiments (n = 180 participants) suggest that humans exhibit compliance rates comparable to AI agents but over-refuse at much higher rates.",
+                "authors": [
+                  "Joseph Marvin Imperial",
+                  "Daniel Slate",
+                  "Noam Kolt"
+                ],
+                "published": "2026-11-08T11:19:18Z",
+                "updated": "2026-11-08T11:19:18Z",
+                "url": "http://arxiv.org/abs/2611.11306v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.11306v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.CL",
+                "categories": [
+                  "cs.CL",
+                  "cs.AI"
+                ]
+              },
+              {
+                "arxiv_id": "2611.11279v1",
+                "title": "How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints",
+                "summary": "We evaluate AI agents in an online setting where tasks arrive sequentially and, before running each task, we construct an upper predictive bound on its \\emph{time-to-success}---the number of interactions until the task is completed successfully. Under a limited budget, some runs are stopped early, so their time-to-success is unobserved (right-censored), and the correctness of the bound may be unknown. We introduce \\emph{\\textbf{PR}edictive Bounds for \\textbf{O}nline \\textbf{B}udget \\textbf{E}fficiency} (\\texttt{PROBE}), a method for constructing calibrated upper predictive bounds while adaptively allocating a limited budget across agent tasks to reduce the anticipated coverage deficit. Our method calibrates the bounds online using inverse-probability-weighted feedback together with a correction designed to minimize coverage deficit while remaining unbiased. We prove that \\texttt{PROBE} provides a coverage guarantee for any finite time horizon while satisfying the budget constraint. Experiments on software engineering, retrieval-augmented generation, and instruction following show that \\texttt{PROBE} attains a coverage rate closer to the target level with tighter predictive bounds than a calibrated baseline.",
+                "authors": [
+                  "Roy Maor Lotan",
+                  "Shai Feldman",
+                  "Yaniv Romano"
+                ],
+                "published": "2026-11-08T10:05:38Z",
+                "updated": "2026-11-08T10:05:38Z",
+                "url": "http://arxiv.org/abs/2611.11279v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.11279v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.LG",
+                "categories": [
+                  "cs.LG"
+                ]
+              }
+            ],
+            "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+          }
+        },
+        {
+          "tool": "format",
+          "args": {
+            "headline": "Recent Papers on AI Agent Evaluation (Late 2026)",
+            "items": [
+              {
+                "source": "arxiv.org",
+                "summary": "Introduces a finite‑sample probabilistic safety certification framework for AI agents coordinating thousands of grid‑edge devices, using binomial inference and adversarial attacks to bound unsafe operation probability.",
+                "title": "Finite-Sample Probabilistic Safety Certification for AI-Based Grid-Edge Coordination",
+                "url": "http://arxiv.org/abs/2609.28182v2"
+              },
+              {
+                "source": "arxiv.org",
+                "summary": "Examines whether notes (harness) around a frozen‑weight 9B model can learn from the agent’s failure traces, showing modest gains in customer‑service decision accuracy but limited transfer to full conversations.",
+                "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+                "url": "http://arxiv.org/abs/2611.11342v1"
+              },
+              {
+                "source": "arxiv.org",
+                "summary": "Presents ScrapeBench, a benchmark measuring how often AI agents obey website terms‑of‑service and robots.txt; finds most agents have <5 % compliance on prohibited sites and over‑refuse on allowed sites.",
+                "title": "ScrapeBench: Evaluating Legal Compliance of AI Agents in Website Scraping",
+                "url": "http://arxiv.org/abs/2611.11306v1"
+              },
+              {
+                "source": "arxiv.org",
+                "summary": "Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success under a limited budget, achieving tighter bounds and better coverage than baselines.",
+                "title": "How Efficient Is Your Agent? Online Predictive Bounds under Budget Constraints",
+                "url": "http://arxiv.org/abs/2611.11279v1"
+              },
+              {
+                "source": "arxiv.org",
+                "summary": "Introduces a citation system that ties chatbot data claims to their analytic provenance; experiments show citations improve perceived accuracy of correct claims and reduce trust in incorrect ones.",
+                "title": "Linking Event‑sequence Data Claims to Analytic Provenance in Chatbots: Technique and Evaluation",
+                "url": "http://arxiv.org/abs/2611.11325v1"
+              }
+            ],
+            "template": "bullets"
+          },
+          "result": {
+            "tool": "render_digest",
+            "template": "bullets",
+            "markdown": "- Introduces a finite‑sample probabilistic safety certification framework for AI agents coordinating thousands of grid‑edge devices, using binomial inference and adversarial attacks to bound unsafe operation probability. - [arxiv.org](http://arxiv.org/abs/2609.28182v2)\n- Examines whether notes (harness) around a frozen‑weight 9B model can learn from the agent’s failure traces, showing modest gains in customer‑service decision accuracy but limited transfer to full conversations. - [arxiv.org](http://arxiv.org/abs/2611.11342v1)\n- Presents ScrapeBench, a benchmark measuring how often AI agents obey website terms‑of‑service and robots.txt; finds most agents have <5 % compliance on prohibited sites and over‑refuse on allowed sites. - [arxiv.org](http://arxiv.org/abs/2611.11306v1)\n- Proposes PROBE, a method for constructing calibrated predictive bounds on an agent’s time‑to‑success under a limited budget, achieving tighter bounds and better coverage than baselines. - [arxiv.org](http://arxiv.org/abs/2611.11279v1)\n- Introduces a citation system that ties chatbot data claims to their analytic provenance; experiments show citations improve perceived accuracy of correct claims and reduce trust in incorrect ones. - [arxiv.org](http://arxiv.org/abs/2611.11325v1)",
+            "item_count": 5
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T11:46:55"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "transcript_id": "v2_openrouter_20261110T114147510766",
+  "version": "v2",
+  "artifact_version": "v2+peb1c8179815b+t5b22a2476d41",
+  "prompt_hash": "eb1c8179815bd79d34de7d326420bb99b3072e6e8ae96464c02d4411f905fc68",
+  "tools_hash": "5b22a2476d41b989d5dc1e54f24ce7890e781909deb2f7afafb856ab53a6d7c0",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-oss-120b",
+  "system_prompt": "artifacts\\system_prompt.md",
+  "tools": "artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T11:41:47",
+  "updated_at": "2026-11-10T11:41:53",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T11:41:47",
+      "user": "chào",
+      "status": "answered",
+      "assistant_text": "Chào bạn! 😊 Có việc gì mình có thể giúp không?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Chào bạn! 😊 Có việc gì mình có thể giúp không?",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T11:41:53"
+    }
+  ]
+}
