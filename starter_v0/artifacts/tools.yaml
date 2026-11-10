@@ -123,3 +123,22 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
+
+  - name: hn_search
+    description: "Tìm thảo luận trên Hacker News. Dùng khi hỏi dân dev, cộng đồng tech, Hacker News bàn gì. Không dùng khi hỏi bài đăng trên X/Twitter (dùng social_search)."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Từ khoá tìm kiếm"}
+        sort: {type: string, enum: [popular, recent], default: "popular", description: "Cách sắp xếp: 'popular' hoặc 'recent'"}
+        limit: {type: integer, default: 5, description: "Số lượng kết quả (1-10)"}
+      required: [query]
+
+  - name: citations
+    description: "Tra cứu số trích dẫn và độ ảnh hưởng của một paper cụ thể. Dùng khi hỏi paper cụ thể được trích dẫn bao nhiêu lần, xuất bản năm nào, đăng ở đâu. Không dùng khi tìm paper theo chủ đề (dùng papers)."
+    parameters:
+      type: object
+      properties:
+        paper: {type: string, default: "", description: "Tiêu đề bài báo hoặc arXiv id (ví dụ '2106.09685')"}
+      required: [paper]
+

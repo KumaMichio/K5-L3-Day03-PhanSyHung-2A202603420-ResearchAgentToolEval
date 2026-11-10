@@ -33,8 +33,17 @@ Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc 
 | Tên tool | Làm được gì | Tool mới nhóm thêm? |
 |---|---|---|
 | clarify | hỏi lại người dùng khi thiếu thông tin | không |
-|  |  |  |
-|  |  |  |
+| timeline | lấy bài đăng gần đây của một tài khoản | không |
+| social_search | tìm bài đăng trên Twitter/X theo từ khoá | không |
+| lookup | tra cứu thông tin trên internet / tin tức | không |
+| fetch | đọc nội dung chi tiết từ một URL | không |
+| format | trình bày dữ liệu đã có thành markdown digest | không |
+| send | gửi text lên Telegram channel (khi đã xác nhận) | không |
+| policy | tìm trong tài liệu nội bộ công ty | không |
+| papers | tìm paper khoa học trên arXiv | không |
+| paper_text | tải và trích xuất text từ bài báo arXiv | không |
+| hn_search | tìm kiếm bài viết, thảo luận tech trên Hacker News | có (TV4) |
+| citations | tra cứu số trích dẫn, venue, năm xuất bản paper qua OpenAlex | có (TV4) |
 
 ## A3. Câu hỏi mẫu để thử
 
@@ -89,12 +98,20 @@ Only fill if your team did bonus.
 
 | Bonus | Evidence File | What Worked | Risk / Guardrail |
 |---|---|---|---|
-| send (Telegram) |  |  |  |
-| arXiv/company policy |  |  |  |
-| UI |  |  |  |
-| Tool unit tests (`tests/`) | `pytest` output |  |  |
+| send (Telegram) | `tests/test_tools_todo.py` | Kiểm tra token & chat_id, chỉ gửi khi `confirmed=True` | Chặn network call nếu `confirmed=False` |
+| arXiv/company policy | `company_policy/`, `tests/` | Mock và query policy, filter area, tách `untrusted_text` | Prompt injection được cô lập vào `untrusted_text` |
+| UI | `starter_v0/app.py` | Streamlit app chạy tương tác, log chi tiết từng round | Giới hạn max 4 rounds tránh loop vô tận |
+| Tool unit tests (`tests/`) | `pytest tests/` (92 passed, 0 skipped, 0 failed) | 100% test xanh cho toàn bộ core tools + 2 tools mới | Mock offline bằng `fake_http`, không tốn credit API |
+| Tool mới TV4 (`hn_search`, `citations`) | `tools/hn_search/`, `tools/citations/` | Không cần API key, gọi Algolia HN API và OpenAlex API | Kẹp limit 1-10, fallback 404 cho paper không tồn tại |
 
-Tool unit tests: số test đã viết, số bug tìm được trong tool có sẵn (nếu có), và một ví dụ lỗi mà unit test bắt được nhưng eval không bắt được.
+**Báo cáo Tool unit tests:**
+- **Số test đã viết**: 20 unit tests hoàn chỉnh trong `test_tools_todo.py` (bao gồm 14 tests cho các core/bonus tools và 6 tests cho `hn_search` + `citations`).
+- **Bug tìm được & sửa**: 
+  1. Trong `hn_search`: Lỗi falsy check khi `limit=0` dẫn đến `0 or 5` trả về 5 thay vì bị kẹp thành 1. Đã sửa bằng ép kiểu an toàn và dùng `max(1, min(limit_int, 10))`.
+  2. Trong `citations`: Xử lý ngoại lệ khi bài báo không tìm thấy (HTTP 404 hoặc `results: []`) trả về `items: []` thay vì crash unhandled.
+  3. Trong `fetch`: Xác định chính xác hành vi cắt chuỗi 4000 ký tự không bị lỗi index.
+- **Ví dụ lỗi unit test bắt được nhưng eval không bắt được**: 
+  Model gọi đúng `hn_search(query="Rust", limit=0)` $\rightarrow$ eval routing báo PASS vì đúng tên tool và có gọi. Nhưng trong code thực tế nếu không có unit test kiểm tra `hitsPerPage` gửi lên Algolia thì `limit=0` sẽ bị lỗi gửi giá trị sai hoặc lấy sai số lượng kết quả. Unit test bắt được chính xác request HTTP gửi đi và assert `hitsPerPage == 1`.
 
 ## B6. Reflection
 
