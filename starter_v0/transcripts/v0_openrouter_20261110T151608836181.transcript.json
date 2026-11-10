@@ -1,0 +1,72 @@
+{
+  "transcript_id": "v0_openrouter_20261110T151608836181",
+  "version": "v0",
+  "artifact_version": "v0+peb1c8179815b+t5b22a2476d41",
+  "prompt_hash": "eb1c8179815bd79d34de7d326420bb99b3072e6e8ae96464c02d4411f905fc68",
+  "tools_hash": "5b22a2476d41b989d5dc1e54f24ce7890e781909deb2f7afafb856ab53a6d7c0",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "artifacts\\versions\\v0\\system_prompt.md",
+  "tools": "artifacts\\versions\\v0\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T15:16:08",
+  "updated_at": "2026-11-10T15:16:17",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T15:16:12",
+      "user": "chào ae",
+      "status": "answered",
+      "assistant_text": "Chào bạn! Có điều gì tôi có thể giúp bạn hôm nay không?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "send",
+              "args": {
+                "text": "Chào bạn! Có điều gì tôi có thể giúp bạn hôm nay không?"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "send",
+              "args": {
+                "text": "Chào bạn! Có điều gì tôi có thể giúp bạn hôm nay không?"
+              },
+              "result": {
+                "tool": "send_telegram",
+                "status": "needs_confirmation",
+                "message": "Only send after the user explicitly confirms."
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "Chào bạn! Có điều gì tôi có thể giúp bạn hôm nay không?",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "send",
+          "args": {
+            "text": "Chào bạn! Có điều gì tôi có thể giúp bạn hôm nay không?"
+          },
+          "result": {
+            "tool": "send_telegram",
+            "status": "needs_confirmation",
+            "message": "Only send after the user explicitly confirms."
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T15:16:17"
+    }
+  ]
+}

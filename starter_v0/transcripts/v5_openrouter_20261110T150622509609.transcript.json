@@ -1,0 +1,78 @@
+{
+  "transcript_id": "v5_openrouter_20261110T150622509609",
+  "version": "v5",
+  "artifact_version": "v5+pfc14bea47ff2+td908e6fef2e2",
+  "prompt_hash": "fc14bea47ff20d008ba6b1bbe3f953c1e954cc1f555ae4a169b81b6695184359",
+  "tools_hash": "d908e6fef2e26d97791764f006890d9616c214f6cc358aa6bf807f179c5f5c02",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "artifacts\\versions\\v5\\system_prompt.md",
+  "tools": "artifacts\\versions\\v5\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T15:06:22",
+  "updated_at": "2026-11-10T15:07:13",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T15:07:10",
+      "user": "Tin tức AI hôm nay có gì nổi bật?",
+      "status": "answered",
+      "assistant_text": "Xin lỗi, mình không thể truy cập tin tức AI hôm nay. Bạn có muốn tìm kiếm thông tin khác không?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "lookup",
+              "args": {
+                "query": "AI",
+                "topic": "news",
+                "timeframe": "day"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "lookup",
+              "args": {
+                "query": "AI",
+                "topic": "news",
+                "timeframe": "day"
+              },
+              "result": {
+                "tool": "web_search",
+                "error": "RuntimeError",
+                "message": "Missing TAVILY_API_KEY env var"
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "Xin lỗi, mình không thể truy cập tin tức AI hôm nay. Bạn có muốn tìm kiếm thông tin khác không?",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI",
+            "topic": "news",
+            "timeframe": "day"
+          },
+          "result": {
+            "tool": "web_search",
+            "error": "RuntimeError",
+            "message": "Missing TAVILY_API_KEY env var"
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T15:07:13"
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 
 ## Team
 
-- Team: 
+- Team: AI slop
 - Members: Phan Sỹ Hùng - Lead, prompt & eval, Nguyễn Tiến Hưng – UI, Dương Thị Huệ – tool `wiki`/`github_repo`, Dương Minh Tân – tool `hn_search`/`citations`, Dương Ngọc Tuyên – eval cases
 - Provider/model: OpenRouter, `openai/gpt-4o-mini` (mọi run eval v0–v5 và transcript v3)
 
@@ -176,6 +176,8 @@ Transcript chính: `transcripts/v3_openrouter_20261110T135727861487.transcript.j
 
 Các transcript khác trong `transcripts/` do TV2 tạo khi thử UI. Chúng dùng model `openai/gpt-oss-120b` và nhãn version không khớp hash prompt (ví dụ file `v2_…113006…` có prompt hash `eb1c8179815b` của v0), nên chỉ dùng làm bằng chứng UI chạy được, không dùng để so sánh version.
 
+9 transcript tạo lúc 14:48–15:41 (`v0_…151608`, `v0_…152107`, `v3_…150305`, `v4_…151709`, `v5_…144842/150622/151136/151649`, `current_…154128`) là các lượt thử trên UI Streamlit với `openai/gpt-4o-mini`; nhãn version khớp hash. File `current_…` là prompt/tools đang dùng khi chạy, có artifact `current+pfc14bea47ff2+td908e6fef2e2`, tức trùng hash với v5.
+
 ## B5. Bonus Evidence
 
 Only fill if your team did bonus.
@@ -185,11 +187,17 @@ Only fill if your team did bonus.
 | send (Telegram) | `tests/test_tools_todo.py`, `transcripts/v3_openrouter_20261110T135727861487.transcript.json` (lượt 5–6) | Kiểm tra token & chat_id, chỉ gửi khi `confirmed=True`. Live chat v3: model hỏi `clarify(response_type="yes_no")` trước, chỉ gọi `send(confirmed=true)` sau khi user trả lời "Có" | Chặn network call nếu `confirmed=False` |
 | arXiv/company policy | `company_policy/`, `tests/` | Mock và query policy, filter area, tách `untrusted_text` | Prompt injection được cô lập vào `untrusted_text` |
 | UI | `app.py`, `tests/test_app_ui.py`, `transcripts/*.transcript.json` (`"interface": "streamlit"`) | Streamlit chat dùng lại `run_model_tool_loop` của `chat.py`, nên chạy giống CLI. Mỗi lượt hiện tool call, args, kết quả (item có link, digest markdown, JSON), có nút trả lời nhanh khi `clarify` hỏi yes/no hoặc choice, ghi transcript cùng schema với `chat.py`. Mở ra ngoài qua Cloudflare Tunnel. 4 test offline (provider giả) pass. | Link tunnel là public: ai có link cũng tiêu credit API của nhóm, nên chỉ bật trong buổi showdown. `send` vẫn phụ thuộc `confirmed=true` và rule trong prompt. Lỗi provider hoặc thiếu key hiện lên UI thay vì làm sập app. |
-| Tool unit tests (`tests/`) | `pytest tests/` (126 passed, 0 skipped, 0 failed) | 100% test xanh cho toàn bộ core tools + 2 tools mới | Mock offline bằng `fake_http`, không tốn credit API |
+| Tool unit tests (`tests/`) | `pytest` (146 passed, 0 skipped, 0 failed) | Toàn bộ test xanh cho core tools, bonus tools, 4 tool mới, UI và eval dashboard | Mock offline bằng `fake_http`, không tốn credit API |
 | Tool mới TV4 (`hn_search`, `citations`) | `tools/hn_search/`, `tools/citations/` | Không cần API key, gọi Algolia HN API và OpenAlex API | Kẹp limit 1-10, fallback 404 cho paper không tồn tại |
+| Tool mới TV3 (`wiki`, `github_repo`) | `tools/wiki/`, `tools/github_repo/`, `tests/test_tool_wiki.py`, `tests/test_tool_github_repo.py` | `wiki`: tìm trang rồi lấy summary từ Wikipedia `en`/`vi`. `github_repo`: nhận `owner/name` hoặc URL đầy đủ, trả về sao, fork, lần push gần nhất, release mới nhất | `lang` lạ thì quay về `en`; query rỗng hoặc repo sai định dạng trả error dict mà không gọi mạng; repo chưa có release thì `latest_release=null` chứ không báo lỗi; HTTP 404/429 trả error dict |
 
 **Báo cáo Tool unit tests:**
-- **Số test đã viết**: 20 unit tests hoàn chỉnh trong `test_tools_todo.py` (bao gồm 14 tests cho các core/bonus tools và 6 tests cho `hn_search` + `citations`).
+- **Số test đã viết**: 146 test, phân bổ như sau:
+  - `test_tools_todo.py`: 21 test, gồm 14 test cho core/bonus tools và 7 test cho `hn_search` + `citations`. Không còn stub `skip` nào.
+  - `test_tools_new.py`: 12 test.
+  - `test_tool_wiki.py` và `test_tool_github_repo.py`: mỗi file 7 test.
+  - `test_tool_contract.py`: 75 test.
+  - Còn lại là test có sẵn, test UI và test eval dashboard.
 - **Bug tìm được & sửa**: 
   1. Trong `hn_search`: Lỗi falsy check khi `limit=0` dẫn đến `0 or 5` trả về 5 thay vì bị kẹp thành 1. Đã sửa bằng ép kiểu an toàn và dùng `max(1, min(limit_int, 10))`.
   2. Trong `citations`: Xử lý ngoại lệ khi bài báo không tìm thấy (HTTP 404 hoặc `results: []`) trả về `items: []` thay vì crash unhandled.
@@ -237,7 +245,7 @@ Bài học: rule hội thoại đặt trong mô tả tool **chưa chắc đượ
 1. Eval case cho `clarify` nên chạy với `tool_choice` auto (giống chat thật), hoặc thêm rule prompt: "khi hỏi lại user, luôn dùng tool `clarify`, không hỏi bằng text".
 2. Đưa tình huống của v5 thành eval case multi-turn: lượt trước nói "mới nhất" về tweet, lượt sau hỏi HN, expected `sort="popular"`.
 3. Unit test với HTTP giả không bắt được lỗi chất lượng kết quả (bug `search_by_date`). Nên có vài smoke test gọi API thật, chạy tay trước khi demo.
-4. Thêm eval case cho `wiki` và `github_repo`.
+4. Sửa G06: mô tả arg `lang` của `wiki` trong `tools.yaml` cần nói rõ "mặc định `en`, chỉ dùng `vi` khi user yêu cầu Wikipedia tiếng Việt", không suy ra từ ngôn ngữ câu hỏi.
 5. Cho grader chấp nhận nhiều giá trị đúng (tiêu đề hoặc arXiv id cho `citations`).
 6. Chạy thử v3 trên model local nhỏ (B7).
 
