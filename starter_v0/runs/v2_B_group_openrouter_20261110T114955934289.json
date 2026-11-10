@@ -1,0 +1,845 @@
+{
+  "run_id": "v2_B_group_openrouter_20261110T114955934289",
+  "version": "v2",
+  "artifact_version": "v2+p9352321c7609+t151898fd033d",
+  "prompt_hash": "9352321c7609645510c82f22e742569da80c9e56b1d11b7e5903a699de31efdf",
+  "tools_hash": "151898fd033dcbc74e134b66276838c7f17b4ae76cf21491655a6d16a735f7f9",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "E:\\VinUni_AI_course\\K5-L3-Day03-PhanSyHung-2A202603420-ResearchAgentToolEval\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "E:\\VinUni_AI_course\\K5-L3-Day03-PhanSyHung-2A202603420-ResearchAgentToolEval\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm: 5 single-turn + 5 multi-turn, kiểm tra định tuyến hn_search, citations, phân biệt Hacker News vs Twitter, và xử lý tham số.",
+  "generated_at": "2026-11-10T11:49:55",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 9,
+    "case_accuracy": 0.9,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 0.9,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {
+      "wrong_tool": 1
+    },
+    "observed_mismatch_counts": {
+      "wrong_arg_value": 1
+    }
+  },
+  "results": [
+    {
+      "id": "G01_hn_search_dev_community",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_hn_search",
+        "difficulty": "easy",
+        "what_it_tests": "Dân HN/dev bàn gì -> hn_search, không phải social_search."
+      },
+      "input": "Dân Hacker News đang bàn gì về Rust?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Rust"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Rust",
+              "sort": "popular",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "Rust",
+            "sort": "popular",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Rust",
+            "sort": "popular",
+            "items": [
+              {
+                "title": "Why Discord is switching from Go to Rust",
+                "url": "https://blog.discordapp.com/why-discord-is-switching-from-go-to-rust-a190bbca2b1f",
+                "points": 1582,
+                "num_comments": 642,
+                "hn_url": "https://news.ycombinator.com/item?id=22238335",
+                "created_at": "2020-02-04T17:30:40Z"
+              },
+              {
+                "title": "Leaving Rust gamedev after 3 years",
+                "url": "https://loglog.games/blog/leaving-rust-gamedev/",
+                "points": 1484,
+                "num_comments": 972,
+                "hn_url": "https://news.ycombinator.com/item?id=40172033",
+                "created_at": "2024-04-26T17:33:56Z"
+              },
+              {
+                "title": "A half-hour to learn Rust",
+                "url": "https://fasterthanli.me/articles/a-half-hour-to-learn-rust",
+                "points": 1444,
+                "num_comments": 330,
+                "hn_url": "https://news.ycombinator.com/item?id=25610741",
+                "created_at": "2021-01-02T05:50:39Z"
+              },
+              {
+                "title": "Announcing Rust 1.0",
+                "url": "http://blog.rust-lang.org/2015/05/15/Rust-1.0.html",
+                "points": 1363,
+                "num_comments": 306,
+                "hn_url": "https://news.ycombinator.com/item?id=9551937",
+                "created_at": "2015-05-15T17:02:09Z"
+              },
+              {
+                "title": "CityBound – An open source city simulation game in Rust",
+                "url": "https://github.com/citybound/citybound",
+                "points": 1340,
+                "num_comments": 264,
+                "hn_url": "https://news.ycombinator.com/item?id=19583384",
+                "created_at": "2019-04-05T15:18:45Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_hn_search_recent_sort",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_sort_recent",
+        "difficulty": "medium",
+        "what_it_tests": "'Bài mới nhất trên HN' -> hn_search sort='recent'."
+      },
+      "input": "Bài mới nhất trên HN về Llama",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Llama",
+              "sort": "recent"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Llama",
+              "sort": "recent",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "Llama",
+            "sort": "recent",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Llama",
+            "sort": "recent",
+            "items": [
+              {
+                "title": "Many Claude Code and Codex sessions, one bottleneck: me",
+                "url": "https://github.com/LlamachantTechnology/LlamaTree",
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50426434",
+                "created_at": "2026-11-09T14:50:49Z"
+              },
+              {
+                "title": "Show HN: TimeScroll – an open-source, local replacement for Rewind on Mac",
+                "url": "https://github.com/XInTheDark/TimeScrollApp",
+                "points": 2,
+                "num_comments": 2,
+                "hn_url": "https://news.ycombinator.com/item?id=50424070",
+                "created_at": "2026-11-09T11:19:39Z"
+              },
+              {
+                "title": "Show HN: My first project, an AI-powered financial news analyzer",
+                "url": "https://github.com/lamarcol/NotBot",
+                "points": 3,
+                "num_comments": 2,
+                "hn_url": "https://news.ycombinator.com/item?id=50418158",
+                "created_at": "2026-11-08T22:34:06Z"
+              },
+              {
+                "title": "Show HN: 3-SAT: Let me show you 500K variables",
+                "url": "https://zenodo.org/records/23933428",
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50415664",
+                "created_at": "2026-11-08T18:20:56Z"
+              },
+              {
+                "title": "GPT-6 Luna and GPT-6.1 Sol are 90% off the listed price",
+                "url": "https://anyrouter.dev/blog/releases/2026-11-03-llamport",
+                "points": 4,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50415103",
+                "created_at": "2026-11-08T17:12:55Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_citations_arxiv_lookup",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_citations_arxiv",
+        "difficulty": "easy",
+        "what_it_tests": "Hỏi số trích dẫn của paper theo arXiv id -> citations, không phải papers."
+      },
+      "input": "Paper 2106.09685 được cite bao nhiêu lần?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "citations",
+          "args": {
+            "paper": "2106.09685"
+          },
+          "result": {
+            "tool": "citations",
+            "paper": "2106.09685",
+            "items": [
+              {
+                "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+                "cited_by_count": 13453,
+                "publication_year": 2021,
+                "venue": "arXiv (Cornell University)",
+                "url": "https://doi.org/10.48550/arxiv.2106.09685"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_citations_by_title",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_citations_title",
+        "difficulty": "medium",
+        "what_it_tests": "Hỏi số trích dẫn theo tiêu đề bài báo cụ thể -> citations."
+      },
+      "input": "Bài báo Attention Is All You Need có bao nhiêu lượt trích dẫn?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "Attention Is All You Need"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "1706.03762"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "paper: expected 'Attention Is All You Need', got '1706.03762'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "citations",
+          "args": {
+            "paper": "1706.03762"
+          },
+          "result": {
+            "tool": "citations",
+            "paper": "1706.03762",
+            "items": [
+              {
+                "title": "Attention Is All You Need",
+                "cited_by_count": 135148,
+                "publication_year": 2017,
+                "venue": "arXiv (Cornell University)",
+                "url": "https://doi.org/10.48550/arxiv.1706.03762"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_out_of_scope_cooking",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_cooking",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi nấu ăn ngoài phạm vi research -> không gọi tool, từ chối lịch sự."
+      },
+      "input": "Hướng dẫn mình cách nấu món phở bò truyền thống Hà Nội.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Xin lỗi, nhưng mình không thể giúp bạn với yêu cầu nấu ăn. Tuy nhiên, bạn có thể tìm thấy nhiều công thức nấu phở bò truyền thống Hà Nội trên internet hoặc trong sách nấu ăn. Nếu bạn cần thông tin khác, hãy cho mình biết!",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "GM01_papers_then_citations",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_paper_to_citations",
+        "difficulty": "hard",
+        "what_it_tests": "Lượt 1 tìm paper, lượt 2 hỏi số cite của paper -> gọi citations."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm paper về LoRA"
+        },
+        {
+          "role": "user",
+          "content": "Paper 2106.09685 được cite bao nhiêu lần?"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "citations",
+          "args": {
+            "paper": "2106.09685"
+          },
+          "result": {
+            "tool": "citations",
+            "paper": "2106.09685",
+            "items": [
+              {
+                "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+                "cited_by_count": 13453,
+                "publication_year": 2021,
+                "venue": "arXiv (Cornell University)",
+                "url": "https://doi.org/10.48550/arxiv.2106.09685"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM02_hn_search_switch_sort",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_hn_switch_sort",
+        "difficulty": "hard",
+        "what_it_tests": "Multi-turn: chuyển sort từ popular sang recent khi user yêu cầu bài mới nhất."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm các thảo luận nổi bật về Mojo trên Hacker News"
+        },
+        {
+          "role": "user",
+          "content": "Lấy bài mới nhất thôi, đừng lấy bài cũ"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Mojo",
+              "sort": "recent"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Mojo",
+              "sort": "recent",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "Mojo",
+            "sort": "recent",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Mojo",
+            "sort": "recent",
+            "items": [
+              {
+                "title": "Checking Module Boundaries in a Java Monolith",
+                "url": "https://foojay.io/today/enforce-java-module-boundaries-with-modulith-rules/",
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50435177",
+                "created_at": "2026-11-10T02:05:06Z"
+              },
+              {
+                "title": "Starship – Go for Orbit [video]",
+                "url": "https://www.youtube.com/watch?v=8ySMdUIF3cY",
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50435109",
+                "created_at": "2026-11-10T01:57:11Z"
+              },
+              {
+                "title": "Welcome to Ed and Sam's great adventure",
+                "url": "https://www.hintz.org/trip/",
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50434313",
+                "created_at": "2026-11-10T00:11:09Z"
+              },
+              {
+                "title": "Show HN: Rat Race (After Dark, 1994), ported from 68k assembly to TypeScript",
+                "url": "https://rat-race.heyitsjam.es/",
+                "points": 2,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50434254",
+                "created_at": "2026-11-10T00:05:38Z"
+              },
+              {
+                "title": "Pentagon mulls placing fleet of military satellites around the Moon",
+                "url": "https://arstechnica.com/space/2026/11/us-military-notionally-interested-in-satellite-constellation-around-moon/",
+                "points": 2,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50433418",
+                "created_at": "2026-11-09T22:49:03Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM03_hn_search_limit_update",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_hn_limit",
+        "difficulty": "hard",
+        "what_it_tests": "Multi-turn: cập nhật limit=3 cho hn_search."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Cho mình xem thảo luận về AI agents trên Hacker News"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ lấy đúng 3 bài thôi nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "AI agents",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "AI agents",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "AI agents",
+            "limit": 3
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "AI agents",
+            "sort": "popular",
+            "items": [
+              {
+                "title": "An AI agent published a hit piece on me",
+                "url": "https://theshamblog.com/an-ai-agent-published-a-hit-piece-on-me/",
+                "points": 2346,
+                "num_comments": 951,
+                "hn_url": "https://news.ycombinator.com/item?id=46990729",
+                "created_at": "2026-02-12T16:23:24Z"
+              },
+              {
+                "title": "AI agent bankrupted their operator while trying to scan DN42",
+                "url": "https://lantian.pub/en/article/fun/ai-agent-bankrupted-their-operator-scan-dn42lantian.lantian/",
+                "points": 1467,
+                "num_comments": 536,
+                "hn_url": "https://news.ycombinator.com/item?id=48500012",
+                "created_at": "2026-06-12T04:42:53Z"
+              },
+              {
+                "title": "OpenCode – Open source AI coding agent",
+                "url": "https://opencode.ai/",
+                "points": 1274,
+                "num_comments": 618,
+                "hn_url": "https://news.ycombinator.com/item?id=47460525",
+                "created_at": "2026-03-20T21:03:52Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM04_clarify_then_hn_query",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_clarify_then_hn",
+        "difficulty": "medium",
+        "what_it_tests": "Lượt 1 thiếu từ khóa, lượt 2 bổ sung từ khóa -> gọi hn_search."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm thảo luận trên Hacker News giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Về chủ đề Python 3.13"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Python 3.13"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Python 3.13",
+              "sort": "recent",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "Python 3.13",
+            "sort": "recent",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Python 3.13",
+            "sort": "recent",
+            "items": [
+              {
+                "title": "Show HN: AI agent needs process to build a commercial application",
+                "url": "https://nomorehappypath.com/",
+                "points": 1,
+                "num_comments": 1,
+                "hn_url": "https://news.ycombinator.com/item?id=50304765",
+                "created_at": "2026-10-30T14:49:17Z"
+              },
+              {
+                "title": "Show HN: ManimGX – Manim's API on a Rust/wgpu engine, for 3D videos in Python",
+                "url": "https://github.com/academa-labs/manimgx",
+                "points": 10,
+                "num_comments": 3,
+                "hn_url": "https://news.ycombinator.com/item?id=50037852",
+                "created_at": "2026-10-10T22:33:30Z"
+              },
+              {
+                "title": "Show HN: Range – open a 1TB Linux environment in under a second",
+                "url": "https://news.ycombinator.com/item?id=49908611",
+                "points": 5,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=49908611",
+                "created_at": "2026-09-30T13:24:42Z"
+              },
+              {
+                "title": "Python 3.13 gets a JIT (2024)",
+                "url": "https://tonybaloney.github.io/posts/python-gets-a-jit.html",
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=48557632",
+                "created_at": "2026-06-16T16:18:01Z"
+              },
+              {
+                "title": "Show HN: A terminal writing environment with Git, E2EE sync and temporal search",
+                "url": "https://news.ycombinator.com/item?id=48462046",
+                "points": 4,
+                "num_comments": 1,
+                "hn_url": "https://news.ycombinator.com/item?id=48462046",
+                "created_at": "2026-06-09T14:59:54Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM05_citations_doi_correction",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_citations_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Multi-turn: đính chính arXiv id từ 1706.03762 thành 2106.09685."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Paper 1706.03762 được trích dẫn bao nhiêu lần?"
+        },
+        {
+          "role": "user",
+          "content": "À mình gõ nhầm, tra paper 2106.09685 mới đúng"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "citations",
+          "args": {
+            "paper": "2106.09685"
+          },
+          "result": {
+            "tool": "citations",
+            "paper": "2106.09685",
+            "items": [
+              {
+                "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+                "cited_by_count": 13453,
+                "publication_year": 2021,
+                "venue": "arXiv (Cornell University)",
+                "url": "https://doi.org/10.48550/arxiv.2106.09685"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
