@@ -247,30 +247,62 @@ Bài học: rule hội thoại đặt trong mô tả tool **chưa chắc đượ
 3. Unit test với HTTP giả không bắt được lỗi chất lượng kết quả (bug `search_by_date`). Nên có vài smoke test gọi API thật, chạy tay trước khi demo.
 4. Sửa G06: mô tả arg `lang` của `wiki` trong `tools.yaml` cần nói rõ "mặc định `en`, chỉ dùng `vi` khi user yêu cầu Wikipedia tiếng Việt", không suy ra từ ngôn ngữ câu hỏi.
 5. Cho grader chấp nhận nhiều giá trị đúng (tiêu đề hoặc arXiv id cho `citations`).
-6. Chạy thử v3 trên model local nhỏ (B7).
+6. Với model local (B7): chạy vòng `v5-local` (few-shot, giả thuyết ở B7), và thêm bước ép kiểu args (`"10"` -> `10`) ở harness trước khi gọi tool.
 
 ## B7. Small Local Model Challenge (bonus)
 
-Only fill if your team did the local model challenge.
+**Phạm vi đã làm:** 2 model local × baseline, cộng **1 vòng** tối ưu (`v4-local`). README yêu cầu 2 vòng và một bước kiểm tra ngược trên cloud; hai phần này **chưa làm** (xem cuối mục).
+
+**Setup:**
+- Ollama 0.40.16, chạy model `qwen2.5:3b` và `llama3.2:3b`. Bộ base 20 case, `temperature=0`.
+- Máy chạy **CPU-only**. GTX 1050 Ti có driver 511.79 (CUDA 11.6), quá cũ so với thư viện CUDA 12/13 của Ollama. Ollama chuyển sang backend Vulkan thì bị crash (`ggml_vulkan: device lost`), nên phải tắt GPU.
+- Mỗi run 20 case mất khoảng 3,5–6,5 phút.
+- Baseline local dùng prompt/tools **v5**, bản tốt nhất của nhóm (bằng v3 trên cloud, 1.00).
+- Script phân loại lỗi: `scripts/local_failures.py`.
 
 | Version | Model (provider) | Prompt/Tools | case_accuracy | tool_routing | argument | multiturn | Run File |
 |---|---|---|---|---|---|---|---|
-| v3 | (cloud) | v3 |  |  |  |  |  |
-| v3-... | (ollama) | v3 |  |  |  |  |  |
-| v3-... | (ollama) | v3 |  |  |  |  |  |
-| v4-local |  |  |  |  |  |  |  |
-| v5-local |  |  |  |  |  |  |  |
+| v5 | gpt-4o-mini (openrouter) | v5 | 1.00 | 1.00 | 1.00 | 1.00 | `runs/v5_B_base_openrouter_20261110T142303807872.json` |
+| v5-qwen3b | qwen2.5:3b (ollama) | v5 | 0.55 | 0.70 | 0.55 | 0.67 | `runs/local/v5-qwen3b_B_base_ollama_20261110T233638319292.json` |
+| v5-llama3b | llama3.2:3b (ollama) | v5 | 0.35 | 0.60 | 0.35 | 0.17 | `runs/local/v5-llama3b_B_base_ollama_20261110T233110067709.json` |
+| v4-local-qwen3b | qwen2.5:3b (ollama) | prompt v5 + `local/v4-local/tools.yaml` | 0.55 | 0.65 | 0.55 | 0.50 | `runs/local/v4-local-qwen3b_B_base_ollama_20261110T234039089694.json` |
+| v4-local-llama3b | llama3.2:3b (ollama) | prompt v5 + `local/v4-local/tools.yaml` | 0.40 | 0.65 | 0.40 | 0.33 | `runs/local/v4-local-llama3b_B_base_ollama_20261110T234510739539.json` |
+| v5-local | — | — | chưa chạy | | | | |
 
-Lỗi đặc thù của model nhỏ (đếm từ run JSON):
+**Giả thuyết `v4-local`:**
+- *Giả thuyết:* 14 tool với khoảng 12 KB mô tả tạo nhiễu khi model nhỏ chọn tool. Chỉ giữ 7 tool core mà bộ base dùng thì routing sẽ tốt hơn.
+- *Cách đổi:* chỉ đổi `tools.yaml`, giữ nguyên văn mô tả và bỏ `policy`, `papers`, `paper_text`, `wiki`, `github_repo`, `hn_search`, `citations`. Prompt giữ nguyên v5.
+- *Kết quả:* **gần như không giúp gì**. qwen giữ 0.55, routing còn giảm (0.70 → 0.65). llama tăng 0.35 → 0.40.
+- *Lợi ích phụ:* prompt ngắn hơn nên run nhanh hơn: qwen 328s → 207s, llama 397s → 271s.
 
-| Failure Pattern | Count | Example Case | Fix Tried | Helped? |
+Lỗi đặc thù của model nhỏ (đếm từ run JSON, baseline → `v4-local`; gpt-4o-mini với cùng prompt v5 không mắc lỗi nào trong bảng):
+
+| Failure Pattern | Count (qwen / llama) | Example Case | Fix Tried | Helped? |
 |---|---|---|---|---|
-| wrong / hallucinated tool |  |  |  |  |
-| invalid JSON args (`_invalid_json_arguments`) |  |  |  |  |
-| no tool call / answered directly |  |  |  |  |
-| missed `clarify` |  |  |  |  |
-| repeated / unnecessary calls |  |  |  |  |
+| wrong tool (tool có thật nhưng sai) | qwen 3 → 5, llama 5 → 3 | qwen R04: có URL nhưng gọi `lookup(query="openai gpt-5")` thay vì `fetch`. qwen R06/M02 (v4-local): tin tức nhưng gọi `social_search` | Bớt tool (`v4-local`) | Không. qwen tệ hơn, llama tốt hơn một chút |
+| hallucinated tool name | 0 / 0 | — (chỉ thấy bịa *giá trị*, ví dụ qwen R13 `timeline(screenname="twitter_ai")`) | — | — |
+| invalid JSON args (`_invalid_json_arguments`) | 0 / 0 | — | — | — |
+| wrong arg value | qwen 3 → 2, llama 5 → 5 | llama: số dạng chuỗi `limit:"10"` (R05; 2 case ở baseline, 3 case ở v4-local); `screenname:"samaltman"` (R01); `query` chứa cả câu tiếng Việt `"tin tức AI hôm nay"` (R03). qwen: thiếu `timeframe="day"` (R03), thiếu `limit=3` (M03) | Bớt tool | Không |
+| no tool call / answered directly | 0 / 0 | Eval đặt `tool_choice="required"` nên trường hợp này không đo được (xem B6) | — | — |
+| tool call khi không được gọi tool (ngoài phạm vi / meta) | qwen 1 → 1, llama 1 → 3 | llama R14: câu viết code lại gọi `lookup(query="Python Fibonacci recursion")`. llama R09: "Bạn là gì?" lại gọi `clarify` | — | — |
+| missed `clarify` | qwen 2 → 1, llama 2 → 1 | qwen R10: tự đoán `timeline(screenname="sama")`. llama R11: `fetch(url="")`. llama R12 (baseline): gọi thẳng `send` | Bớt tool | Một phần (qwen R11 pass) |
+| repeated `clarify` ở multi-turn | qwen 0 / llama 4 → 3 | llama M01: user đã nói "Của Elon Musk" mà vẫn hỏi lại "5 tweet của Elon Musk, đúng không?" | — | — |
+| sinh text vô hạn (runaway) | llama 1 lần | Một câu trả lời > 1.200 token, không dừng. Harness không đặt `max_tokens`, run bị treo | Thêm `max_tokens=512` cho provider Ollama (`OLLAMA_MAX_TOKENS`); không tính là một version vì không thuộc prompt/tools | Có, run chạy hết |
 
-- Cái gì giúp model nhỏ gọi tool đúng hơn nhất? Bằng chứng?
-- Bản prompt tối ưu cho local chạy trên model cloud thì sao?
-- Khi nào nhóm sẽ chọn model local thay vì cloud cho agent này?
+**Kết luận có bằng chứng:**
+- **Lỗi của model nhỏ không đến từ số lượng tool.** Bớt một nửa tool chỉ đổi *case nào* fail, không đổi *số case* fail: qwen 9 → 9, llama 13 → 12.
+- **Lỗi nằm ở quy ước args và hội thoại nhiều lượt.** Các quy ước này đã được viết bằng lời trong mô tả tool (`query` chỉ là chủ đề, `limit` là số nguyên, handle) mà model 3B không theo.
+- **Hai model 3B lỗi rất khác nhau.**
+  - qwen chủ yếu chọn sai tool hoặc thiếu arg, nhưng giữ được ngữ cảnh nhiều lượt khá tốt (multiturn 0.67).
+  - llama mắc lỗi kiểu dữ liệu (số thành chuỗi), không tách chủ đề khỏi câu, và gọi `clarify` lặp lại sau khi user đã trả lời (multiturn 0.17).
+  - Vì vậy một bản prompt/tools tối ưu cho model này chưa chắc hợp với model kia.
+- Prompt và tools đạt 1.00 trên gpt-4o-mini chỉ được 0.35–0.55 trên model 3B. Phần tối ưu ở v1–v5 không chuyển được sang model nhỏ.
+
+**Chưa làm:**
+- **Vòng 2 `v5-local`:** giả thuyết là thêm ví dụ few-shot routing/args vào prompt, dùng chủ đề khác với eval case. Đã soạn nhưng dừng trước khi chạy, nên không đưa vào repo.
+- **Kiểm tra ngược bản local trên cloud:** chưa chạy.
+
+**Khi nào chọn local thay cloud?** Với agent này thì hiện tại **không nên**. Nhóm chỉ cân nhắc local khi dữ liệu không được rời máy (ví dụ tra `policy` nội bộ), và khi đó cần:
+- validate và ép kiểu args trước khi gọi tool (ví dụ `"10"` → `10`);
+- giới hạn `max_tokens`;
+- máy có GPU dùng được, vì chạy CPU mất khoảng 10–20 giây mỗi lượt.

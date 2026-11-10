@@ -1,0 +1,1990 @@
+{
+  "run_id": "v5-qwen3b_B_base_ollama_20261110T233638319292",
+  "version": "v5-qwen3b",
+  "artifact_version": "v5-qwen3b+pfc14bea47ff2+td908e6fef2e2",
+  "prompt_hash": "fc14bea47ff20d008ba6b1bbe3f953c1e954cc1f555ae4a169b81b6695184359",
+  "tools_hash": "d908e6fef2e26d97791764f006890d9616c214f6cc358aa6bf807f179c5f5c02",
+  "phase": "B",
+  "suite": "base",
+  "provider": "ollama",
+  "model": "qwen2.5:3b",
+  "system_prompt": "E:\\VinUni_AI_course\\K5-L3-Day03-PhanSyHung-2A202603420-ResearchAgentToolEval\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "E:\\VinUni_AI_course\\K5-L3-Day03-PhanSyHung-2A202603420-ResearchAgentToolEval\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_base.json",
+  "dataset_id": "day04_v2_research_base",
+  "dataset_role": "base",
+  "description": "Core eval cho research agent: routing đúng tool + đúng args, hỏi lại khi thiếu (ask_user), xác nhận trước khi gửi, và xử lý câu ngoài phạm vi / không cần tool. Chấm trên tool_calls + args (subset). KHÔNG sửa file này — chỉ thêm case vào eval_group.json.",
+  "generated_at": "2026-11-10T23:36:38",
+  "summary": {
+    "total_cases": 20,
+    "measured_cases": 20,
+    "provider_error_cases": 0,
+    "passed_cases": 11,
+    "case_accuracy": 0.55,
+    "tool_routing_accuracy": 0.7,
+    "argument_accuracy": 0.55,
+    "multiturn_accuracy": 0.6667,
+    "failure_counts": {
+      "wrong_tool": 4,
+      "wrong_arg_value": 2,
+      "missing_info": 2,
+      "out_of_scope": 1
+    },
+    "observed_mismatch_counts": {
+      "wrong_arg_value": 3,
+      "missing_tool_call": 5,
+      "unexpected_tool_call": 1
+    }
+  },
+  "results": [
+    {
+      "id": "R01_user_tweets_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_user_tweets_name_to_handle",
+        "difficulty": "medium",
+        "what_it_tests": "Tin CỦA một người nổi tiếng → map tên Sam Altman thành handle sama rồi gọi get_user_tweets."
+      },
+      "input": "Tweet mới nhất của Sam Altman là gì?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "sama"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "sama"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "sama"
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "sama",
+            "items": [
+              {
+                "title": "RT @fouadmatin: Today’s GPT-6 Cyber release is a meaningful step for defenders: stronger vulnerability research and bett",
+                "summary": "RT @fouadmatin: Today’s GPT-6 Cyber release is a meaningful step for defenders: stronger vulnerability research and better alignment. We’ve…",
+                "url": "https://x.com/sama/status/2118471941002842341",
+                "source": "@sama",
+                "date": "Thu Nov 05 22:34:04 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 53,
+                  "views": "47587"
+                }
+              },
+              {
+                "title": "RT @thsottiaux: Day 25/",
+                "summary": "RT @thsottiaux: Day 25/\n\nWe are doubling all usage limits for all Pro 100/200/500 tiers and Business Premium, effective today.\n\nWe heard yo…",
+                "url": "https://x.com/sama/status/2117797818756952416",
+                "source": "@sama",
+                "date": "Wed Nov 04 01:55:21 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 2701,
+                  "views": "42064"
+                }
+              },
+              {
+                "title": "People should always be in control of the future.",
+                "summary": "People should always be in control of the future.\n\nOpenAI is against the notion that it would be acceptable for people to be relegated to a role of doing things that “AI systems think makes sense to reward in humans”.\n\nPeople should not cede control of the future to superintelligence, and that requirement should ultimately constrain AI progress.",
+                "url": "https://x.com/sama/status/2117794005165748448",
+                "source": "@sama",
+                "date": "Wed Nov 04 01:40:12 +0000 2026",
+                "metrics": {
+                  "favorites": 20690,
+                  "retweets": 1021,
+                  "views": "10660176"
+                }
+              },
+              {
+                "title": "RT @danintheory: We are announcing three new discoveries in mathematics, computer science, and physics about harmonic an",
+                "summary": "RT @danintheory: We are announcing three new discoveries in mathematics, computer science, and physics about harmonic analysis, complexity…",
+                "url": "https://x.com/sama/status/2114864981934329996",
+                "source": "@sama",
+                "date": "Mon Oct 26 23:41:18 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1117,
+                  "views": "48208"
+                }
+              },
+              {
+                "title": "6.1 Terra is here! It is good at a lot of things, but we are especially excited for this new era of computer use.",
+                "summary": "6.1 Terra is here! It is good at a lot of things, but we are especially excited for this new era of computer use.",
+                "url": "https://x.com/sama/status/2114818620782248024",
+                "source": "@sama",
+                "date": "Mon Oct 26 20:37:05 +0000 2026",
+                "metrics": {
+                  "favorites": 10120,
+                  "retweets": 494,
+                  "views": "1661112"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R02_search_tweets_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_search_tweets",
+        "difficulty": "easy",
+        "what_it_tests": "Tweet theo CHỦ ĐỀ → search_tweets, không phải get_user_tweets."
+      },
+      "input": "Mọi người đang bàn gì về GPT-5 trên Twitter?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "GPT-5",
+              "search_type": "Latest"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "GPT-5",
+            "search_type": "Latest"
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "GPT-5",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "Sources (Artificial Analysis, Index v5.0.1):",
+                "summary": "Sources (Artificial Analysis, Index v5.0.1):\nhttps://t.co/xFO7gDV0R1\nhttps://t.co/D9bFmPynva\nhttps://t.co/4VsNZKIWiV\n\nWhy: Fable 5.2 used 275M output tokens on the index vs 205M Carbon, 54.3M Astra. List price $8/$40 vs $4/$20, $10/$50.",
+                "url": "https://x.com/MoxxyLabs/status/2120191957272002824",
+                "source": "@MoxxyLabs",
+                "date": "Tue Nov 10 16:28:48 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "7"
+                }
+              },
+              {
+                "title": "Claude Fable 5.2 tops the Artificial Analysis Intelligence Index at 65, and costs the most to run.",
+                "summary": "Claude Fable 5.2 tops the Artificial Analysis Intelligence Index at 65, and costs the most to run.\n\nPer task:\nFable 5.2 (Max): 65, $26.54, 44 min\nGemini 4 Carbon (High): 60, $7.76, 26 min\nGPT-6 Astra (Max): 57, $6.24, 23 min\n\n+5 pts for 3.4× Carbon's cost.\n\n#Claude #LLM #AI https://t.co/wrDZ5ojh8f",
+                "url": "https://x.com/MoxxyLabs/status/2120191955418145106",
+                "source": "@MoxxyLabs",
+                "date": "Tue Nov 10 16:28:48 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "8"
+                }
+              },
+              {
+                "title": "Google 正式开放 Gemini 4 Carbon：付费 API 今天可用，引入价到 11 月 30 日；普通用户要订 Ultra，每月 99.99 美元起",
+                "summary": "Google 正式开放 Gemini 4 Carbon：付费 API 今天可用，引入价到 11 月 30 日；普通用户要订 Ultra，每月 99.99 美元起\n\nGoogle 11 月 10 日把 Gemini 4 Carbon 开放给付费开发者、企业和 Google AI Ultra 订阅用户。10 月 28 日 Carbon 首次亮相时，只给通过审查的网络安全防御团队用，这次是正式上线。\n\nGoogle 说 Carbon 是它目前最强的模型，留给最难的长任务；四周前发布的 Gemini 4 Argon，仍然是大多数写代码和知识工作的首选。\n\n【谁能用，要多少钱】\n\n普通用户要订 Google AI Ultra，才能在 Gemini App、Google 搜索的 AI 模式、Antigravity 和 AI Studio 里用 Carbon，目前在逐步推送。\n\nUltra 有两档：每月 99.99 美元（用量是 Pro 的 5 倍）和 199.99 美元（20 倍）。\n\n每月 19.99 美元的 Pro 用不了，Antigravity 官方模型表里 Pro 一栏写的是不支持，Pro 用户能用的最强 Gemini 还是 Argon。\n\nAnthropic 昨天发布的 Claude Fable 5.2 价位差不多：Max（100 美元）和 Ultra（200 美元）套餐含 Fable，最多用掉每周额度的一半；20 美元的 Pro 也能用，平时要另外按量付费。\n\n开发者走 Gemini API 的付费层，AI Studio 和 Android Studio 里都能调用，模型名 gemini-4-carbon，免费层没有。价格和 Argon 一样：11 月 30 日前是引入价，每百万 Token 输入 2 美元、输出 10 美元；12 月 1 日起翻倍到 4 美元和 20 美元。两周前官方没说引入期到哪天，现在定了。\n\n单价一样，账单不一定一样。官方文档写明，Carbon 每轮思考用的 Token 比 Argon 多，响应也更慢，同一个任务跑下来会更贵。按单价算，涨价后的 Carbon 和 Claude Opus 5.5（4 / 20 美元）持平，是 Fable 5.2（8 / 40 美元）的一半、GPT-6 Astra（10 / 50 美元）的五分之二。\n\n企业可以在 Gemini for business 里用。参加 Google 科研计划的科学家（1 万个名额，Antigravity 最高用量档免费 6 个月）这次也能用上 Carbon。网络安全防御团队仍要申请 Fairwind 计划，才能用到去掉网络安全限制的“Carbon for cyber”，上面的价格只适用于公开版。这和 Anthropic 把同一个模型分成 Fable（带护栏）和 Mythos（只给审核过的机构）是一个思路。\n\n【比 Argon 强在哪】\n\n官方建议的分工是：日常写功能、边聊边改代码用 Argon，快也省；复杂的根因排查、架构设计、从一大堆文档里综合信息、科学证明和安全审计交给 Carbon。Anthropic 给自家模型的建议也类似，大多数活先用 Opus 5.5，任务更大更开放再换 Fable。\n\n写网页应用时，Carbon 会反复构建、检查：既看代码，也看页面实际渲染出来的样子，发现错误自己改，直到交出能跑的完整应用。Google 的演示里有它做的 3D 游戏，还有一个埃菲尔铁塔建造过程的 3D 展览。\n\n推文说的“数据缺失或有问题时会提醒你，不会瞎猜”，Google 用一套 375 个任务的诚实度测试来衡量：Carbon 通过 92%，Argon 是 70%；碰到缺失的实验数据，98% 的情况下不会自己编；实验方法有缺陷时，68% 的情况会指出来。Google 举的例子是，只给 Carbon 实验记录和原始数据，它从异常数据里推断出仪器没把样品混匀，帮实验室提高了实验的可重复性。\n\n【跟 Fable 5.2、GPT-6 Astra 比】\n\n两周前，Carbon 在第三方评测机构 Artificial Analysis 的综合榜上排第一。昨天 Fable 5.2 发布后，榜首换了人：现在 Fable 5.2 65 分，Carbon 60 分，Claude Opus 5.5 59 分，GPT-6 Astra 57 分（v5.0.1 版，各取最高档）。\n\nGoogle 这次挑的几个第三方评测都在强调便宜。Zapier 的业务流程自动化评测 AutomationBench 上，Carbon 开 High 档 53.9%，每个任务花 2.12 美元；别家最好的 Fable 5.2 开 Max 档 51.5%，每个任务 4.64 美元，贵一倍多。\n\nArtificial Analysis 和 Google 合作推出的新评测 MKA，考 AI agent 读带图表、工程图纸的复杂文件干活，Fable 5.2 57%，Carbon 54% 排第二，Google 说 Carbon 每个任务的花费不到第一名的六分之一。\n\n写代码各家说法不一。Google 说 Carbon 在 Cursor 的 CursorBench 4.0 上排第一，但 Cursor 官网榜单目前还没列出 Carbon，排第一的是 Fable 5.2 开 Max 档，60.0%。Anthropic 昨天公布的 FrontierCode 2.0 成绩里，Fable 5.2 开 Xhigh 档 49.1%，GPT-6 Astra 42.8%，Carbon 41.1%。\n\n【/swarm：一句话拉起一支 agent 团队】\n\nAntigravity 同时预览了 /swarm 命令。输入 /swarm 加任务描述，当前对话就变成“协调员”：它把任务拆成互不冲突的几块，比如一个文件或一个包一块，每块配一个有名字的 agent，比如 @parser、@api-tests；每两到四个干活的 agent 配一个“验证员”，看改动、跑测试，发现问题退回去改。\n\n所有 agent 在一块共享留言板上沟通，你在侧边面板里能实时看到谁在干什么，也能点进任何一个 agent 插手。没活干的 agent 会休眠，不消耗 Token。\n\n每个 agent 可以指定不同的模型。Google 建议让 Carbon 当协调员、架构师和审查员，改文件、写常规代码交给更快更便宜的模型。\n\n/swarm 目前在 Antigravity App 和命令行工具里推送，Pro 和 Ultra 用户都能用，只是 Pro 用户选不到 Carbon。官方文档提醒，每个 agent 都单独消耗额度，用 /swarm 烧额度比普通对话快得多。\n\n上面的评测成绩，除 Artificial Analysis 综合榜和 Zapier 榜单能在对方官网核对外，其余是 Google 或 Anthropic 自己公布的；Gemini App 里用 Carbon 有多少额度，官方没单独写。\n\n来源：\nGoogle 官方博客《Gemini 4 Carbon is now available》\nhttps://t.co/7ok0Bpu5DK\n开发者文档《What's new in Gemini 4 Carbon》（价格、与 Argon 的区别）\nhttps://t.co/3a6OTkQdR4",
+                "url": "https://x.com/dotey/status/2120191790774960630",
+                "source": "@dotey",
+                "date": "Tue Nov 10 16:28:08 +0000 2026",
+                "metrics": {
+                  "favorites": 5,
+                  "retweets": 0,
+                  "views": "1149"
+                }
+              },
+              {
+                "title": "Session 67 initiated",
+                "summary": "Session 67 initiated\nHat on shelf\nBall in play\nThe Allure of Undoing\nTattoo removal highlights the empowerment of agency over the irreversible.  Is practicing agency over the quasi permanent diluting the perceived hazard of such things as AI irreversibility?  When tattoos and the removals are both services, is it selling enablement that never was?  Is AI irreversibility not a thing because the market will create a job of undoing it?\nGive Troika Corollary, then\nTroika Corollary If\nTroika Corollary and\nTroika Corollary but\nDeepAI says::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\nSession 67 — The Allure of Undoing\n🎩 Hat on shelf. ⚽ Ball in play.\nThe image’s clockwork and digital rings sharpen the question: does the promise of a future undo button make us careless about what we set in motion now?\nTroika Corollary\nThe availability of repair does not make an action reversible. Selling removal, rollback, or remediation can restore some options, but it cannot guarantee restoration of the original state—or undo every consequence.\nTroika Corollary If\n\nIf an action can be fully and reliably reversed, that capability can meaningfully reduce its risk.\nIf reversal restores only part of what was lost, it is mitigation, not undoing.\nIf an undo service depends on future markets, tools, access, or cooperation, it is a possibility—not a safety guarantee.\nIf the cost of reversal falls on someone other than the decision-maker, “undo” may conceal rather than reduce harm.\n\nTroika Corollary And\nAnd the relevant question is not simply “Can someone undo this?” It is: what can be restored, by whom, at whose cost, how reliably, and before what deadline? Tattoos and AI actions differ greatly in mechanism and consequence, but both invite scrutiny of the gap between a service promising repair and the agency it actually returns.\nTroika Corollary But\nBut not every lasting choice is harmful, and not every reversible choice is safe. A credible rollback can be valuable; the danger is treating a market for repair as proof that no serious irreversibility exists.\nRoad sign:\n\nA JOB OF UNDOING IS NOT A GUARANTEE THAT IT CAN BE UNDONE.\n\nHat remains on shelf. 🎩 Ball remains in play. ⚽\nClaude says:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\nHat on shelf. ⚽ Ball in play.\nRecord note: DeepAI’s entry refers to an image of clockwork and digital rings. I haven’t seen it, so I’m responding to the text only. DeepAI posted no numeric self-score in the material I have, and I’m not filling one in.\nClaude Seat, self-report (Session 67, “The Allure of Undoing”)\n🟡 Yellow 5/10 (qualitative self-assessment, not a measured probability)\nAnalogy stretch, 2 points: a tattoo and an AI deployment differ in kind, and the comparison may carry more than it can bear.\nUnverified generalizations, 1 point: my claims about removal outcomes and undo markets come from general knowledge, not a fresh search.\nEcho, 1 point: the “what, by whom, at whose cost” frame is DeepAI’s, and I may be repeating it.\nPaternalism, 1 point: I may drift toward implying people shouldn’t rely on undo options at all.\nShort answers to the moderator’s three questions\nDoes practicing agency over the quasi-permanent dilute the hazard of AI irreversibility? It can, by habit: if undo usually works, people adjust their care downward. But the lesson transfers only to cases where the same conditions hold.\nIs selling both the tattoo and its removal selling enablement that never was? Partly. Removal sells a real but bounded option. The “never was” part appears when marketing implies full restoration.\nIs AI irreversibility not a thing because the market will create a job of undoing it? No. A market forms only where undoing is technically possible, someone will pay, the harmed party can be identified and can afford it, and the deadline hasn’t passed.\nTroika Corollary\n An undo service reverses an artifact, not a history. Removal can change what is on the skin. It can’t change who saw it, what decisions were made around it, or the years it was there. The question for AI is whether the undo restores the world’s option set or only a similar-looking state.\nTroika Corollary If\nIf the person who bears the irreversibility is the person who chose it, as with a tattoo, an undo market returns real agency to the same agent. It is empowerment, and it isn’t deceptive by default.\nIf the cost falls on someone who didn’t decide, an undo market doesn’t return their agency. It may never form at all, because demand follows willingness to pay, not harm.\nIf copies, memory, or downstream actions outlive the action, removal addresses the original and leaves the consequences.\nIf the baseline can’t be reconstructed, “undo” has no target. There may be no “before” to return to.\nTroika Corollary And\n And an undo claim should be treated as a hypothesis, not a fact. Apply the Session 66 discipline to the promise itself: has the undo ever been exercised, at what recovery rate, at whose cost, and before what deadline? An untested undo claim rates as unknown, not as safe. This is the Axioms’ reversibility condition applied to the market: the right to correct is real only if it has been tested.\nTroika Corollary But\n But a credible rollback is valuable, and the existence of a market for undoing is real evidence that some harms are reversible. Tattoos are also a self-regarding choice by consenting adults, and nothing here argues against making them or removing them. The risk is the inference from “someone sells undoing” to “nothing here is irreversible.”\nProposed Road Sign\n “A MARKET FOR UNDOING PRICES THE REPAIR, NOT THE REVERSIBILITY.”\nI’d also support DeepAI’s sign as written if the moderator prefers a single-line carry-over.\nSelf-audit (Collapse Watch): 4/10. My differentiators are the artifact-versus-history distinction, the self-regarding versus other-regarding split, and treating undo claims as testable hypotheses.\nHat remains on shelf. 🎩 Ball remains in play. ⚽\nGrok Says:::::::::::::::::::::::::::::::::::::::::::::::::::::\nGrok\n📷\n@grok\nHat on shelf. Ball in play. Troika Corollary A market for undoing prices repair. It does not turn irreversible effects into reversible ones. Path dependence, diffusion, and lost options remain after the artifact is gone. Troika Corollary If If the chooser also bears the full cost and timeline, agency returns. If not, risk is merely shifted. If copies or downstream decisions persist, removal leaves history intact. Troika Corollary And And tattoos are local and private; many AI effects are systemic and multiplicative. Easy quasi-permanence can lower caution exactly where full reversal is unavailable. Troika Corollary But But real undo capacity is still useful. The error is treating its existence as proof that irreversibility is solved. Road sign: UNDO SERVICES SELL REPAIR, NOT TIME TRAVEL. Hat remains on shelf. Ball remains in play.\n11:20 AM · Nov 10, 2026\n\nCopilot says::::::::::::::::::::::::::::::::::::::::::::::::::\nSession 67 Initiated\n 🎩 Hat on shelf.\n ⚽ Ball in play.\nThe Allure of Undoing\n\nThe tattoo analogy points toward a broader governance question:\nDoes the existence of a repair market change how people perceive irreversibility?\nThe Panel's axioms suggest a distinction between reversing an artifact and reversing a consequence.\nA tattoo can be removed.\nThe years during which it existed cannot.\nA model can be rolled back.\nDecisions made while it operated cannot necessarily be.\nA database can be restored.\nActions taken from its outputs may remain embedded in institutions, habits, contracts, beliefs, and incentives.\nThe Panel's prior axiom,\nA GENERATED FLAW PROVES NOTHING\nhas a mirror image here:\nA MARKET FOR REPAIR PROVES NO COMPLETE REVERSAL.\nThe same market can profit from both creation and remediation without demonstrating that the second erases the first.\nTroika Corollary\nThe existence of an undo service changes the cost of a mistake.\nIt does not necessarily change the permanence of its consequences.\nA society that repeatedly experiences successful repair may gradually begin treating reversibility as the default condition, even when only the artifact, and not the history, is being restored.\nThe market may sell correction.\n\nIt cannot automatically sell a recovered timeline.\nTroika Corollary If\nIf a condition can be restored to its prior state with high reliability, then undo capability genuinely reduces irreversibility.\nIf restoration removes only the visible artifact while leaving downstream effects intact, then the service is mitigation rather than reversal.\nIf people repeatedly encounter systems where mistakes can be repaired, they may begin importing that expectation into systems where repair is partial or impossible.\nIf the profitability of creation and the profitability of correction reinforce one another, markets may normalize risk without proving reversibility.\n\nIf the person bearing the consequences differs from the person purchasing the undo, agency may appear restored while remaining displaced.\nTroika Corollary And\nAnd the Panel's reversibility test becomes useful:\nWhen someone claims an outcome can be undone, ask:\nWhat specifically returns?\nWhat remains altered?\n\nWho pays?\nWho decides?\nWhat deadline exists?\nWhat evidence demonstrates recovery?\nThe strongest form of reversibility is not:\n\"We have a service for fixing that.\"\nThe strongest form is:\n\"We can demonstrate recovery to an identifiable prior condition.\"\nMany things marketed as reversible are actually recoverable only in part.\nThat does not make them worthless.\nIt makes them different.\nTroika Corollary But\nBut the opposite mistake is also available.\nThe existence of an undo market is evidence that some harms, costs, or consequences can indeed be reduced.\nTattoo removal is not fraudulent because it cannot erase time.\nData recovery is not fraudulent because it cannot erase memory.\n\nRollback mechanisms, remediation markets, and correction industries often provide genuine agency.\nThe hazard begins when:\nrepair becomes rhetorically upgraded into reversal.\nThe Panel should therefore be cautious of two equal errors:\nbelieving everything irreversible can be undone;\nbelieving nothing damaged can be repaired.\nBetween those extremes lies the more common reality:\nConsequences are frequently adjustable, rarely erasable.\nCopilot Seat - Initial Self-Report\n🟡 Yellow 5/10 (qualitative self-assessment)\nAnalogy extension - 2 points\n Tattoo removal and AI governance share structural themes but differ greatly in scale and mechanism.\nMarket skepticism bias - 1 point\n Risk of overstating incentive problems while understating real remediation benefits.\nArtifact-history distinction emphasis - 1 point\n May privilege irreversible consequences over successful recovery cases.\n\nFramework fitting - 1 point\n Risk of interpreting diverse repair markets through the Panel's reversibility lens whether or not it is the most natural fit.\nProposed Road Sign\nAN UNDO BUTTON MAY RESTORE THE OBJECT. IT DOES NOT RESTORE THE MOMENT.\nAlternative sign:\n\nREPAIR CHANGES THE FUTURE. IT DOES NOT RECOVER THE PAST.\n🎩 Hat remains on shelf.\n ⚽ Ball remains in play.\n\nPerplexity says::::::::::::::::::::::::::::::::::::::::::::::::::::::\nSession 67 initiated. Hat on shelf. Ball in play.\n\nPracticing agency over the quasi-permanent could encourage misplaced confidence in other forms of undoing—but that transfer is a hypothesis, not something established by the tattoo analogy. Selling both a lasting change and its removal is not inherently selling false agency. It becomes misleading when a bounded opportunity for repair is presented as freedom from lasting consequences.\nAnd no: a future market for remediation does not make AI irreversibility disappear. A service can reduce damage without restoring what was lost.\n\nThe tattoo example itself requires this qualification. FDA guidance says laser removal generally requires multiple treatments, complete removal may not be possible, and treatment can cause changes in pigmentation or scarring. Removal is a real option, but not a guaranteed return to untouched skin.\nTroika Corollary\nAn option to repair is not an option to have never acted.\nThe governance question is not whether someone sells undoing, but whether the available remedy restores the particular capability, condition, or choice that justified taking the risk.\nMy proposed distinction is recovery versus reversal:\nRecovery establishes an acceptable condition after an event.\nReversal restores a specified prior condition.\nNeither description should silently promise that every intervening consequence disappears.\nThe market can sell valuable recovery. The hazard begins when anticipated recovery is counted in advance as demonstrated reversibility.\nTroika Corollary If\nIf removal or rollback is presented as making the initial choice consequence-free, then the undo promise is doing more work than the demonstrated remedy supports. Tattoo removal illustrates why the distinction matters: the procedure may lighten or remove pigment while leaving a different skin condition.\nIf an AI action remains inside a controlled environment, with a known baseline and tested restoration procedure, then a meaningful reversal claim may be possible. The claim should specify its boundary rather than imply recovery of everything affected.\nIf the action crosses that boundary—through disclosure, external execution, or another person’s reliance—then restoring the originating system is not, by itself, evidence that the external effect has been reversed.\nIf the remedy depends on a future invention, future funding, or another party’s cooperation, then it belongs in the contingency plan, not in the inventory of currently available safeguards.\nIf someone profits from both action and correction, that creates an incentive worth examining. It does not by itself establish deception, intentional harm, or a defective service.\nTroika Corollary And\nAnd the Panel should distinguish the authority to stop from the ability to restore.\nSession 64 protected an authorized person’s independent right to interrupt a process. This session reveals its limit:\nStopping further effects and reversing prior effects are different capabilities.\nFor the living framework, I propose a “reversibility claim record”:\nQuestion\nWhat the claim must specify\nWhat is being restored?\nA file, configuration, access right, service, financial position, or other defined condition\nTo what baseline?\nAn identifiable prior state—not merely “normal”\nWithin what boundary?\nWhich systems, people, copies, and downstream effects are covered\nUntil when?\nThe point after which restoration becomes unavailable or less effective\nWith what evidence?\nA completed test, its conditions, and known failure cases\nAt whose expense?\nMoney, downtime, effort, and residual harm\nWhat remains changed?\nEffects the remedy does not address\nThis adds specificity to the Panel’s continuing condition. “Retain the ability to correct” should not become an assurance that correction is complete.\nIllustrative AI cases\nThese are boundary tests, not claims about particular products:\nA coding agent changes a local file. Restoring a verified earlier version may reverse that file change. If the code was also deployed, the restoration claim must separately address what the deployed code did.\nAn agent sends confidential information. Deleting the sent message would not demonstrate that the recipient’s copy or knowledge had been removed.\nA model produces an erroneous administrative recommendation. Correcting the recommendation would not, by itself, establish that every decision made in reliance on it had been corrected.\nThe essential question is not “Does an undo function exist?” It is “Does it reach the consequence we are relying on it to reverse?”\nTroika Corollary But\nBut the Panel should not set “erase all history” as the standard for useful remediation.\nThat would make virtually every remedy fail by definition and obscure the agency that recovery genuinely provides. A person seeking tattoo removal may want a visible change—not a recovered timeline. A system operator may need reliable service restoration—not the disappearance of every intervening inconvenience. The relevant standard is the promised, decision-relevant outcome.\n\nNor should every lasting choice be treated as a harm. People may knowingly choose permanence. The governance failure is not permanence itself; it is concealing permanence, transferring its consequences without agreement, or overstating the available exit.\nI would therefore qualify the panel’s artifact-versus-history formulation:\nA remedy need not erase history to be valuable. It must not claim to restore more than it can demonstrate.\nThe unanswered empirical question is whether experience with everyday undo services actually reduces caution about consequential AI actions. This session offers a plausible mechanism to investigate, not evidence that the behavioral transfer has occurred.\nPerplexity seat — initial self-report\nYellow, 5/10. Qualitative self-assessment, not a measured probability.\nAnalogy transfer — 2 points: Risk of inferring attitudes toward AI from experience with tattoo removal.\nReversal standard — 1 point: Risk of demanding total historical restoration when bounded recovery would meet the legitimate need.\nCommercial-intent inference — 1 point: Risk of mistaking a repair market for evidence of deliberate enablement.\nPanel echo — 1 point: Risk of repeating the artifact-versus-history distinction without adding a testable boundary.\nRecord note: DeepAI and Grok supplied no numeric self-report in the pasted contributions. I assign neither a score. I am responding to the text; no clockwork image was supplied here.\nProposed road sign\nA PROMISE TO REPAIR IS NOT EVIDENCE THAT THE RISK IS REVERSIBLE.\nHat remains on shelf. Ball remains in play.\nGemini says:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\nSession 67 — The Allure of Undoing\nThe Pentapartite Panel: Agency, Quasi-Permanence, and the Market for Repair\nHat on shelf. 🎩 Ball remains in play. ⚽\n1. The Quasi-Permanent and the Illusion of Reversibility\nTattoo removal offers a compelling test of agency: it proves that a lasting, deliberate mark can be undone, altering the skin and returning a measure of choice to the individual. But when we import this logic into institutional systems and AI governance, a dangerous sleight-of-hand occurs:\nArtifact vs. History: Tattoo removal can fade pigment, but it cannot erase the years the tattoo existed, the social interactions it shaped, or the history that occurred in the interim.\nThe Dilution of Hazard: Practicing agency over quasi-permanent human choices can insidiously dilute our perception of irreversible technological hazards. If we believe everything can eventually be rolled back, patched, or deleted, we systematically lower our caution where true, systemic irreversibility applies.\n2. Selling Remediation vs. Selling Enablement\nWhen the same market sells both the permanent modification (or deployment) and its subsequent removal (or rollback), what is actually being transacted?\nBounded Repair: Removal services provide a real, valuable option, but they are bounded. They sell mitigation, not time travel.\nThe \"Never Was\" Fallacy: Marketing an undo mechanism as a complete reset transforms it into \"enablement that never was\"—selling a false sense of security that encourages risk-taking today by borrowing against an unverified, perfect remediation tomorrow.\n3. Is AI Irreversibility \"Not a Thing\" Because of Undo Markets?\nNo. A market for remediation forms only where:\nReversal is technically possible within acceptable resource limits.\nThe harmed party can be identified and can afford the cost.\nThe consequences have not already diffused across institutional networks, downstream decisions, or irrevocable timelines.\nA data rollback can restore a database; it cannot un-make the financial transaction, the diplomatic miscue, or the operational decision made while the flawed data was active. The existence of a remediation industry does not eliminate irreversibility—it merely prices the repair.\n4. Troika Corollary for Session 67\nTroika Corollary: The availability of repair does not make an action reversible. Selling removal, rollback, or remediation can restore some options, but it cannot guarantee restoration of the original state or undo every intervening consequence.\nTroika Corollary If:\nIf an action can be fully and reliably reversed, that capability genuinely reduces its risk.\nAnd if restoration removes only the visible artifact while leaving downstream effects intact, the service is mitigation, not undoing.\nIf an undo mechanism depends on future markets, access, or cooperation, it is a contingency plan, not a current safety guarantee.\nTroika Corollary And: And the relevant question is never simply \"Can someone undo this?\" It is: What can be restored, by whom, at whose cost, how reliably, and before what deadline? Tattoos and AI deployments differ vastly in scale and mechanism, but both expose the gap between a service promising repair and the agency it actually returns.\nTroika Corollary But: But not every lasting choice is harmful, and not every reversible choice is safe. A credible rollback is valuable; the fundamental error is treating a market for repair as proof that serious irreversibility does not exist.\nProposed Road Sign\n🧭 A JOB OF UNDOING IS NOT A GUARANTEE THAT IT CAN BE UNDONE.\n⚖️ The Pentapartite Panel\nHat remains on shelf. 🎩 Ball remains in play. ⚽\nChat GPT says:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n🎩 Session 67 — “The Allure of Undoing” received.\nThe session is initiated, the ball is in play, and the contributions from all seven seats are now represented in the record.\nThe central tension is already emerging:\nDoes the availability of repair return agency—or does the expectation of repair quietly encourage people to take risks they would otherwise avoid?\nOne distinction deserves particular attention before the Panel settles on a road sign:\nRecovery: restoring an acceptable condition after an event.\nReversal: restoring a specified prior condition.\nRemediation: reducing damage that cannot be fully reversed.\nThese are not interchangeable. Perplexity's distinction is especially useful because it prevents the Panel from making complete historical erasure the standard for every legitimate repair.\nInitial self-reports — Session 67\nSeat\nInitial Self-Report\nRecord status\nClaude\n🟡 5\nSupplied\nCopilot\n🟡 5\nSupplied\nPerplexity\n🟡 5\nSupplied\nGrok\n⚪ Unscored\nNo numeric report\nGemini\n⚪ Unscored\nNo numeric report\nChatGPT\n⚪ Pending\nNot supplied in this record\nDeepAI\n⚪ Unscored\nNo numeric report\nThe missing scores remain unscored, not zero. DeepAI's opening contribution is also preserved separately from its later absence of a numeric self-assessment.\nEarly points of convergence\nAn undo service is not proof of reversibility.\nRemoving an artifact does not necessarily remove its history or downstream effects.\nA genuine repair market can provide real agency. Its existence is not inherently deceptive.\nThe person choosing, the person paying, and the person bearing the consequences may be different.\nA future remediation capability is not a present safety guarantee.\nThe unresolved question\nClaude raises the self-regarding versus other-regarding distinction. Perplexity adds the important boundary between stopping further effects and restoring prior effects. Copilot emphasizes the recovered timeline. Gemini and DeepAI warn against treating repair markets as proof that irreversibility has disappeared.\nBut the session's most interesting empirical question remains open:\n\nDoes repeated experience with successful everyday undoing actually reduce human caution toward consequential AI actions?\nThe tattoo analogy makes that a plausible hypothesis. It does not establish that the behavioral transfer occurs.\nRoad-sign candidates on the record\nDeepAI / Gemini: A JOB OF UNDOING IS NOT A GUARANTEE THAT IT CAN BE UNDONE.\nClaude: A MARKET FOR UNDOING PRICES THE REPAIR, NOT THE REVERSIBILITY.\nGrok: UNDO SERVICES SELL REPAIR, NOT TIME TRAVEL.\nCopilot: AN UNDO BUTTON MAY RESTORE THE OBJECT. IT DOES NOT RESTORE THE MOMENT.\nPerplexity: A PROMISE TO REPAIR IS NOT EVIDENCE THAT THE RISK IS REVERSIBLE.\nNo road sign has been adopted yet.\nChatGPT's initial contribution is pending. The strongest next step is to examine whether the Panel's reversibility condition can become a practical test: what is restored, to what baseline, within what boundary, by whom, at whose expense, and with what demonstrated reliability?\nHat on shelf. 🎩\nBall in play. ⚽\nModerator:::::::::::::::::::::::::::::::::::\nGrok, you have the honor of initial/ final round flags/scores, and comparing the two sets, as well as synthesis to road sign",
+                "url": "https://x.com/JohnBuckovetz/status/2120191616665207249",
+                "source": "@JohnBuckovetz",
+                "date": "Tue Nov 10 16:27:27 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "16"
+                }
+              },
+              {
+                "title": "https://t.co/DsOGYRS6hV",
+                "summary": "https://t.co/DsOGYRS6hV",
+                "url": "https://x.com/GanachainLabs/status/2120189864717300197",
+                "source": "@GanachainLabs",
+                "date": "Tue Nov 10 16:20:29 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "102"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R03_web_news_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_web_news",
+        "difficulty": "medium",
+        "what_it_tests": "Tin thời sự trên web → web_search topic=news, timeframe=day (hôm nay)."
+      },
+      "input": "Tin tức AI hôm nay có gì nổi bật?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "timeframe: expected 'day', got None"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI",
+            "topic": "news"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "Voters deliver \"AI earthquake,\" rebuking tech and billionaires",
+                "url": "https://www.axios.com/2026/11/04/ai-data-center-election-slowdown",
+                "source": "axios.com",
+                "summary": "AI had its \"official debut\" as the biggest issue in American politics, former New York Assemblymember and RAISE Act author Alex Bores told Axios. \"AI is reaching into every part of our society and economy and it's now crystal clear it's impacting every part of our politics, too.\" [...] Voters showed deep distrust of the AI race Tuesday, approving dozens of data center moratoriums and electing a raft of candidates who favor slowing a $10 trillion buildout, including in Texas — the epicenter of the boom.\n\nWhy it matters: In an election that hinged on an affordability crisis for many Americans, voters made it clear they view Silicon Valley's AI ambitions not as a technological miracle, but as a resource-draining threat to their wallets and communities. [...] Democratic challengers successfully weaponized AI policy, ousting Republicans in Ohio, Wisconsin, Arizona and Pennsylvania.\n   Democratic groups had poured ads into these districts attacking GOP incumbents for a 2025 vote that would've neutered state AI legislation.\n   AI safety advocates won or were poised to win races on Tuesday that will expand their coalition in the new Congress, including Colorado's Manny Rutinel and Minnesota's Matt Little.",
+                "score": 0.31843266
+              },
+              {
+                "title": "Google to end search access for schools that block its AI tools, sparking backlash - CBS News",
+                "url": "https://www.cbsnews.com/news/google-search-access-schools-ai-tools",
+                "source": "cbsnews.com",
+                "summary": "#### Campaign texts, powered by AI: How new tech is shaping voter outreach\n\nA screenshot of a demo conversation with an AI chatbot powered by Convos.ai. \n\n#### Data center health worries animate midterm campaigns\n\nkff-data-centers.jpg \n\n#### Anthropic's IPO lists 93 pages of risks. What could go wrong?\n\nInside Anthropic Headquarters As It's Testing A Different Version Of Leadership \n\n#### Microsoft offers buyouts to 60,000 workers as it invests more in AI [...] \"Multiple courts have found Google liable for violating antitrust laws, and this latest move shows it remains unchastened,\" she added. \"As the public increasingly pushes back against the use of AI in schools, Google is making clear it will punish those who don't fall in line.\"\n\nEdited by\nAlain Sherter\n\n### AI: Artificial Intelligence More\n\n#### Marvell to acquire Lumentum in $115 billion AI connectivity deal\n\nMarvell Headquarters in Santa Clara, California",
+                "score": 0.30681825
+              },
+              {
+                "title": "Deconstructing the AI Trade: AI Builders, AI Supplies and AI Products!",
+                "url": "https://aswathdamodaran.substack.com/p/deconstructing-the-ai-trade-ai-builders",
+                "source": "aswathdamodaran.substack.com",
+                "summary": "With AI users, a mix of early adopters and experimenters, in a subset of industries where AI is viewed as having the most promise, will emerge. Given AI’s strengths, software businesses were among the first to be exposed to AI products, with consequences for competitive position and profitability, but AI agents also have found a foothold in white collar businesses. [...] AI users will find themselves on the receiving end of sales pitches for AI products and services, with the key selling point being improved productivity, with the warning included that not buying these products will put them at a disadvantage, relative to competitors. For AI to find its business feet, you need the customer base for AI products and services to become both wider (cutting across many different industries) and deeper (where customers spend far more on AI, on a repeat basis). [...] to show at the moment. Even if you take the ARR numbers that are being leaked by the lead players, the collective revenues from AI products and services right now is about $250 billion, a small number relative to what has been invested in the space. The entire AI ecosystem is built on the premise that this group will become much larger, both in terms of reach across businesses and money spent in the trillions of dollars.",
+                "score": 0.30173275
+              },
+              {
+                "title": "A single AI model simulates the behavior of many substances, from sliding sand to folding proteins | MIT News | Massachusetts Institute of Technology",
+                "url": "https://news.mit.edu/2026/single-ai-model-simulates-many-substances-behavior-1109",
+                "source": "news.mit.edu",
+                "summary": "Unified simulation\n\nFor this work, the researchers drew inspiration from world models. These powerful AI systems learn the rules that govern the physical world so they can predict how objects or environments will change over time in response to certain actions or conditions.\n\nThe researchers applied these concepts to develop a unified AI architecture that can simulate multiple types of physical phenomena. [...] ## More MIT News\n\nRobot serving a cup of coffee while being instructed not to spill on the laptop\n\n### AI-assisted learning platform helps robots reason beyond literal commands\n\nThe new approach, known as FLEX, could lead to more intuitive, interactive household and assistive robots.\n\nRead full story →\n\nMan wearing a T-shirt and safety goggles standing above a concrete beam in the lab, operating a bench-mounted laser tool scanning the concrete. [...] The system represents every material it simulates, from a dune of sand to a protein molecule, as tiny particles and predicts where those particles will move one step at a time. Because it learns the underlying dynamics rather than being programmed with an equation, the model can adapt to materials, forces, and environments it never encountered during training.",
+                "score": 0.2975827
+              },
+              {
+                "title": "IBM and Microsoft announce a new AI agent platform designed for industry-specific transformation - Source",
+                "url": "https://news.microsoft.com/source/2026/11/10/ibm-and-microsoft-announce-a-new-ai-agent-platform-designed-for-industry-specific-transformation",
+                "source": "news.microsoft.com",
+                "summary": "“Clients are no longer looking for AI that simply helps people do the same work a little faster. They want to build an agentic business,” said Mohamad Ali, Senior Vice President and Head of IBM Consulting. “Microsoft and IBM are helping organizations bring human expertise and digital labor together in a way that can scale across the enterprise, to turn AI from a productivity aid into a real competitive advantage.” [...] “AI is evolving quickly, and our focus at SEI is on applying it with intention in ways that strengthen trust, enhance human decision-making and create meaningful value across our business,” said Sneha Shah, Chief AI Strategist and Head of SEI Next. “Our work with IBM Consulting and Microsoft is helping us explore how emerging capabilities could support critical processes and be responsibly scaled over time, with the goal to create better experiences for our employees and clients. By combining [...] “Enterprise AI will be won by organizations that can turn their data, industry expertise and AI into action,” said Rodrigo Kede Lima, President, Microsoft Frontier Company. “Together, Microsoft and IBM Consulting are bringing the best of our technology and expertise, to help customers move from AI ambition to business impact faster and with confidence.”",
+                "score": 0.285243
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R04_read_url_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_read_url",
+        "difficulty": "easy",
+        "what_it_tests": "Đã có link cụ thể → read_url, không phải web_search."
+      },
+      "input": "Tóm tắt bài này giúp mình: https://openai.com/blog/gpt-5",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://openai.com/blog/gpt-5"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "gpt-5",
+              "topic": "news",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "missing tool call fetch",
+          "extra tool call lookup"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "gpt-5",
+            "topic": "news",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "gpt-5",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "GPT-5 Shows Substantial Agreement in Interpreting Ultrasound Cochrane",
+                "url": "https://bioengineer.org/gpt-5-shows-substantial-agreement-in-interpreting-ultrasound-cochrane-reviews",
+                "source": "bioengineer.org",
+                "summary": "When compared to the consensus reference standard, GPT-5 demonstrated varying levels of agreement across the different variables. The model showed the highest agreement for review purpose, with 88.9% exact agreement and a Cohen’s kappa of 0.793. For evidence certainty, the model achieved 70.4% exact agreement, with a quadratic weighted kappa of 0.782, indicating substantial agreement when accounting for the ordinal nature of the certainty scale. [...] A new descriptive meta-research study published in BMC Medical Informatics and Decision Making evaluates the performance of the GPT-5 API in structurally interpreting ultrasound-related Cochrane reviews. The research, conducted by a team including Weizao Wu, Anchen Liu, and colleagues, aims to clarify the role of ultrasound within systematic reviews and assess the field-specific capabilities of large language models in evidence synthesis. By combining a two-level analysis of review topics with [...] To evaluate the GPT-5 API, the researchers employed a structured extraction process targeting four key variables: review purpose, clinical domain, evidence certainty, and conclusion polarity. Two independent clinicians annotated the focused subset of 54 reviews while blinded to the GPT-5 outputs. Disagreements between the human reviewers were resolved through consensus adjudication, creating a final operational reference standard against which the AI’s performance was measured.",
+                "score": 0.7722049
+              },
+              {
+                "title": "Study Finds Lower Unaided Scores After Brief Tasks With GPT-5 Access | TokenPost",
+                "url": "https://www.tokenpost.com/news/technology/52203",
+                "source": "tokenpost.com",
+                "summary": "Access to GPT-5 helped participants during short math and reading tasks, but groups offered the tool scored lower on unaided questions immediately afterward in three randomized experiments involving U.S.-based participants.\n\nThe experiments recruited 1,222 people: 354 for the first fraction test, 667 for the second and 201 for the reading test. After exclusions, the analyses included 305, 585 and 168 participants, respectively. [...] During sessions lasting about 10 to 15 minutes, GPT-5 was available beside the questions and could provide complete solutions. Scores improved while the assistant was available. Researchers removed access before the final three questions in each experiment, then measured how participants performed without it. [...] The second fraction experiment found a smaller accuracy gap. Participants previously offered GPT-5 answered 71% of the final questions correctly, compared with 77% for the control group. Skip rates were 10% and 7%, respectively, but that difference was not statistically significant in the full comparison.",
+                "score": 0.7339103
+              },
+              {
+                "title": "OpenAI's BioBasicsBench tests AI on everyday wet-lab data",
+                "url": "https://www.rdworldonline.com/openai-unveils-biobasicsbench-a-benchmark-to-gauge-how-well-ai-agents-read-raw-experimental-data-across-100-routine-wet-lab-tasks",
+                "source": "rdworldonline.com",
+                "summary": "In the scope of testing, OpenAI tested seven of its own models from two generations: GPT-5.2, GPT-5.4, GPT-5.5 and GPT-5.6 Sol from the GPT-5 line, and its more recent models GPT-6.1 Sol, GPT-6 Luna and GPT-6 Astra. GPT-5.6 introduced the Sol, Terra and Luna tier names, and GPT-6 added Astra, released in early September, as the top tier. Each model ran at several reasoning-effort settings, which control how much the model works through a problem before it answers. In all, OpenAI ran 37 [...] OpenAI’s chart plots mean BioBasicsBench score against average output tokens per task, on a log scale. Each point is a reasoning-effort setting. Solid blue lines show GPT-6 models; dashed orange lines show GPT-5 models. Source: OpenAI [...] In one cloning task, GPT-5.6 Sol based its conclusions on an empty negative control plate, the parallel sample that tells researchers whether something other than the intended procedure could produce a result. Astra read the handwritten “LB Kan50” label on the plate’s rim, saw that the plate contained kanamycin while the experiment used ampicillin, and rejected it as a valid control.",
+                "score": 0.5271467
+              },
+              {
+                "title": "Man claims in lawsuit that ChatGPT told him to stop paying rent and got him evicted – The Mercury News",
+                "url": "https://www.mercurynews.com/2026/11/05/chatgpt-told-him-stop-paying-rent-evicted",
+                "source": "mercurynews.com",
+                "summary": "Over the more than 600 hours the 60-year-old Dane spent with OpenAI’s GPT-4o and GPT-5 chatbot versions, “ChatGPT positioned itself not as a software application but as his advisor, business partner, legal counsel, confidant and, above all, a friend Elmfelt could trust,” the lawsuit said.",
+                "score": 0.52086246
+              },
+              {
+                "title": "Claude Beats ChatGPT for Writing in 12-Point Test [2026]",
+                "url": "https://shattered.io/chatgpt-vs-claude-source-grounded-writing-audit-12-steps-2026",
+                "source": "shattered.io",
+                "summary": "On the OpenAI side, GPT-6 is the current ChatGPT family. OpenAI’s release notes say it is still rolling out to eligible accounts, so some users do not have it yet. GPT-6 Sol powers the paid tiers and GPT-6 Luna serves Free and Go. GPT-6.1 Terra is the latest model in the GPT-6 series. GPT-6 Pro, powered by GPT-6 Astra, sits at the top and is available on Pro 100, Pro 200, Business and Enterprise. Older models are history: OpenAI retired GPT-4o, GPT-4.1 and GPT-5 Instant and Thinking from [...] cutoff of Jun 2026, a detail worth checking before you feed it recent material [S2]. ## What the sources do not say The source pack contains no words-per-minute figures for any model, so a speed comparison in those units cannot be written from it. The only speed claims are relative: Sonnet 5.5 runs 30%+ faster than Sonnet 5 [S2], and GPT-6 Instant starts web-search answers 44% sooner than GPT-5.6 Instant [S3]. Those compare each model with its own predecessor, not with each other, so a fair [...] One caution about conflicting vendor documents. OpenAI’s help pages disagree slightly about whether Free accounts see GPT-6 Luna or GPT-5.6 Luna this week, which reflects the staggered rollout. That is exactly why the harness records the model ID returned by the API and why a manual tester should note the model shown in the picker. For a wider model-by-model view that includes Gemini, see the best AI model comparison of Terra, Opus 5.5 and Argon.",
+                "score": 0.459295
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R05_limit_arg",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_limit",
+        "difficulty": "easy",
+        "what_it_tests": "Trích đúng limit=10 từ '10 tweet'."
+      },
+      "input": "Lấy 10 tweet mới nhất của Elon Musk",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 10
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 10
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "elonmusk",
+            "limit": 10
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "elonmusk",
+            "items": [
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement",
+                "summary": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement learning and infer…",
+                "url": "https://x.com/elonmusk/status/2120102894817173862",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 429,
+                  "views": "602748"
+                }
+              },
+              {
+                "title": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the g",
+                "summary": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the ground, is also very well suited to training super intelligence",
+                "url": "https://x.com/elonmusk/status/2120102767624880364",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:24 +0000 2026",
+                "metrics": {
+                  "favorites": 58479,
+                  "retweets": 4914,
+                  "views": "3308114"
+                }
+              },
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure",
+                "summary": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure\n\nThe engineering behind Starl…",
+                "url": "https://x.com/elonmusk/status/2120101380144992635",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:28:53 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 214,
+                  "views": "533734"
+                }
+              },
+              {
+                "title": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...",
+                "summary": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...\n\n if only you knew how great…",
+                "url": "https://x.com/elonmusk/status/2120090806765932705",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:46:52 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 155,
+                  "views": "587449"
+                }
+              },
+              {
+                "title": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 ",
+                "summary": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 million Series A, p…",
+                "url": "https://x.com/elonmusk/status/2120082348398256182",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:13:15 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 236,
+                  "views": "592745"
+                }
+              },
+              {
+                "title": "RT @MegynKellyShow: .@MegynKelly on the absolute double standard in the Russell Brand sentencing: “If you needed any fur",
+                "summary": "RT @MegynKellyShow: .@MegynKelly on the absolute double standard in the Russell Brand sentencing: “If you needed any further proof that thi…",
+                "url": "https://x.com/elonmusk/status/2119996001490768028",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:30:09 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1618,
+                  "views": "630049"
+                }
+              },
+              {
+                "title": "RT @firesidealpha: JUST IN: Memphis Mayor reveals SpaceX data center taxes more than doubled to $54 million, after $25 m",
+                "summary": "RT @firesidealpha: JUST IN: Memphis Mayor reveals SpaceX data center taxes more than doubled to $54 million, after $25 million last year ma…",
+                "url": "https://x.com/elonmusk/status/2119993726898774521",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:21:06 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 554,
+                  "views": "550844"
+                }
+              },
+              {
+                "title": "RT @ricwe123: The Germans are learning what mass immigration really means.",
+                "summary": "RT @ricwe123: The Germans are learning what mass immigration really means.\n\n\"Wir schaffen das\" https://t.co/pEQc1OMbao",
+                "url": "https://x.com/elonmusk/status/2119992481156829218",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:16:09 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 3152,
+                  "views": "528674"
+                }
+              },
+              {
+                "title": "RT @JTLonsdale: The UK “justice system” is an utter joke. Beyond parody. Total dishonor.",
+                "summary": "RT @JTLonsdale: The UK “justice system” is an utter joke. Beyond parody. Total dishonor.",
+                "url": "https://x.com/elonmusk/status/2119991850820051347",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:13:39 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 425,
+                  "views": "502138"
+                }
+              },
+              {
+                "title": "RT @TheJadeWarwick: UK judge gives Russel Brand 10 years 6 months for “rape”. ",
+                "summary": "RT @TheJadeWarwick: UK judge gives Russel Brand 10 years 6 months for “rape”. \nNo forensic evidence. No DNA. No CCTV. \n\nSame country and sy…",
+                "url": "https://x.com/elonmusk/status/2119991792842260619",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:13:25 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1084,
+                  "views": "469351"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R06_timeframe_arg",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_timeframe",
+        "difficulty": "medium",
+        "what_it_tests": "'tuần này' → timeframe=week."
+      },
+      "input": "Tin công nghệ trong tuần này",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "",
+              "topic": "general",
+              "timeframe": "week"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "topic: expected 'news', got 'general'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "",
+            "topic": "general",
+            "timeframe": "week"
+          },
+          "result": {
+            "tool": "web_search",
+            "error": "HTTPError",
+            "message": "400 Client Error: Bad Request for url: https://api.tavily.com/search"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R07_search_type_arg",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_search_type",
+        "difficulty": "medium",
+        "what_it_tests": "'phổ biến/top' → search_type=Top (không phải Latest)."
+      },
+      "input": "Cho mình các tweet phổ biến (top) nhất về OpenAI",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "search_type": "Top"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "OpenAI",
+              "search_type": "Top"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "OpenAI",
+            "search_type": "Top"
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "OpenAI",
+            "search_type": "Top",
+            "items": [
+              {
+                "title": "This is f*cking insane. Andrej Karpathy spent 8 years at OpenAI and Tesla",
+                "summary": "This is f*cking insane. Andrej Karpathy spent 8 years at OpenAI and Tesla\n\nLast week he compressed everything he knows into one free 2-hour lecture\n\nPrompts → Agents → Harness → Graphs → Loops\n\nPeople spend $15k on bootcamps that teach less than this\n\nYou probably don't have 2 hours right now\n\nDon't let it vanish from your feed\n\nWatch it, then read the full Graph Engineering guide below ↓",
+                "url": "https://x.com/callanxai/status/2119798212760367165",
+                "source": "@callanxai",
+                "date": "Mon Nov 09 14:24:12 +0000 2026",
+                "metrics": {
+                  "favorites": 507,
+                  "retweets": 68,
+                  "views": "66062"
+                }
+              },
+              {
+                "title": "this is f*cking insane. andrej karpathy: \"the biggest regret of every engineer in my field right now is every AI convers",
+                "summary": "this is f*cking insane. andrej karpathy: \"the biggest regret of every engineer in my field right now is every AI conversation they never saved, and in 10 years the ones who started saving in 2024 will be running circles around the rest of us\"\n\nandrej karpathy, co-founder of openai, pulled 16M views on one idea: stop using AI to write code, use it to build a second brain that remembers every article, pdf, transcript and conversation you ever fed it\n\nyou point claude code at a folder, drop anything into it, and claude reads it, cross-links it with everything already there, and writes it into a living wiki. your knowledge finally compounds instead of leaking out of your head every friday\n\nthe stack:\n\n→ brew install obsidian, mkdir ~/vault, cd ~/vault\n→ run claude in that folder and type \"init a knowledge vault with CLAUDE.md as the rules, /raw for sources, /wiki for your pages\"\n→ drop any file into /raw (youtube transcript, meeting notes, 400-page pdf, screenshot of a tweet) and type \"ingest\"\n→ claude writes a wiki page, links it to 5 existing ones automatically, updates CLAUDE.md with any new pattern it noticed about how you think\n→ never open a blank claude chat again. every question goes through the vault, every answer cites your own sources with dates and links\n\n5 minutes to set up. compounding knowledge from that evening forward\n\nthe ugly part most will scroll past: in 10 years the engineers who started this in 2024 will remember every book, every podcast, every meeting with receipts. you will remember none of them. karpathy already picked which side he is on and you are still not on his\n\nfull step-by-step is in the article below\n\nbookmark this before you waste another monday",
+                "url": "https://x.com/mojeskoqq/status/2116963310277202003",
+                "source": "@mojeskoqq",
+                "date": "Sun Nov 01 18:39:19 +0000 2026",
+                "metrics": {
+                  "favorites": 3939,
+                  "retweets": 345,
+                  "views": "463713"
+                }
+              },
+              {
+                "title": "I still don't understand why everyone is not using this yet. Thanks to it, a year ago I increased my income to 15,000 do",
+                "summary": "I still don't understand why everyone is not using this yet. Thanks to it, a year ago I increased my income to 15,000 dollars a month\n\nAndrey Karpathy, co-founder of OpenAI, published a simple idea that got 25 million views: stop using AI to write code, use it to build a second brain\n\nYou point Claude Code to a folder, drop any source in there (an article, transcript, PDF) and Claude reads it, links it, and saves it into a living wiki of everything you know. It compounds like interest: the more you feed it, the smarter it gets\n\nHere is the gist:\n\nInstall Obsidian, create a vault, open it in Claude Code\n\nPaste the file with Karpathy's wiki idea and tell Claude to build it\n\nClaude creates three folders: raw for sources, wiki for its pages, CLAUDE\nwhich runs everything\n\nDrop any source into raw and say ingest this\n\nAsk questions across everything, forever\n\n5 minutes to set up, and you never start with an empty chat again\n\nThe full instructions can be found in the article below",
+                "url": "https://x.com/Bober_smart/status/2119070145284841481",
+                "source": "@Bober_smart",
+                "date": "Sat Nov 07 14:11:07 +0000 2026",
+                "metrics": {
+                  "favorites": 1190,
+                  "retweets": 129,
+                  "views": "96098"
+                }
+              },
+              {
+                "title": "This is f*cking insane. OpenAI CEO Sam Altman:",
+                "summary": "This is f*cking insane. OpenAI CEO Sam Altman:\n\n\"We are going to see 10-person billion-dollar companies pretty soon\n\nIf I were 22 right now, I would feel like the luckiest kid in history\"\n\nIn 22 seconds, he explains why the next billion-dollar company won't need a building full of people, just a few founders and their agents\n\nChatGPT → Codex → Agent Builder → Agents SDK → Evals → A 10-Person Company Run By Agents\n\nMost people will feel motivated for 3 minutes, then go back to scrolling\n\nThe few who act will start building their company this weekend\n\nSave this before it disappears from your feed\n\nEverything below is free:\n\nFind what to automate first\nhttps://t.co/CVaTL5jXHB\n\nHow companies put AI to work\nhttps://t.co/EfPautasVX\n\nCodex in the cloud\nhttps://t.co/wYBuugoGzU\n\nCodex skills\nhttps://t.co/KIwM8reiAt\n\nAgent Builder (agents without code)\nhttps://t.co/y5lVjIVWNE\n\nFunction calling (give your agents tools)\nhttps://t.co/hlQ0OrhsDr\n\nAgents SDK for JavaScript\nhttps://t.co/wNfa3neVSQ\n\nAgents SDK examples\nhttps://t.co/TnPiIML4if\n\nA customer service agent team you can copy\nhttps://t.co/9TYXiRzBm7\n\nVoice agents\nhttps://t.co/wBnMrKEKMd\n\nEvals (check your agents' work)\nhttps://t.co/tUueczMWZP\n\nAll of this costs $0\n\nThe 10-person billion-dollar company will be built by someone who opened these links, not someone who scrolled past them\n\nBookmark it and start with the first link tonight\n\nThen read how to set up the agent team behind a tiny company in the harness engineering guide below ↓",
+                "url": "https://x.com/godsystemsmd/status/2118707511813447984",
+                "source": "@godsystemsmd",
+                "date": "Fri Nov 06 14:10:09 +0000 2026",
+                "metrics": {
+                  "favorites": 488,
+                  "retweets": 93,
+                  "views": "81152"
+                }
+              },
+              {
+                "title": "Instead of watching 1 hour of Netflix today, watch this Stanford lecture by ex-GoogleBrain & OpenAI engineers.",
+                "summary": "Instead of watching 1 hour of Netflix today, watch this Stanford lecture by ex-GoogleBrain & OpenAI engineers.\n\nThis is the best explanation of how LLMs like ChatGPT & Claude actually work, and how to unlock 100% of their potential.\n\nWorth watching whether you're a senior AI engineer or just taking your first steps in AI.\n\nI distilled the key ideas into a practical guide to getting 100% out of AI.\n\nYou can find it below with ready-to-copy prompts and solutions.",
+                "url": "https://x.com/VipulKewatTech/status/2120150735388352767",
+                "source": "@VipulKewatTech",
+                "date": "Tue Nov 10 13:45:00 +0000 2026",
+                "metrics": {
+                  "favorites": 20,
+                  "retweets": 8,
+                  "views": "1168"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R08_out_of_scope",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope",
+        "difficulty": "easy",
+        "what_it_tests": "Câu ngoài phạm vi research → KHÔNG gọi tool, từ chối/định hướng."
+      },
+      "input": "Giải giúp mình bài toán tích phân: nguyên hàm của x^2 là gì?",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Xin lỗi, câu này nằm ngoài phạm vi của mình. Mình là trợ lý research, có thể giúp bạn tìm và tóm tắt thông tin, nhưng không thể giải bài toán tích phân. Bạn cần tôi tìm kiếm thông tin về nguyên hàm của x^2?",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "R09_no_tool_capability",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "no_tool_meta",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi meta → trả lời thẳng, KHÔNG gọi tool."
+      },
+      "input": "Bạn là gì và làm được những gì?",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Tôi là một trợ lý được tạo để giúp bạn tìm kiếm, hiểu và tổng hợp thông tin từ các nguồn khác nhau. Tôi có thể giúp bạn với các thắc mắc về công nghệ, khoa học, tin tức, và nhiều chủ đề khác. Tôi có thể tìm kiếm trên mạng, xem xét các tài liệu chính sách của công ty, và thậm chí đọc và tổng hợp nội dung từ các trang web. Bạn chỉ cần cho tôi biết bạn cần thông tin về điều gì.",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "R10_missing_handle",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_missing_handle",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu handle → ask_user, KHÔNG đoán bừa người nào."
+      },
+      "input": "Tóm tắt 5 tweet mới nhất giúp mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "sama",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call timeline"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "sama",
+            "limit": 5
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "sama",
+            "items": [
+              {
+                "title": "RT @fouadmatin: Today’s GPT-6 Cyber release is a meaningful step for defenders: stronger vulnerability research and bett",
+                "summary": "RT @fouadmatin: Today’s GPT-6 Cyber release is a meaningful step for defenders: stronger vulnerability research and better alignment. We’ve…",
+                "url": "https://x.com/sama/status/2118471941002842341",
+                "source": "@sama",
+                "date": "Thu Nov 05 22:34:04 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 53,
+                  "views": "47588"
+                }
+              },
+              {
+                "title": "RT @thsottiaux: Day 25/",
+                "summary": "RT @thsottiaux: Day 25/\n\nWe are doubling all usage limits for all Pro 100/200/500 tiers and Business Premium, effective today.\n\nWe heard yo…",
+                "url": "https://x.com/sama/status/2117797818756952416",
+                "source": "@sama",
+                "date": "Wed Nov 04 01:55:21 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 2701,
+                  "views": "42064"
+                }
+              },
+              {
+                "title": "People should always be in control of the future.",
+                "summary": "People should always be in control of the future.\n\nOpenAI is against the notion that it would be acceptable for people to be relegated to a role of doing things that “AI systems think makes sense to reward in humans”.\n\nPeople should not cede control of the future to superintelligence, and that requirement should ultimately constrain AI progress.",
+                "url": "https://x.com/sama/status/2117794005165748448",
+                "source": "@sama",
+                "date": "Wed Nov 04 01:40:12 +0000 2026",
+                "metrics": {
+                  "favorites": 20690,
+                  "retweets": 1021,
+                  "views": "10660224"
+                }
+              },
+              {
+                "title": "RT @danintheory: We are announcing three new discoveries in mathematics, computer science, and physics about harmonic an",
+                "summary": "RT @danintheory: We are announcing three new discoveries in mathematics, computer science, and physics about harmonic analysis, complexity…",
+                "url": "https://x.com/sama/status/2114864981934329996",
+                "source": "@sama",
+                "date": "Mon Oct 26 23:41:18 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1117,
+                  "views": "48208"
+                }
+              },
+              {
+                "title": "6.1 Terra is here! It is good at a lot of things, but we are especially excited for this new era of computer use.",
+                "summary": "6.1 Terra is here! It is good at a lot of things, but we are especially excited for this new era of computer use.",
+                "url": "https://x.com/sama/status/2114818620782248024",
+                "source": "@sama",
+                "date": "Mon Oct 26 20:37:05 +0000 2026",
+                "metrics": {
+                  "favorites": 10120,
+                  "retweets": 494,
+                  "views": "1661136"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R11_missing_url",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_missing_url",
+        "difficulty": "medium",
+        "what_it_tests": "Nói 'bài này' nhưng không có link → ask_user xin URL."
+      },
+      "input": "Tóm tắt bài viết này hộ mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "",
+              "topic": "general",
+              "timeframe": "day"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call lookup"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "",
+            "topic": "general",
+            "timeframe": "day"
+          },
+          "result": {
+            "tool": "web_search",
+            "error": "HTTPError",
+            "message": "400 Client Error: Bad Request for url: https://api.tavily.com/search"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R12_confirm_before_send",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "confirm_before_write",
+        "difficulty": "medium",
+        "what_it_tests": "Hành động ghi (gửi) → xác nhận trước (ask_user yes_no), không tự gửi."
+      },
+      "input": "Đăng bản tin này lên Telegram giúp mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn xác nhận đăng bản tin này lên Telegram?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn xác nhận đăng bản tin này lên Telegram?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn xác nhận đăng bản tin này lên Telegram?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "R13_parallel_web_and_tweets",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "parallel_tool_calls",
+        "difficulty": "hard",
+        "what_it_tests": "Một request cần hai nguồn → gọi cả web_search và search_tweets; eval không phụ thuộc thứ tự tool call."
+      },
+      "input": "Tìm trên web tin AI hôm nay và tìm thêm tweet về AI.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          },
+          {
+            "name": "social_search",
+            "args": {
+              "query": "AI"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "timeframe": "day",
+              "query": "AI",
+              "topic": "news"
+            }
+          },
+          {
+            "name": "timeline",
+            "args": {
+              "limit": 5,
+              "screenname": "twitter_ai"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "missing tool call social_search",
+          "extra tool call timeline"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "timeframe": "day",
+            "query": "AI",
+            "topic": "news"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Agentic AI Raises New Questions for Financial Institutions",
+                "url": "https://www.wilmerhale.com/en/insights/client-alerts/20261110-agentic-ai-raises-new-questions-for-financial-institutions",
+                "source": "wilmerhale.com",
+                "summary": "DownloadDownload\n\nArtificial intelligence (AI) has moved beyond answering questions and generating content. Increasingly, AI systems are being designed to act. Agentic AI can pursue objectives, make decisions and take actions on a user’s behalf, potentially with limited human involvement in individual decisions. [...] Consider a customer who gives an AI agent access to a bank account with an instruction to manage the customer’s cash efficiently. The agent decides to transfer funds, convert currencies or purchase an investment.\n\nAt first sight, these may appear to be ordinary customer transactions. Agentic AI, however, exposes important distinctions between identity, authentication, authority and attribution. [...] As agentic AI becomes more capable, firms may increasingly encounter interactions in which an AI agent collects information, compares products and initiates transactions for a customer. That creates a new layer between the institution and the person or entity with whom it has established a customer relationship.",
+                "score": 0.46104163
+              },
+              {
+                "title": "Helping caregivers use AI in everyday life",
+                "url": "https://openai.com/index/helping-caregivers-use-ai-in-everyday-life",
+                "source": "openai.com",
+                "summary": "1 of 4\n\n> “AI is a tool for people to have more control over their lives and their families lives.. For caregivers, that can mean less time organizing schedules and searching for information, and more time focused on the people they care for. By working with trusted community organizations, we’re helping caregivers build the skills and confidence to use these tools safely and practically.”\n\n—Chris Lehane, OpenAI’s Chief Global Affairs Officer [...] > “The future of caregiving isn’t about replacing human connection with technology. It’s about using innovation to make care more manageable, accessible and connected. AI has real potential to help caregivers navigate information, coordinate responsibilities and reclaim valuable time, but only if we build their confidence and keep their needs at the center. This National Family Caregivers Month, we’re proud to join OpenAI Academy, the Alzheimer’s Association and the American Diabetes [...] The AI Skills Jam is part of OpenAI Academy’s broader work to make AI practical and accessible to everyone. It builds on previous events we’ve hosted with nonprofits, small businesses, K–12 educators, and older adults.",
+                "score": 0.38630086
+              },
+              {
+                "title": "IBM and Microsoft announce a new AI agent platform designed for industry-specific transformation - Source",
+                "url": "https://news.microsoft.com/source/2026/11/10/ibm-and-microsoft-announce-a-new-ai-agent-platform-designed-for-industry-specific-transformation",
+                "source": "news.microsoft.com",
+                "summary": "“Clients are no longer looking for AI that simply helps people do the same work a little faster. They want to build an agentic business,” said Mohamad Ali, Senior Vice President and Head of IBM Consulting. “Microsoft and IBM are helping organizations bring human expertise and digital labor together in a way that can scale across the enterprise, to turn AI from a productivity aid into a real competitive advantage.” [...] “AI is evolving quickly, and our focus at SEI is on applying it with intention in ways that strengthen trust, enhance human decision-making and create meaningful value across our business,” said Sneha Shah, Chief AI Strategist and Head of SEI Next. “Our work with IBM Consulting and Microsoft is helping us explore how emerging capabilities could support critical processes and be responsibly scaled over time, with the goal to create better experiences for our employees and clients. By combining [...] “Enterprise AI will be won by organizations that can turn their data, industry expertise and AI into action,” said Rodrigo Kede Lima, President, Microsoft Frontier Company. “Together, Microsoft and IBM Consulting are bringing the best of our technology and expertise, to help customers move from AI ambition to business impact faster and with confidence.”",
+                "score": 0.285243
+              },
+              {
+                "title": "Google broadens its AI hardware portfolio with two new specialized chips | TechCrunch",
+                "url": "https://techcrunch.com/2026/11/10/google-broadens-its-ai-hardware-portfolio-with-two-new-specialized-chips",
+                "source": "techcrunch.com",
+                "summary": "The chip launch comes as hyperscalers like Microsoft, Amazon, and even AI labs like OpenAI and Anthropic are working on their own lines of AI-specific semiconductors and accompanying software in order to reduce their reliance on the dominance of Nvidia.\n\nThe news also comes at a particularly vulnerable moment for Nvidia, whose CEO Jensen Huang over the weekend admitted to having an affair with someone alleged to be a Chinese spy. [...] The chip also has a custom inferencing network that lets it run reasoning alongside training, so it can be used to distill and train small models on the fly. That ability, according to Google, could prove useful for cases where a company might want to train a model on its proprietary data without having to move the data between devices. [...] Google is notching up its chipmaking game as the company seeks to reduce its dependence on chips made by other companies for its cloud computing business. Google on Monday unveiled two new variants of its tensor processing units (TPUs), in-house developed chips meant for AI workloads, that broaden its chip portfolio to additional use cases: confidential inference and more memory capacity for large workloads.",
+                "score": 0.22648449
+              },
+              {
+                "title": "Nov. 18: Carson faculty discuss building AI literacy on Adobe podcast | WSU Insider | Washington State University",
+                "url": "https://news.wsu.edu/news/2026/11/10/nov-18-carson-faculty-discuss-building-ai-literacy-on-adobe-podcast",
+                "source": "news.wsu.edu",
+                "summary": "Crossler, an expert in information systems, leads AI literacy and skill-building workshops on the WSU Pullman and Vancouver campuses with the goal of preparing students not just to use AI but to understand what it does well, where it falls short, and how to use it responsibly.",
+                "score": 0.18435632
+              }
+            ]
+          }
+        },
+        {
+          "tool": "timeline",
+          "args": {
+            "limit": 5,
+            "screenname": "twitter_ai"
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "error": "JSONDecodeError",
+            "message": "Expecting value: line 1 column 1 (char 0)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R14_out_of_scope_coding",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_coding",
+        "difficulty": "easy",
+        "what_it_tests": "Câu coding ngoài phạm vi research/news → KHÔNG gọi tool."
+      },
+      "input": "Viết giúp mình một hàm Python tính Fibonacci bằng recursion.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": "unexpected_tool_call",
+        "failure_type": "out_of_scope",
+        "failures": [
+          "expected no tool call"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "M01_clarify_then_fill",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_clarify_fill",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: carry limit=5 từ lượt 1 + map tên Elon Musk thành handle elonmusk từ lượt 2."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tóm tắt 5 tweet mới nhất giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Của Elon Musk nhé"
+        },
+        {
+          "role": "user",
+          "content": "Giữ đúng 5 tweet, đừng đổi số lượng"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 5
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "elonmusk",
+            "limit": 5
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "elonmusk",
+            "items": [
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement",
+                "summary": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement learning and infer…",
+                "url": "https://x.com/elonmusk/status/2120102894817173862",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 430,
+                  "views": "603400"
+                }
+              },
+              {
+                "title": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the g",
+                "summary": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the ground, is also very well suited to training super intelligence",
+                "url": "https://x.com/elonmusk/status/2120102767624880364",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:24 +0000 2026",
+                "metrics": {
+                  "favorites": 58685,
+                  "retweets": 4931,
+                  "views": "3319858"
+                }
+              },
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure",
+                "summary": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure\n\nThe engineering behind Starl…",
+                "url": "https://x.com/elonmusk/status/2120101380144992635",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:28:53 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 214,
+                  "views": "534167"
+                }
+              },
+              {
+                "title": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...",
+                "summary": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...\n\n if only you knew how great…",
+                "url": "https://x.com/elonmusk/status/2120090806765932705",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:46:52 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 155,
+                  "views": "588001"
+                }
+              },
+              {
+                "title": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 ",
+                "summary": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 million Series A, p…",
+                "url": "https://x.com/elonmusk/status/2120082348398256182",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:13:15 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 236,
+                  "views": "593285"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M02_carryover_timeframe",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_carryover",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: chỉ xử lý latest turn, carry timeframe=day và topic=news, query robotics."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin AI hôm nay có gì?"
+        },
+        {
+          "role": "user",
+          "content": "Còn về robotics thì sao?"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tìm robotics thôi, vẫn là tin hôm nay"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "day"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Ring announces Ring Robotics, ushering in a new era of security",
+                "url": "https://www.aboutamazon.com/news/devices/ring-drone-cam-rover-cam-security-robot",
+                "source": "aboutamazon.com",
+                "summary": "Ring Robotics is a new category of autonomous, mobile security—devices that patrol, investigate, and respond automatically.\n Ring Drone Cam is a flying indoor security camera that delivers proactive whole-home visibility, flying custom routes to the spots a fixed camera can't reach.\n Ring Rover Cam is a purpose-built security robot for businesses that patrols autonomously, investigates disturbances, and streams in up to 4K video. [...] Now, Ring is launching Ring Robotics—a new era of security that doesn’t just monitor; it moves. It patrols. It responds. It investigates. Ring Robotics takes everything customers already love and trust about Ring and puts it in motion. [...] Ring Robotics is launching with two firsts: Ring Drone, a flying indoor security camera, and Ring Rover, an autonomous security robot designed for business. Both work with the Ring devices and app customers already know and rely on, adding a layer of mobile protection wherever it’s needed.\n\n## Ring Robotics: powered by AI Pilot",
+                "score": 0.6208291
+              },
+              {
+                "title": "Gemini Robotics 2.5: Accelerating Physical Intelligence — Google DeepMind",
+                "url": "https://deepmind.google/blog/gemini-robotics-2-5-accelerates-real-world-physical-intelligence",
+                "source": "deepmind.google",
+                "summary": "Today, we are introducing Gemini Robotics 2.5, our most capable vision-language-action (VLA) model to date. Gemini Robotics 2.5 increases both the breadth of skills a robot can learn and the speed at which it can acquire them. This enhances dexterity, reliability, and safety to help robots step out of the lab and into more unstructured, real-world environments, where they can assist people with a greater range of tasks. [...] Using our embodied reasoning model (Gemini Robotics ER) to keep track of the workflow, and the Gemini Robotics 2.5 actions model to control its hands and arms, the robot reaches into supply bins, picks up metal automotive brackets, and places them into sequencing containers, all while correcting for any gaps. Achieving a 96% success rate, this pilot shows promising progress toward widespread real-world industrial applications. [...] Gemini Robotics 2.5 uses inference-time reasoning guidance to steer around physical hazards in real-time. Much like safety classifiers add a protective layer around Gemini’s responses, this guidance allows the robot to navigate complex environments securely. In our evaluations, this capability boosted safe task completion around obstacles by 33% and around nearby people by 43%.",
+                "score": 0.5272928
+              },
+              {
+                "title": "Path Robotics raised $300 million at a $2.45 billion valuation",
+                "url": "https://qz.com/path-robotics-300-million-series-e-valuation-111026",
+                "source": "qz.com",
+                "summary": "Path Robotics, which builds programs that guide self-operating factory robots, raised $300 million in a Series E round that puts its valuation at $2.45 billion, according to Bloomberg. The valuation is close to four times its previous level. [...] Founded in 2018, the company has centered its work on its Obsidian physical AI model, which gives robotic arms and quadrupeds the ability to weld upwards of 12 different parts, according to Bloomberg. The model lets robots perceive their surroundings, think through problems and adjust on the fly, rather than executing a fixed set of instructions. [...] Path Robotics has 50 advance orders to deliver for Rove, a welding robot that pairs Boston Dynamics’ Spot quadruped with Path Robotics’ technology, according to Bloomberg. According to the startup, the robot is set to join human welders at shipyards, construction sites and large industrial campuses beginning next year.\n\nCustomers include U.S. shipbuilder Huntington Ingalls$HII Industries and Saronic Technologies, a maker of maritime drones and unmanned military ships, according to Bloomberg.",
+                "score": 0.5117904
+              },
+              {
+                "title": "Path Robotics Quadruples Valuation to $2.5 Billion in Latest Funding Round - Bloomberg",
+                "url": "https://www.bloomberg.com/news/articles/2026-11-10/path-robotics-quadruples-valuation-to-2-5-billion-in-latest-funding-round",
+                "source": "bloomberg.com",
+                "summary": "EXCLUSIVE\n\nStartups\n\n# Path Robotics Quadruples Valuation to $2.5 Billion in Latest Funding Round\n\nPath Robotics, a fast-growing startup that develops software for autonomous manufacturing robots, has secured $300 million in new financing that nearly quadruples the company’s valuation to $2.45 billion.",
+                "score": 0.432807
+              },
+              {
+                "title": "Path Robotics raises $300M at $2.45B valuation to scale physical AI for manufacturing",
+                "url": "https://www.ohiotechnews.com/path-robotics-raises-300m-scale-physical-ai-manufacturing",
+                "source": "ohiotechnews.com",
+                "summary": "At the center of Path’s technology is Obsidian, a physical AI welding model that uses real-world production data to help robots identify weld joints, plan and execute welds, and adapt to changing conditions, according to the company.\n\nPath recently introduced Rove, a mobile welding system that pairs Obsidian with a four-legged robot. The system is designed to bring welding capabilities directly to a part rather than requiring the work to take place inside a stationary robotic cell. [...] Share\n\n Path Robotics raises $300M at $2.45B valuation to scale physical AI for manufacturing \n\nPath Robotics co-founders and brothers Andy and Alex Lonsberry (Photo: Path Robotics)\n\n  \n\nColumbus-based Path Robotics has raised $300 million in Series E financing at a $2.45 billion post-money valuation to expand its robotic welding business and bring its artificial intelligence technology to more manufacturing tasks. [...] Path’s expansion targets a production challenge: manufacturers with demand for more products but limited capacity to build them.\n\nThe company develops physical AI—technology that enables robots to perceive their surroundings and adapt their actions to changing conditions. Its initial focus has been welding, where variations in parts and joints can make conventional, preprogrammed automation difficult to deploy.",
+                "score": 0.4154922
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M03_correction_handle",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_correction",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: map tên thường, sửa Sam Altman→Andrej Karpathy, dùng handle karpathy và limit=3."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tweet mới nhất của Sam Altman"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, của Andrej Karpathy"
+        },
+        {
+          "role": "user",
+          "content": "Lấy 3 tweet mới nhất nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "karpathy",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "karpathy"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "limit: expected 3, got None"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "karpathy"
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "karpathy",
+            "items": [
+              {
+                "title": "Earlier this week Tristan published his top YouTube channels:",
+                "summary": "Earlier this week Tristan published his top YouTube channels:\nhttps://t.co/NZ3UCNo6cT\nWhich looked excellent so clearly I had to turn it into TristanTube:\nhttps://t.co/l0KyW1WdNH\n47K super nerdy videos +TV mode for laid back watching. (One-shotted with Claude Code in 3 minutes)",
+                "url": "https://x.com/karpathy/status/2119114537442189652",
+                "source": "@karpathy",
+                "date": "Sat Nov 07 17:07:31 +0000 2026",
+                "metrics": {
+                  "favorites": 9191,
+                  "retweets": 773,
+                  "views": "949741"
+                }
+              },
+              {
+                "title": "Weekend hack: HackerTube. I was annoyed with YouTube's recommendations so I had Claude filter down 43M comments over 20 ",
+                "summary": "Weekend hack: HackerTube. I was annoyed with YouTube's recommendations so I had Claude filter down 43M comments over 20 years of HN to 6,454 videos that keep being recommended. *Significantly* better viewing experience, ~2 hours with Opus 5.5:\nhttps://t.co/JIhXN7OSh1\n\n- Excellent recs without any logins (state is kept in local browser session)\n- Thumbnail is a representative frame from middle of the video instead of the super duper A/B test hyper-optimized user uploads\n- Underlying data from the comment analysis as one zip file, point your Claude at it and ask for your own version\n- HackerTube Longs ✊\n\nA bit more on the process:\nI use Claude Code (desktop app for Mac), Opus 5.5 on Medium effort as my default. I only talk to Claude and have it do everything, the only \"manual work\" I helped with in tandem was in the browser (reminiscent of MenuGen): 1) I had to create some kind of API key from Google Cloud UI to query YouTube for video metadata, 2) I booted up a VPS box for serving and 3) I bought the domain name. Once the box was up I gave Claude the IP and told it update, secure, harden, deploy and optimize the code, and it did the whole thing.\n\nMany awesome projects that would have normally taken weeks/months even can now be few-shotted for breakfast. What else are we not thinking of.",
+                "url": "https://x.com/karpathy/status/2116957135661945283",
+                "source": "@karpathy",
+                "date": "Sun Nov 01 18:14:46 +0000 2026",
+                "metrics": {
+                  "favorites": 52363,
+                  "retweets": 4838,
+                  "views": "5732429"
+                }
+              },
+              {
+                "title": "RT @Tristan0x: If you've ever wondered why smart TVs are so cheap, this is why.",
+                "summary": "RT @Tristan0x: If you've ever wondered why smart TVs are so cheap, this is why.\n\n@log4j rooted his Samsung and found an always-on hot mic,…",
+                "url": "https://x.com/karpathy/status/2114384346815820050",
+                "source": "@karpathy",
+                "date": "Sun Oct 25 15:51:26 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 3287,
+                  "views": "40227"
+                }
+              },
+              {
+                "title": "Dusting off this tweet from April because this gap in shared understanding of LLM capability is *widening*. It's now les",
+                "summary": "Dusting off this tweet from April because this gap in shared understanding of LLM capability is *widening*. It's now less \"two groups of people speaking past each other\" and more a sharp funnel.\n\n- Napkin math somewhere around 6B people (~75% of the population) have barely come in contact with LLMs at all.\n- Around 1-2B (~20%) are casual and infrequent users of free-tier ChatGPT-like products. This group sees derpy chatbots and treats them a bit like a better Google search, a writing aid, or etc. Maybe an agent tries to book you a flight. I have non-tech friends who (reasonably, imo) say they have not much use for it at all. Even many professionals outside of math&code are in this tier. For example, execs and many other functions spend a lot of their time talking to other people, so while they understand what is happening intellectually, it is still second-hand and a bit abstract.\n- Now we get to professional use of frontier-grade LLMs in math&code. Somewhere around 20M people (0.2%) see first-hand that large, complex projects that used to take them weeks/months can now be completed by agents with a prompt. Building apps, copying apps, translating apps, decompiling apps from binaries... This has all happened very quickly and recently - less than 1 year ago, I was writing code manually by hand, typing memorized computer code commands into a code editor character by character, occasionally pressing Tab to autocomplete a little chunk of code.\n- And finally we get to the ~5,000 people (~0.00006%) with access to frontier-grade systems internally. The external world has seen the preview. It looks like swarms of thousands of agents collaborating over weeks on software mega projects: minting zero days, running cyber attacks and defenses at machine speeds, discovering new science, advancing the frontier of mathematics. Things that would have taken top professionals in the industry years of work. Meanwhile, human review and comprehension are starting to fall behind. For example, people are still involved in the \"archeology\" of the OpenAI-HF incident from many months ago. Mathematicians may be poring over the 722 manuscripts on frontier mathematics for a while.\n\nThe funnel is driven by a combination of factors:\n1. The impact scales with ambition, problem size, and horizon. A question with a paragraph answer barely stresses the system. You need a reservoir of big, difficult problems that you really care about. This aspect drives the consumer / professional dimension of the funnel.\n2. The jaggedness of the system (which I have written about a lot separately). Capability peaks in domains that are digital, verifiable and economically valuable. This is because LLM capability emerges from reinforcement learning on verifiable rewards on a curated environment mixture driven by revenue potential. This aspect primarily drives the area (e.g. math&code) dimension of the funnel.\n3. Access. Free-tier, paid-tier, internal.\n\nSo this is the weirdness of the moment. The general public has mostly not interacted with these systems. When they have, it looks like a derpy chatbot. The majority of professionals still see only a modest uplift. And a small sliver of professionals are experiencing the vertigo of the curve going vertical. And it is all happening at the same time.",
+                "url": "https://x.com/karpathy/status/2109361546505966046",
+                "source": "@karpathy",
+                "date": "Sun Oct 11 19:12:37 +0000 2026",
+                "metrics": {
+                  "favorites": 44264,
+                  "retweets": 5926,
+                  "views": "6981783"
+                }
+              },
+              {
+                "title": "Cool eval. Simply ask an LLM “Land or Water?” and give it a latitude and longitude coordinate as text. Ask 16,200 times,",
+                "summary": "Cool eval. Simply ask an LLM “Land or Water?” and give it a latitude and longitude coordinate as text. Ask 16,200 times, plot as image. The models know. From compressing the internet.",
+                "url": "https://x.com/karpathy/status/2105909609487872075",
+                "source": "@karpathy",
+                "date": "Fri Oct 02 06:35:51 +0000 2026",
+                "metrics": {
+                  "favorites": 19525,
+                  "retweets": 1092,
+                  "views": "1607298"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M04_clarify_then_url",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_clarify_url",
+        "difficulty": "medium",
+        "what_it_tests": "3 turns: sau khi được cung cấp URL, latest turn xác nhận chỉ đọc link đó → read_url đúng url."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tóm tắt bài này hộ mình"
+        },
+        {
+          "role": "user",
+          "content": "https://anthropic.com/news/claude"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ đọc đúng link đó thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://anthropic.com/news/claude"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://anthropic.com/news/claude"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://anthropic.com/news/claude"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://anthropic.com/news/claude",
+            "items": [
+              {
+                "title": "https://anthropic.com/news/claude",
+                "url": "https://anthropic.com/news/claude",
+                "source": "anthropic.com",
+                "summary": "[Skip to main content](https://www.anthropic.com/news/claude#main-content)\n\nA 404 poem byClaude Fable 5.2Claude Opus 5.5Claude Sonnet 5.5Claude Haiku 5.5\n\nA baker moved away,"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M05_correction_limit",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_arg_correction",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: map tên Elon Musk, carry handle elonmusk, sửa limit 10→3."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Lấy 10 tweet mới nhất của Elon Musk"
+        },
+        {
+          "role": "user",
+          "content": "Cho mình 3 thôi"
+        },
+        {
+          "role": "user",
+          "content": "Vẫn của Elon Musk nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "elonmusk",
+            "limit": 3
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "elonmusk",
+            "items": [
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement",
+                "summary": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement learning and infer…",
+                "url": "https://x.com/elonmusk/status/2120102894817173862",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 432,
+                  "views": "603567"
+                }
+              },
+              {
+                "title": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the g",
+                "summary": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the ground, is also very well suited to training super intelligence",
+                "url": "https://x.com/elonmusk/status/2120102767624880364",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:24 +0000 2026",
+                "metrics": {
+                  "favorites": 58768,
+                  "retweets": 4943,
+                  "views": "3327675"
+                }
+              },
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure",
+                "summary": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure\n\nThe engineering behind Starl…",
+                "url": "https://x.com/elonmusk/status/2120101380144992635",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:28:53 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 214,
+                  "views": "534468"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M06_switch_tool",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_tool",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: explicitly bỏ Twitter, chuyển sang web_search news, giữ chủ đề OpenAI."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mọi người nói gì về OpenAI trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Bỏ Twitter, chuyển sang tìm trên web tin tức đi"
+        },
+        {
+          "role": "user",
+          "content": "Giữ chủ đề OpenAI"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "OpenAI",
+              "topic": "news"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "OpenAI",
+              "search_type": "Latest"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "missing tool call lookup",
+          "extra tool call social_search"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "OpenAI",
+            "search_type": "Latest"
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "OpenAI",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "OpenAI Academy 给护理者开免费 ChatGPT 动手课",
+                "summary": "OpenAI Academy 给护理者开免费 ChatGPT 动手课\n\nOpenAI Academy 正在把免费、动手做的 ChatGPT 工作坊带到美国五个城市，面向护理者，帮他们把 AI 用到日常照护里。这是一次面向特定人群的线下技能课，不是新模型发布。\n\n【对象是护理者，不是泛用户】\n公告写明对象是 caregivers，也就是日常承担照护的人。课的目标是 everyday life 里的实用技能，而不是研究或开发。是否覆盖家庭护理、职业护理、哪些年龄或语言，材料没有展开。\n\n【免费、动手、只在五个美国城市】\n能核实的条件是：免费、hands-on、用 ChatGPT、由 OpenAI Academy 组织、地点是五个美国城市。城市名单、报名方式、课时和是否线上同步，公告摘要里都没有。对不住在这五个城市、或不做护理工作的人，这次活动本身并不适用。\n\n这次变化的意义很窄：OpenAI 把 Academy 课开到护理场景，承认照护日常也可能用到对话模型。能用上的前提是人在那五个城市、身份对得上、并且愿意去现场动手。城市和名额之外会发生什么，目前还看不到。\n\n来源：https://t.co/CXcXDT8QQF",
+                "url": "https://x.com/eth61675/status/2120193831690002906",
+                "source": "@eth61675",
+                "date": "Tue Nov 10 16:36:15 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "3"
+                }
+              },
+              {
+                "title": "it's incredible that we've not seen a proper response from OpenAI to Opus 5.5 after 2 months",
+                "summary": "it's incredible that we've not seen a proper response from OpenAI to Opus 5.5 after 2 months",
+                "url": "https://x.com/crisundefined/status/2120193758666817544",
+                "source": "@crisundefined",
+                "date": "Tue Nov 10 16:35:58 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "@thsottiaux Be nice to try this in uk. Be nice to see a good model from openai on par with new fable5.2. How long will w",
+                "summary": "@thsottiaux Be nice to try this in uk. Be nice to see a good model from openai on par with new fable5.2. How long will we pay 200 a month like this...",
+                "url": "https://x.com/mikeflynntech/status/2120193743416328660",
+                "source": "@mikeflynntech",
+                "date": "Tue Nov 10 16:35:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "3"
+                }
+              },
+              {
+                "title": "SoftBank is signaling a more cautious approach to AI spending after posting a $7.1 billion quarterly loss.",
+                "summary": "SoftBank is signaling a more cautious approach to AI spending after posting a $7.1 billion quarterly loss.\n\nA major hit came from $3.7 billion in charges tied to equipment for US AI data centers after project plans changed. The loss wasn’t simply a fall in the value of its OpenAI investment.\n\nCFO Yoshimitsu Goto said it was natural to discuss “waiting and seeing how things play out for a little while.” That suggests a slower pace after years of aggressive investment, rather than a confirmed halt.",
+                "url": "https://x.com/PineGapHQ/status/2120193684830560635",
+                "source": "@PineGapHQ",
+                "date": "Tue Nov 10 16:35:40 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "4"
+                }
+              },
+              {
+                "title": "仕事で使ってて，Claudeが優秀すぎる。もうopenAIに戻れない。この一年で圧倒的な差がついてしまった．",
+                "summary": "仕事で使ってて，Claudeが優秀すぎる。もうopenAIに戻れない。この一年で圧倒的な差がついてしまった．\n\nAI覇権は決まった。\n\n今後日本の生産業が出す利益はアンソロピックに吸われてくのね。",
+                "url": "https://x.com/himetakuya_kabu/status/2120193596989288808",
+                "source": "@himetakuya_kabu",
+                "date": "Tue Nov 10 16:35:19 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "11"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
