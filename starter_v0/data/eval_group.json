@@ -2,6 +2,126 @@
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
   "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_wiki_concept",
+      "phase": "B",
+      "suite": "group",
+      "query": "RLHF là gì?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wiki",
+            "args": {
+              "query": "RLHF"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "routing_wiki_vs_lookup",
+        "difficulty": "easy",
+        "what_it_tests": "Hỏi định nghĩa khái niệm nền tảng → wiki, không phải lookup."
+      }
+    },
+    {
+      "id": "G02_lookup_vs_wiki_news",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tin tức mới nhất về RLHF hôm nay",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "RLHF",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "routing_news_vs_wiki",
+        "difficulty": "medium",
+        "what_it_tests": "Tin tức thời sự hôm nay → lookup topic=news, không dùng wiki vì wiki không có tin nóng."
+      }
+    },
+    {
+      "id": "G03_github_repo_stats",
+      "phase": "B",
+      "suite": "group",
+      "query": "Repo github.com/langchain-ai/langgraph bao nhiêu sao?",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_repo",
+            "args": {
+              "repo": "langchain-ai/langgraph"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "routing_github_repo",
+        "difficulty": "easy",
+        "what_it_tests": "Hỏi số sao, release repo GitHub → github_repo với repo='langchain-ai/langgraph', không dùng fetch."
+      }
+    },
+    {
+      "id": "G04_hn_search_community",
+      "phase": "B",
+      "suite": "group",
+      "query": "Dân công nghệ trên Hacker News đang bàn gì về Rust?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Rust"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "routing_hn_vs_twitter",
+        "difficulty": "easy",
+        "what_it_tests": "Thảo luận của dev trên Hacker News → hn_search, không dùng social_search (Twitter)."
+      }
+    },
+    {
+      "id": "G05_citations_paper_influence",
+      "phase": "B",
+      "suite": "group",
+      "query": "Paper arXiv 2106.09685 được trích dẫn bao nhiêu lần?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "routing_citations_vs_papers",
+        "difficulty": "medium",
+        "what_it_tests": "Hỏi số trích dẫn của paper cụ thể theo arXiv ID → citations, không phải papers (tìm paper)."
+      }
+    }
+  ]
 }

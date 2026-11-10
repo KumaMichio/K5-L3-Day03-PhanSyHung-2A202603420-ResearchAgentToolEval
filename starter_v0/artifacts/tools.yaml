@@ -123,3 +123,39 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
+
+  # ---------------- Team New tools ----------------
+  - name: wiki
+    description: "Tra cứu định nghĩa, khái niệm và tiểu sử trên Wikipedia. Dùng khi hỏi 'X là gì', 'ai là X', định nghĩa nền tảng. Không dùng khi cần tin tức mới nhất (dùng lookup topic=news)."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Tên khái niệm hoặc người cần tra"}
+        lang: {type: string, enum: [en, vi], default: "en", description: "Ngôn ngữ tra cứu"}
+      required: [query]
+
+  - name: github_repo
+    description: "Lấy thông tin và trạng thái của một GitHub repository (số sao, forks, release mới nhất, thời gian cập nhật). Dùng khi hỏi số sao, release mới nhất, repo còn active không. Không dùng khi đọc nội dung trang/README (dùng fetch)."
+    parameters:
+      type: object
+      properties:
+        repo: {type: string, default: "", description: "Tên repo dạng owner/name hoặc URL github.com/owner/name"}
+      required: [repo]
+
+  - name: hn_search
+    description: "Tìm kiếm bài đăng và thảo luận của cộng đồng lập trình viên trên Hacker News. Dùng khi hỏi dân dev, cộng đồng tech trên Hacker News bàn luận gì. Không dùng khi tìm bài đăng trên Twitter/X (dùng social_search)."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Từ khóa thảo luận"}
+        sort: {type: string, enum: [popular, recent], default: "popular", description: "Sắp xếp theo độ phổ biến (popular) hoặc mới nhất (recent)"}
+        limit: {type: integer, default: 5, description: "Số kết quả (1-10)"}
+      required: [query]
+
+  - name: citations
+    description: "Tra cứu số lượng trích dẫn (citations) và độ ảnh hưởng của một bài báo khoa học qua OpenAlex API. Dùng khi hỏi paper cụ thể được trích dẫn bao nhiêu lần, xuất bản ở đâu. Không dùng khi tìm bài báo theo chủ đề (dùng papers)."
+    parameters:
+      type: object
+      properties:
+        paper: {type: string, default: "", description: "Tiêu đề paper hoặc arXiv ID (ví dụ 2106.09685)"}
+      required: [paper]
