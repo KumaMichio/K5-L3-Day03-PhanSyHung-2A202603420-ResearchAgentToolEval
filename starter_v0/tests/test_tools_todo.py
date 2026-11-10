@@ -216,6 +216,22 @@ def test_hn_search_sort_recent_calls_search_by_date(fake_http) -> None:
     assert res["items"][0]["title"] == "Show HN: My App"
 
 
+def test_hn_search_recent_matches_title_strictly(fake_http) -> None:
+    """Regression: search_by_date returned the newest stories that did not mention
+    the query (URL/text or typo matches). Recent search must require the keyword
+    in the title; popular search keeps Algolia's default relevance matching."""
+    calls = fake_http(FakeResponse({"hits": []}))
+    hn_search_tool(query="Rust", sort="recent")
+    assert calls[0]["params"]["restrictSearchableAttributes"] == "title"
+    assert calls[0]["params"]["typoTolerance"] == "false"
+
+    calls.clear()
+    hn_search_tool(query="Rust", sort="popular")
+    assert calls[0]["url"].endswith("/search")
+    assert "restrictSearchableAttributes" not in calls[0]["params"]
+    assert "typoTolerance" not in calls[0]["params"]
+
+
 def test_hn_search_clamps_limit_and_passes_hits_per_page(fake_http) -> None:
     calls = fake_http(FakeResponse({"hits": []}))
     # limit=0 clamped to 1

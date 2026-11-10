@@ -9,6 +9,7 @@ Bản đầy đủ của từng version nằm trong `artifacts/versions/<v>/syst
 | v2 | Không đổi (v2 chỉ sửa `tools.yaml`) | `9352321c7609` | giống v1 |
 | v3 | **Thêm 1 mục** | `e20a0025fb65` | rule "làm theo câu chữ của user" |
 | v4 | **Viết lại mục Stay in scope** | `fc14bea47ff2` | từ chối mọi câu ngoài phạm vi bằng một câu mẫu |
+| v5 | Không đổi (v5 chỉ sửa `tools.yaml`) | `fc14bea47ff2` | giống v4 |
 
 ---
 

@@ -1,0 +1,236 @@
+# Tool declarations (v2).
+# Each description says what the tool does, when to use it and when NOT to use it.
+# Parameter descriptions spell out the arg conventions the eval checks.
+#
+# If you rename a tool, keep the name in sync across:
+#   this file  ->  tools/__init__.py (TOOL_FUNCTIONS)  ->  data/eval_base.json + data/eval_research_extension.json
+# `pytest tests/test_tool_contract.py` checks this sync for you.
+tools:
+  # ---------------- Core tools ----------------
+  - name: clarify
+    description: >-
+      Ask the user one question and wait for their answer in the next turn.
+      Use when required information is missing: no account/handle for a request about someone's posts,
+      no URL for "this article/page/link", or before any `send` to confirm publishing.
+      Do NOT use when the request already has enough information to call a tool.
+    parameters:
+      type: object
+      properties:
+        question: {type: string, default: "", description: "The question to ask, in the user's language."}
+        response_type:
+          type: string
+          enum: [text, yes_no, choice]
+          default: "text"
+          description: >-
+            "yes_no" whenever you ask the user to confirm sending, posting or publishing (always for anything before `send`).
+            "text" when you need a free-form value such as an account handle or a URL.
+            "choice" only when you list fixed options in `options`.
+        options: {type: array, default: [], items: {type: string}, description: "Options for response_type=choice. Leave empty otherwise."}
+      required: [question]
+
+  - name: timeline
+    description: >-
+      Get the most recent posts FROM one specific X/Twitter account.
+      Use when the user names a person or account and wants what they posted.
+      Do NOT use to search a topic across many accounts (use `social_search`).
+      Do NOT use when no account is named; call `clarify` instead and never guess an account.
+    parameters:
+      type: object
+      properties:
+        screenname:
+          type: string
+          default: ""
+          description: "Account handle without '@', e.g. 'sama' for Sam Altman, 'karpathy' for Andrej Karpathy, 'elonmusk' for Elon Musk."
+        limit: {type: integer, default: 5, description: "Number of posts the user asked for (e.g. '3 tweet' -> 3). Default 5."}
+      required: [screenname]
+
+  - name: social_search
+    description: >-
+      Search X/Twitter posts by topic or keyword across all accounts.
+      Use for "mọi người nói gì về X trên Twitter", "tìm tweet về X".
+      Do NOT use for posts of one named account (use `timeline`), for web news (use `lookup`),
+      or for Hacker News discussions (use `hn_search`).
+      If the user says to stop using Twitter or switch to the web, do NOT call this tool again.
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Only the topic keyword(s), e.g. 'AI', 'OpenAI'. Do not add words like 'tweet' or 'news'."}
+        search_type:
+          type: string
+          enum: [Latest, Top]
+          default: "Latest"
+          description: "'Top' when the user asks for popular / nổi bật / hot / nhiều tương tác posts. 'Latest' for newest posts or when not specified."
+        limit: {type: integer, default: 5, description: "Number of posts requested. Default 5."}
+      required: [query]
+
+  - name: lookup
+    description: >-
+      Search the web.
+      Use for news and current events ("tin tức", "tin mới", "hôm nay có gì") with topic="news",
+      and for general web research with topic="general".
+      Use it when the user asks to search the web or switches from Twitter to web/news.
+      Do NOT use for definitions or background of a concept or person (use `wiki`),
+      for X/Twitter posts (use `social_search` / `timeline`), or to read a URL the user gave (use `fetch`).
+    parameters:
+      type: object
+      properties:
+        query:
+          type: string
+          default: ""
+          description: "Only the subject, e.g. 'AI', 'OpenAI'. Do NOT append 'news', 'tin tức', dates or 'hôm nay'; those go in topic and timeframe."
+        topic:
+          type: string
+          enum: [general, news]
+          default: "general"
+          description: "'news' whenever the user asks for news, tin tức, tin mới, or what happened recently. Otherwise 'general'."
+        timeframe:
+          type: string
+          enum: [day, week, month, year]
+          default: "week"
+          description: "'day' for hôm nay/today/24h, 'week' for tuần này/this week, 'month' for tháng này, 'year' for năm nay. Keep the timeframe from earlier turns unless the user changes it."
+        max_results: {type: integer, default: 5, description: "Number of results. Default 5."}
+      required: [query]
+
+  - name: fetch
+    description: >-
+      Read the full content of one URL the user provided.
+      Use only when the user gives an explicit URL (http/https).
+      Do NOT use when no URL is given ("bài viết này" without a link); call `clarify` with response_type="text" instead. Never invent a URL.
+    parameters:
+      type: object
+      properties:
+        url: {type: string, default: "", description: "The exact URL from the user's message."}
+      required: [url]
+
+  - name: format
+    description: >-
+      Turn items you already retrieved with other tools into a markdown digest.
+      Use only after you have items from earlier tool results and the user wants a digest or newsletter.
+      Do NOT use to fetch new information or as the first tool for a research question.
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          default: []
+          description: "Items from earlier tool results. Each item should have title and url; source, summary and section are optional."
+          items:
+            type: object
+            properties:
+              title: {type: string}
+              url: {type: string}
+              source: {type: string}
+              summary: {type: string}
+              section: {type: string}
+        template: {type: string, enum: [brief, sections, bullets, thread, daily_ai_vn], default: "sections", description: "Layout of the digest. 'daily_ai_vn' for a Vietnamese daily AI newsletter."}
+        headline: {type: string, default: "", description: "Optional title for the digest."}
+      required: [items, template]
+
+  # ---------------- Bonus tools ----------------
+  - name: send
+    description: >-
+      Publish text to the team's Telegram channel. This is public and cannot be undone.
+      Call it ONLY after the user explicitly said yes to a `clarify` question with response_type="yes_no" in this conversation, and then set confirmed=true.
+      When the user first asks to send/post/publish, do NOT call this tool; call `clarify` with response_type="yes_no" instead.
+      Never use it to answer the user.
+    parameters:
+      type: object
+      properties:
+        text: {type: string, default: "", description: "The exact text the user confirmed."}
+        confirmed: {type: boolean, default: false, description: "true only after the user confirmed with yes. Otherwise do not call send at all."}
+      required: [text]
+
+  - name: policy
+    description: >-
+      Search the company's internal policy documents (AI research, source citation, data privacy, external publishing, tool usage).
+      Use when the user asks what the company rules or policy say.
+      Do NOT use for public web information (use `lookup`).
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "What to look up in the policies."}
+        policy_area: {type: string, enum: [all, ai_research, source_citation, data_privacy, external_publishing, tool_usage], default: "all", description: "Narrow to one policy area when the user names it; otherwise 'all'."}
+        top_k: {type: integer, default: 3, description: "Number of passages. Default 3."}
+      required: [query]
+
+  - name: papers
+    description: >-
+      Search scientific papers on arXiv by topic.
+      Use when the user wants papers about a subject.
+      Do NOT use for the citation count of one specific paper (use `citations`) or to read a paper's text (use `paper_text`).
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Topic keywords, e.g. 'LoRA', 'diffusion models'."}
+        max_results: {type: integer, default: 5, description: "Number of papers. Default 5."}
+        sort_by: {type: string, enum: [relevance, lastUpdatedDate, submittedDate], default: "relevance", description: "'submittedDate' for newest papers, otherwise 'relevance'."}
+      required: [query]
+
+  - name: paper_text
+    description: >-
+      Download one arXiv paper's PDF and extract its text.
+      Use when the user wants to read or summarize the content of a specific arXiv paper.
+      Do NOT use to search for papers (use `papers`).
+    parameters:
+      type: object
+      properties:
+        arxiv_url: {type: string, default: "", description: "arXiv id (e.g. '2106.09685') or arXiv URL."}
+        max_pages: {type: integer, default: 5, description: "Max pages to extract. Default 5."}
+        max_chars: {type: integer, default: 8000, description: "Max characters to return. Default 8000."}
+      required: [arxiv_url]
+
+  # ---------------- Team tools ----------------
+  - name: wiki
+    description: >-
+      Look up a concept, technology, organization or person on Wikipedia and return its summary.
+      Use for definitions and background: "X là gì", "ai là X", "giải thích X".
+      Do NOT use for recent news about X (use `lookup` with topic="news").
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "The concept or name to look up, e.g. 'RLHF', 'Andrej Karpathy'."}
+        lang: {type: string, enum: [en, vi], default: "en", description: "'vi' only if the user asks for the Vietnamese Wikipedia; otherwise 'en'."}
+      required: [query]
+
+  - name: github_repo
+    description: >-
+      Get stars, forks, last push and latest release of one GitHub repository.
+      Use for questions about a repo's popularity, activity or latest version.
+      Do NOT use to read the README or page content (use `fetch`).
+    parameters:
+      type: object
+      properties:
+        repo: {type: string, default: "", description: "'owner/name', e.g. 'langchain-ai/langgraph'. If the user gives a GitHub URL, pass only 'owner/name'."}
+      required: [repo]
+
+  - name: hn_search
+    description: >-
+      Search Hacker News stories and discussions.
+      Use when the user asks what developers, the tech community or Hacker News (HN) are saying about something.
+      Do NOT use for X/Twitter posts (use `social_search`).
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Topic keyword(s) only, e.g. 'Rust', 'Llama'."}
+        sort:
+          type: string
+          enum: [popular, recent]
+          default: "popular"
+          description: >-
+            'recent' only when the user asks for the newest Hacker News stories ("mới nhất", "gần đây", "latest")
+            in the current message or in an earlier message about this same Hacker News search.
+            Words like "mới nhất" said earlier about tweets, news or another topic do NOT apply here.
+            Otherwise 'popular'.
+        limit: {type: integer, default: 5, description: "Number of stories, 1-10. Default 5."}
+      required: [query]
+
+  - name: citations
+    description: >-
+      Get the citation count, year and venue of one specific paper.
+      Use when the user asks how many times a paper is cited or where it was published.
+      Do NOT use to find papers on a topic (use `papers`).
+    parameters:
+      type: object
+      properties:
+        paper: {type: string, default: "", description: "The paper's arXiv id (e.g. '2106.09685') or its exact title."}
+      required: [paper]

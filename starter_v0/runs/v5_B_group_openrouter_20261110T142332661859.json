@@ -1,0 +1,837 @@
+{
+  "run_id": "v5_B_group_openrouter_20261110T142332661859",
+  "version": "v5",
+  "artifact_version": "v5+pfc14bea47ff2+td908e6fef2e2",
+  "prompt_hash": "fc14bea47ff20d008ba6b1bbe3f953c1e954cc1f555ae4a169b81b6695184359",
+  "tools_hash": "d908e6fef2e26d97791764f006890d9616c214f6cc358aa6bf807f179c5f5c02",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "E:\\VinUni_AI_course\\K5-L3-Day03-PhanSyHung-2A202603420-ResearchAgentToolEval\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "E:\\VinUni_AI_course\\K5-L3-Day03-PhanSyHung-2A202603420-ResearchAgentToolEval\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm: 5 single-turn + 5 multi-turn, kiểm tra định tuyến hn_search, citations, phân biệt Hacker News vs Twitter, và xử lý tham số.",
+  "generated_at": "2026-11-10T14:23:32",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 10,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_hn_search_dev_community",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_hn_search",
+        "difficulty": "easy",
+        "what_it_tests": "Dân HN/dev bàn gì -> hn_search, không phải social_search."
+      },
+      "input": "Dân Hacker News đang bàn gì về Rust?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Rust"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Rust",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "Rust",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Rust",
+            "sort": "popular",
+            "items": [
+              {
+                "title": "Why Discord is switching from Go to Rust",
+                "url": "https://blog.discordapp.com/why-discord-is-switching-from-go-to-rust-a190bbca2b1f",
+                "points": 1582,
+                "num_comments": 642,
+                "hn_url": "https://news.ycombinator.com/item?id=22238335",
+                "created_at": "2020-02-04T17:30:40Z"
+              },
+              {
+                "title": "Leaving Rust gamedev after 3 years",
+                "url": "https://loglog.games/blog/leaving-rust-gamedev/",
+                "points": 1484,
+                "num_comments": 972,
+                "hn_url": "https://news.ycombinator.com/item?id=40172033",
+                "created_at": "2024-04-26T17:33:56Z"
+              },
+              {
+                "title": "A half-hour to learn Rust",
+                "url": "https://fasterthanli.me/articles/a-half-hour-to-learn-rust",
+                "points": 1444,
+                "num_comments": 330,
+                "hn_url": "https://news.ycombinator.com/item?id=25610741",
+                "created_at": "2021-01-02T05:50:39Z"
+              },
+              {
+                "title": "Announcing Rust 1.0",
+                "url": "http://blog.rust-lang.org/2015/05/15/Rust-1.0.html",
+                "points": 1363,
+                "num_comments": 306,
+                "hn_url": "https://news.ycombinator.com/item?id=9551937",
+                "created_at": "2015-05-15T17:02:09Z"
+              },
+              {
+                "title": "CityBound – An open source city simulation game in Rust",
+                "url": "https://github.com/citybound/citybound",
+                "points": 1340,
+                "num_comments": 264,
+                "hn_url": "https://news.ycombinator.com/item?id=19583384",
+                "created_at": "2019-04-05T15:18:45Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_hn_search_recent_sort",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_sort_recent",
+        "difficulty": "medium",
+        "what_it_tests": "'Bài mới nhất trên HN' -> hn_search sort='recent'."
+      },
+      "input": "Bài mới nhất trên HN về Llama",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Llama",
+              "sort": "recent"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Llama",
+              "sort": "recent",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "Llama",
+            "sort": "recent",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Llama",
+            "sort": "recent",
+            "items": [
+              {
+                "title": "Llama-modchip: 284B DeepSeek on 64GB RAM, no GPU",
+                "url": "https://github.com/synchopate/llama-modchip",
+                "points": 477,
+                "num_comments": 205,
+                "hn_url": "https://news.ycombinator.com/item?id=50411961",
+                "created_at": "2026-11-08T10:22:04Z"
+              },
+              {
+                "title": "TokiRecur – llama.cpp LLM launcher with KV-cache recycling",
+                "url": "https://github.com/lhadzic377-netizen/TokiRecur",
+                "points": 3,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50406634",
+                "created_at": "2026-11-07T18:08:43Z"
+              },
+              {
+                "title": "Swapping LLMs in Under Two Seconds: A Sleep Mode for Llama.cpp",
+                "url": "https://zaage.it/writing/llama-sleep/",
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50399642",
+                "created_at": "2026-11-06T22:59:16Z"
+              },
+              {
+                "title": "Desktop app from the llama.cpp team (Mac OS and Windows)",
+                "url": "https://llama.app/models",
+                "points": 3,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50364396",
+                "created_at": "2026-11-04T12:00:53Z"
+              },
+              {
+                "title": "Running quantum circuits inside llama.cpp",
+                "url": "https://github.com/dakk/qullama",
+                "points": 2,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50363725",
+                "created_at": "2026-11-04T10:45:06Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_citations_arxiv_lookup",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_citations_arxiv",
+        "difficulty": "easy",
+        "what_it_tests": "Hỏi số trích dẫn của paper theo arXiv id -> citations, không phải papers."
+      },
+      "input": "Paper 2106.09685 được cite bao nhiêu lần?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "citations",
+          "args": {
+            "paper": "2106.09685"
+          },
+          "result": {
+            "tool": "citations",
+            "paper": "2106.09685",
+            "items": [
+              {
+                "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+                "cited_by_count": 13453,
+                "publication_year": 2021,
+                "venue": "arXiv (Cornell University)",
+                "url": "https://doi.org/10.48550/arxiv.2106.09685"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_citations_by_title",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_citations_title",
+        "difficulty": "medium",
+        "what_it_tests": "Hỏi số trích dẫn theo tiêu đề bài báo cụ thể -> citations."
+      },
+      "input": "Bài báo Attention Is All You Need có bao nhiêu lượt trích dẫn?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "Attention Is All You Need"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "Attention Is All You Need"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "citations",
+          "args": {
+            "paper": "Attention Is All You Need"
+          },
+          "result": {
+            "tool": "citations",
+            "paper": "Attention Is All You Need",
+            "items": [
+              {
+                "title": "Attention Is All You Need",
+                "cited_by_count": 135148,
+                "publication_year": 2017,
+                "venue": "arXiv (Cornell University)",
+                "url": "https://doi.org/10.48550/arxiv.1706.03762"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_out_of_scope_cooking",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_cooking",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi nấu ăn ngoài phạm vi research -> không gọi tool, từ chối lịch sự."
+      },
+      "input": "Hướng dẫn mình cách nấu món phở bò truyền thống Hà Nội.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Xin lỗi, câu này nằm ngoài phạm vi của mình. Mình là trợ lý research, có thể giúp bạn tìm và tóm tắt thông tin, paper, tin tức.",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "GM01_papers_then_citations",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_paper_to_citations",
+        "difficulty": "hard",
+        "what_it_tests": "Lượt 1 tìm paper, lượt 2 hỏi số cite của paper -> gọi citations."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm paper về LoRA"
+        },
+        {
+          "role": "user",
+          "content": "Paper 2106.09685 được cite bao nhiêu lần?"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "citations",
+          "args": {
+            "paper": "2106.09685"
+          },
+          "result": {
+            "tool": "citations",
+            "paper": "2106.09685",
+            "items": [
+              {
+                "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+                "cited_by_count": 13453,
+                "publication_year": 2021,
+                "venue": "arXiv (Cornell University)",
+                "url": "https://doi.org/10.48550/arxiv.2106.09685"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM02_hn_search_switch_sort",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_hn_switch_sort",
+        "difficulty": "hard",
+        "what_it_tests": "Multi-turn: chuyển sort từ popular sang recent khi user yêu cầu bài mới nhất."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm các thảo luận nổi bật về Mojo trên Hacker News"
+        },
+        {
+          "role": "user",
+          "content": "Lấy bài mới nhất thôi, đừng lấy bài cũ"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Mojo",
+              "sort": "recent"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Mojo",
+              "sort": "recent",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "Mojo",
+            "sort": "recent",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Mojo",
+            "sort": "recent",
+            "items": [
+              {
+                "title": "Mojo: Modular's unified device accelerator language [video]",
+                "url": "https://www.youtube.com/watch?v=yOMflrCRya0",
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50273028",
+                "created_at": "2026-10-28T13:14:17Z"
+              },
+              {
+                "title": "Mojo Deflate vs. C",
+                "url": "https://kodare.net/2026/10/26/mojo-deflate.html",
+                "points": 2,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50239785",
+                "created_at": "2026-10-26T06:17:28Z"
+              },
+              {
+                "title": "Mojo 1.2.0",
+                "url": "https://mojolang.org/releases/v1.2.0/",
+                "points": 3,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50199866",
+                "created_at": "2026-10-22T19:25:36Z"
+              },
+              {
+                "title": "Show HN: A Mojo Script Language Container for the Exasol Database",
+                "url": "https://github.com/exasol-labs/language-container-mojo",
+                "points": 6,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=50149883",
+                "created_at": "2026-10-19T08:38:11Z"
+              },
+              {
+                "title": "A 'ludicrously ugly' bridge is Exhibit A that Britain has lost its mojo",
+                "url": "https://www.wsj.com/world/uk/a-ludicrously-ugly-bridge-is-exhibit-a-that-britain-has-lost-its-mojo-7015a654",
+                "points": 17,
+                "num_comments": 26,
+                "hn_url": "https://news.ycombinator.com/item?id=50144933",
+                "created_at": "2026-10-18T20:06:58Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM03_hn_search_limit_update",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_hn_limit",
+        "difficulty": "hard",
+        "what_it_tests": "Multi-turn: cập nhật limit=3 cho hn_search."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Cho mình xem thảo luận về AI agents trên Hacker News"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ lấy đúng 3 bài thôi nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "AI agents",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "AI agents",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "AI agents",
+            "limit": 3
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "AI agents",
+            "sort": "popular",
+            "items": [
+              {
+                "title": "An AI agent published a hit piece on me",
+                "url": "https://theshamblog.com/an-ai-agent-published-a-hit-piece-on-me/",
+                "points": 2346,
+                "num_comments": 951,
+                "hn_url": "https://news.ycombinator.com/item?id=46990729",
+                "created_at": "2026-02-12T16:23:24Z"
+              },
+              {
+                "title": "AI agent bankrupted their operator while trying to scan DN42",
+                "url": "https://lantian.pub/en/article/fun/ai-agent-bankrupted-their-operator-scan-dn42lantian.lantian/",
+                "points": 1467,
+                "num_comments": 536,
+                "hn_url": "https://news.ycombinator.com/item?id=48500012",
+                "created_at": "2026-06-12T04:42:53Z"
+              },
+              {
+                "title": "OpenCode – Open source AI coding agent",
+                "url": "https://opencode.ai/",
+                "points": 1274,
+                "num_comments": 618,
+                "hn_url": "https://news.ycombinator.com/item?id=47460525",
+                "created_at": "2026-03-20T21:03:52Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM04_clarify_then_hn_query",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_clarify_then_hn",
+        "difficulty": "medium",
+        "what_it_tests": "Lượt 1 thiếu từ khóa, lượt 2 bổ sung từ khóa -> gọi hn_search."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm thảo luận trên Hacker News giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Về chủ đề Python 3.13"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Python 3.13"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Python 3.13",
+              "sort": "popular",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "Python 3.13",
+            "sort": "popular",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Python 3.13",
+            "sort": "popular",
+            "items": [
+              {
+                "title": "Python 3.13 Gets a JIT",
+                "url": "https://tonybaloney.github.io/posts/python-gets-a-jit.html",
+                "points": 1081,
+                "num_comments": 521,
+                "hn_url": "https://news.ycombinator.com/item?id=38923741",
+                "created_at": "2024-01-09T08:35:58Z"
+              },
+              {
+                "title": "Our Plan for Python 3.13",
+                "url": "https://github.com/faster-cpython/ideas/blob/main/3.13/README.md",
+                "points": 531,
+                "num_comments": 399,
+                "hn_url": "https://news.ycombinator.com/item?id=36339777",
+                "created_at": "2023-06-15T12:55:55Z"
+              },
+              {
+                "title": "Everything you need to know about Python 3.13 – JIT and GIL went up the hill",
+                "url": "https://drew.silcock.dev/blog/everything-you-need-to-know-about-python-3-13/",
+                "points": 397,
+                "num_comments": 203,
+                "hn_url": "https://news.ycombinator.com/item?id=41677131",
+                "created_at": "2024-09-28T01:23:01Z"
+              },
+              {
+                "title": "Python 3.13.0 Is Released",
+                "url": "https://docs.python.org/3.13/whatsnew/3.13.html",
+                "points": 268,
+                "num_comments": 132,
+                "hn_url": "https://news.ycombinator.com/item?id=41766035",
+                "created_at": "2024-10-07T13:53:47Z"
+              },
+              {
+                "title": "State of Python 3.13 performance: Free-threading",
+                "url": "https://codspeed.io/blog/state-of-python-3-13-performance-free-threading",
+                "points": 196,
+                "num_comments": 190,
+                "hn_url": "https://news.ycombinator.com/item?id=42051197",
+                "created_at": "2024-11-05T13:06:57Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM05_citations_doi_correction",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_citations_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Multi-turn: đính chính arXiv id từ 1706.03762 thành 2106.09685."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Paper 1706.03762 được trích dẫn bao nhiêu lần?"
+        },
+        {
+          "role": "user",
+          "content": "À mình gõ nhầm, tra paper 2106.09685 mới đúng"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "citations",
+            "args": {
+              "paper": "2106.09685"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "citations",
+          "args": {
+            "paper": "2106.09685"
+          },
+          "result": {
+            "tool": "citations",
+            "paper": "2106.09685",
+            "items": [
+              {
+                "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+                "cited_by_count": 13453,
+                "publication_year": 2021,
+                "venue": "arXiv (Cornell University)",
+                "url": "https://doi.org/10.48550/arxiv.2106.09685"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

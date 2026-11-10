@@ -68,6 +68,7 @@ Nguồn: `artifacts/version_log.csv` và `runs/*.json`. Metric là `case_accurac
 | v2 | `tools.yaml` (`v2+p9352321c7609+t151898fd033d`) | Lỗi còn lại là lỗi chọn tool/args do mô tả tool mơ hồ. Viết lại mọi description (làm gì / khi nào dùng / khi nào không) + quy ước args (`query` chỉ là chủ đề, `topic=news`, `timeframe`, handle không `@`, `search_type`) + khai báo 4 tool mới | 0.85 | 0.90 (group 0.90) | `runs/v2_B_base_openrouter_20261110T114920297691.json` |
 | v3 | `system_prompt.md` (`v3+pe20a0025fb65+t151898fd033d`) | 3 lỗi của v2 cùng một gốc: model làm theo suy đoán thay vì câu chữ của user. Thêm mục "Follow the user's words": đăng/gửi luôn `clarify` `yes_no`, bỏ nguồn nào thì không gọi lại, truyền tên/ID đúng như user viết | 0.90 | **1.00** (group 0.90) | `runs/v3_B_base_openrouter_20261110T124444004699.json` |
 | v4 | `system_prompt.md` (`v4+pfc14bea47ff2+t151898fd033d`) | Eval v3 đã 1.00 nhưng chat thật xử lý câu ngoài phạm vi không nhất quán: 2+2, nấu phở bị từ chối; x²=−1, viết hàm Python lại được trả lời; 1/0 vừa từ chối vừa trả lời. Rule v3 chỉ liệt kê ví dụ. Viết lại *Stay in scope*: mọi câu toán/code/nấu ăn/việc cá nhân đều từ chối bằng một câu mẫu + định hướng về research, đúng `behavior: refuse` của R08, R14, G05 | 1.00 | 1.00 (group 0.90 → 1.00, xem G04 ở B2) | `runs/v4_B_base_openrouter_20261110T141502032712.json` |
+| v5 | `tools.yaml` (`v5+pfc14bea47ff2+td908e6fef2e2`) | Live chat lượt 4 (B4): chữ "mới nhất" ở lượt nói về tweet bị mang sang câu hỏi HN, nên model gọi `hn_search(sort="recent")` (3/5 lần khi có lịch sử). Mô tả `sort` chỉ ghi "'recent' for newest". Viết lại: chỉ `recent` khi "mới nhất" nói về chính cuộc tìm HN đó | 1.00 | 1.00 (group 1.00) | `runs/v5_B_base_openrouter_20261110T142303807872.json` |
 
 Metric chi tiết (base):
 
@@ -78,6 +79,17 @@ Metric chi tiết (base):
 | v2 | 0.90 | 0.95 | 0.90 | 0.83 |
 | v3 | 1.00 | 1.00 | 1.00 | 1.00 |
 | v4 | 1.00 | 1.00 | 1.00 | 1.00 |
+| v5 | 1.00 | 1.00 | 1.00 | 1.00 |
+
+v5 cũng không đo được bằng eval, vì không case nào có lịch sử nói "mới nhất" về chủ đề khác. Bằng chứng là chạy lại 5 lần mỗi tình huống ở chế độ chat:
+
+| Tình huống | Đúng là | v4 | v5 |
+|---|---|---|---|
+| Lượt trước "5 tweet mới nhất", rồi hỏi "Dân HN bàn gì về Rust?" | `popular` | 3/5 `recent` ❌ | 5/5 `popular` ✅ |
+| "Thảo luận nổi bật về Mojo trên HN" → "Lấy bài mới nhất thôi" (như GM02) | `recent` | 5/5 `recent` | 5/5 `recent` ✅ |
+| "Bài mới nhất trên HN về Llama" (như G02) | `recent` | 5/5 `recent` | 5/5 `recent` ✅ |
+
+Cùng lúc sửa **bug code** của `hn_search`: `sort="recent"` gọi Algolia `search_by_date`, endpoint này trả về bài mới nhất không chứa từ khoá (0/5 bài về Rust). Thêm `restrictSearchableAttributes=title` và `typoTolerance=false`; test thật với Rust, Llama, Mojo được 15/15 bài đúng chủ đề. Có thêm unit test hồi quy `test_hn_search_recent_matches_title_strictly`. Code tool không nằm trong artifact hash nên không tính là một version riêng.
 
 Eval không phân biệt được v3 và v4, vì grader chỉ chấm "không gọi tool" chứ không chấm agent có từ chối hay không. Bằng chứng cho v4 là test chat thật 8 câu, mỗi câu chạy ở `tool_choice` auto như khi chat:
 
@@ -184,7 +196,7 @@ Các rule về **chọn tool nào và điền args thế nào**, gắn với t�
 - Khi nào dùng / không dùng tool nào, có chỉ sang tool đúng (ví dụ `hn_search` vs `social_search`, `citations` vs `papers`).
 - Quy ước args: `topic="news"` cho tin tức (R13), `query` chỉ chứa chủ đề (R03), `timeframe`, handle không `@`, `search_type`.
 
-v2 chỉ đổi `tools.yaml` mà sửa được R13 và thêm 4 tool mới không làm routing giảm.
+v2 chỉ đổi `tools.yaml` mà sửa được R13 và thêm 4 tool mới không làm routing giảm. v5 cũng là fix thuộc `tools.yaml`: mô tả arg `sort` phải nói rõ "mới nhất" phải nói về chính cuộc tìm HN, nếu không model mang từ đó từ lượt khác sang.
 
 Bài học: rule hội thoại đặt trong mô tả tool **chưa chắc được theo**. Từ v2, `tools.yaml` đã ghi "yes_no … before send" và "do NOT call this tool again" khi user bỏ Twitter, nhưng R12 và M06 chỉ pass khi rule được đưa lên system prompt ở v3. Một thay đổi prompt cũng có thể gây regression ở chỗ khác: M06 pass ở v0 nhưng fail ở v1, v2. Vì vậy mỗi lần sửa đều chạy lại toàn bộ eval.
 
@@ -200,13 +212,13 @@ Bài học: rule hội thoại đặt trong mô tả tool **chưa chắc đượ
   - Eval (G01) × 5 và chat không có lịch sử × 5: 10/10 `sort="popular"`.
   - Chat **có lịch sử** 3 lượt đầu (lượt 1 nói "5 tweet **mới nhất**") × 5: **3/5 `sort="recent"`**.
 
-  Model mang chữ "mới nhất" từ lượt trước sang câu hỏi mới. Eval single-turn không bắt được lỗi này.
-- **Bug tool phát hiện từ lượt 4:** với `sort="recent"`, `hn_search` gọi Algolia `search_by_date`, và endpoint này trả về 5 bài mới nhất **không chứa "Rust"**: Algolia tìm cả trong URL/nội dung và có sửa lỗi chính tả. Thêm `restrictSearchableAttributes=title&typoTolerance=false` thì cả 5 bài đều về Rust. Eval chỉ kiểm tra args, unit test dùng `fake_http`, nên cả hai đều không bắt được.
+  Model mang chữ "mới nhất" từ lượt trước sang câu hỏi mới. Eval single-turn không bắt được lỗi này. **Đã sửa ở v5** (mô tả `sort` trong `tools.yaml`): 5/5 `popular`.
+- **Bug tool phát hiện từ lượt 4:** với `sort="recent"`, `hn_search` gọi Algolia `search_by_date`, và endpoint này trả về 5 bài mới nhất **không chứa "Rust"**: Algolia tìm cả trong URL/nội dung và có sửa lỗi chính tả. Eval chỉ kiểm tra args, unit test dùng `fake_http`, nên cả hai đều không bắt được. **Đã sửa:** thêm `restrictSearchableAttributes=title&typoTolerance=false`, 15/15 bài đúng chủ đề, kèm unit test hồi quy.
 
 **What would you improve next?**
-1. Sửa `hn_search`: thêm `restrictSearchableAttributes=title` và `typoTolerance=false` khi gọi `search_by_date`.
-2. Eval case cho `clarify` nên chạy với `tool_choice` auto (giống chat thật), hoặc thêm rule prompt: "khi hỏi lại user, luôn dùng tool `clarify`, không hỏi bằng text".
-3. Thêm case multi-turn: lượt trước nói "mới nhất", lượt sau hỏi chủ đề khác, kiểm tra `sort` không bị mang sang.
+1. Eval case cho `clarify` nên chạy với `tool_choice` auto (giống chat thật), hoặc thêm rule prompt: "khi hỏi lại user, luôn dùng tool `clarify`, không hỏi bằng text".
+2. Đưa tình huống của v5 thành eval case multi-turn: lượt trước nói "mới nhất" về tweet, lượt sau hỏi HN, expected `sort="popular"`.
+3. Unit test với HTTP giả không bắt được lỗi chất lượng kết quả (bug `search_by_date`). Nên có vài smoke test gọi API thật, chạy tay trước khi demo.
 4. Thêm eval case cho `wiki` và `github_repo`.
 5. Cho grader chấp nhận nhiều giá trị đúng (tiêu đề hoặc arXiv id cho `citations`).
 6. Chạy thử v3 trên model local nhỏ (B7).

@@ -1,4 +1,4 @@
-# So sánh các version v0 → v4
+# So sánh các version v0 → v5
 
 Model: `openai/gpt-4o-mini` qua OpenRouter. Mỗi version chỉ đổi **một file** và kiểm **một giả thuyết**, nên mức tăng điểm gắn được với đúng thay đổi đó.
 Nguồn số liệu: `artifacts/version_log.csv` và các file trong `runs/`.
@@ -12,11 +12,13 @@ Nguồn số liệu: `artifacts/version_log.csv` và các file trong `runs/`.
 | v2 | `tools.yaml` | `v2+p9352321c7609+t151898fd033d` | Lỗi chọn tool và args do mô tả tool sơ sài | **0.90** (18/20) | 0.90 (9/10) |
 | v3 | `system_prompt.md` | `v3+pe20a0025fb65+t151898fd033d` | Model làm theo suy đoán thay vì câu chữ của user | **1.00** (20/20) | 0.90 (9/10) |
 | v4 | `system_prompt.md` | `v4+pfc14bea47ff2+t151898fd033d` | Câu ngoài phạm vi bị xử lý không nhất quán vì rule chỉ liệt kê ví dụ | 1.00 (20/20) | 1.00 (10/10)* |
+| v5 | `tools.yaml` | `v5+pfc14bea47ff2+td908e6fef2e2` | Model mang "mới nhất" từ lượt khác sang `hn_search.sort` | 1.00 (20/20) | 1.00 (10/10) |
 
 Hash trong artifact version chứng minh mỗi bước chỉ đổi một file:
 - v0 → v1: `p…` đổi, `t…` giữ nguyên.
 - v1 → v2: `t…` đổi, `p…` giữ nguyên.
 - v2 → v3 và v3 → v4: `p…` đổi, `t…` giữ nguyên.
+- v4 → v5: `t…` đổi, `p…` giữ nguyên.
 
 \* G04 pass ở v4 nhưng chạy lại 3 lần chỉ 2/3, nên chưa ổn định.
 
@@ -29,6 +31,7 @@ Hash trong artifact version chứng minh mỗi bước chỉ đổi một file:
 | v2 | 0.90 | 0.95 | 0.90 | 0.83 |
 | v3 | 1.00 | 1.00 | 1.00 | 1.00 |
 | v4 | 1.00 | 1.00 | 1.00 | 1.00 |
+| v5 | 1.00 | 1.00 | 1.00 | 1.00 |
 
 ## 2. Case fail qua từng version
 
@@ -164,6 +167,35 @@ Hash trong artifact version chứng minh mỗi bước chỉ đổi một file:
 | Bạn là gì và làm được những gì? | Trả lời | Trả lời |
 
 **Kết quả:** base giữ 1.00, group 0.90 → 1.00. Eval không đo được thay đổi chính, vì grader chỉ chấm "không gọi tool". G04 pass là phụ, và chạy lại 3 lần chỉ đạt 2/3.
+
+## 6c. v5: mô tả `hn_search.sort` trong `tools.yaml` + sửa bug code `hn_search`
+
+**Giả thuyết:** trong live chat, lượt 1 nói "5 tweet mới nhất", lượt 4 hỏi "Dân HN bàn gì về Rust?" thì model gọi `sort="recent"` (chạy lại 3/5 lần). Mô tả `sort` chỉ ghi "'recent' for newest / mới nhất", không nói "mới nhất" đó phải thuộc cuộc tìm HN. Nói rõ phạm vi của từ khoá sẽ hết mang sang mà các case cần `recent` (G02, GM02) vẫn đúng.
+
+**Thay đổi `tools.yaml`:**
+
+```diff
+-        sort: {type: string, enum: [popular, recent], default: "popular", description: "'recent' for newest / mới nhất posts; 'popular' otherwise."}
++        sort:
++          type: string
++          enum: [popular, recent]
++          default: "popular"
++          description: >-
++            'recent' only when the user asks for the newest Hacker News stories ("mới nhất", "gần đây", "latest")
++            in the current message or in an earlier message about this same Hacker News search.
++            Words like "mới nhất" said earlier about tweets, news or another topic do NOT apply here.
++            Otherwise 'popular'.
+```
+
+| Tình huống (5 lần mỗi loại, chế độ chat) | Đúng là | v4 | v5 |
+|---|---|---|---|
+| Lượt trước "5 tweet mới nhất" → "Dân HN bàn gì về Rust?" | `popular` | 3/5 `recent` | 5/5 `popular` |
+| "Thảo luận nổi bật về Mojo trên HN" → "Lấy bài mới nhất thôi" | `recent` | 5/5 | 5/5 |
+| "Bài mới nhất trên HN về Llama" | `recent` | 5/5 | 5/5 |
+
+**Sửa bug code (không thuộc artifact hash):** `tools/hn_search/tool.py` khi `sort="recent"` gọi `search_by_date`, endpoint này trả về bài mới nhất không chứa từ khoá (Rust: 0/5). Thêm `restrictSearchableAttributes=title`, `typoTolerance=false` → Rust, Llama, Mojo 15/15 bài đúng chủ đề. Unit test hồi quy: `test_hn_search_recent_matches_title_strictly`.
+
+**Kết quả eval:** base 1.00, group 1.00. Eval không có case nào đo tình huống này; bằng chứng là bảng trên.
 
 ---
 

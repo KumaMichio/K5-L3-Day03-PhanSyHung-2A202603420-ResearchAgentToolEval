@@ -212,7 +212,15 @@ tools:
       type: object
       properties:
         query: {type: string, default: "", description: "Topic keyword(s) only, e.g. 'Rust', 'Llama'."}
-        sort: {type: string, enum: [popular, recent], default: "popular", description: "'recent' for newest / mới nhất posts; 'popular' otherwise."}
+        sort:
+          type: string
+          enum: [popular, recent]
+          default: "popular"
+          description: >-
+            'recent' only when the user asks for the newest Hacker News stories ("mới nhất", "gần đây", "latest")
+            in the current message or in an earlier message about this same Hacker News search.
+            Words like "mới nhất" said earlier about tweets, news or another topic do NOT apply here.
+            Otherwise 'popular'.
         limit: {type: integer, default: 5, description: "Number of stories, 1-10. Default 5."}
       required: [query]
 

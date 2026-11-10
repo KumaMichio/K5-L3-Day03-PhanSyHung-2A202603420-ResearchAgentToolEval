@@ -22,6 +22,12 @@ def hn_search(query: str = "", sort: str = "popular", limit: int = 5) -> dict[st
         limit_val = max(1, min(limit_int, 10))
         endpoint = "search_by_date" if sort == "recent" else "search"
         params = {"query": query, "tags": "story", "hitsPerPage": limit_val}
+        if endpoint == "search_by_date":
+            # search_by_date ranks by time only, so loose matches (URL/text hits,
+            # typo matches like "Rust" -> "trust") fill the newest results and the
+            # stories end up off-topic. Require the keyword in the title.
+            params["restrictSearchableAttributes"] = "title"
+            params["typoTolerance"] = "false"
         response = requests.get(f"{BASE}/{endpoint}", params=params, timeout=TIMEOUT)
         response.raise_for_status()
         data = response.json()
