@@ -1,0 +1,5 @@
+# Artifact hashes are computed on raw bytes (versioning.py). Pin line endings so
+# git checkouts on Windows (core.autocrlf=true) do not change the hashes.
+artifacts/*.md text eol=lf
+artifacts/*.yaml text eol=lf
+artifacts/versions/** -text

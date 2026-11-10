@@ -31,7 +31,19 @@ from chat import (
 from providers import make_provider
 from tools import load_tool_declarations, to_openai_tools
 from versioning import artifact_version_dict, build_artifact_version
+from eval_dashboard import (
+    COMPARE_PROMPTS,
+    METRIC_LABELS,
+    available_versions,
+    case_calls,
+    case_matrix,
+    load_runs,
+    load_version_log,
+    summary_rows,
+    version_paths,
+)
 
+CURRENT = "current (artifacts/)"
 ROOT = Path(__file__).parent
 ARTIFACTS_DIR = ROOT / "artifacts"
 TRANSCRIPTS_DIR = Path(os.getenv("AGENT_TRANSCRIPTS_DIR") or ROOT / "transcripts")
@@ -245,10 +257,26 @@ def sidebar() -> dict[str, Any]:
         # OPENROUTER_BASE_URL points at another OpenAI-compatible host such as Groq).
         default_model = os.getenv(f"{provider.upper()}_MODEL") or getattr(make_provider(provider), "default_model", "")
         model = st.text_input("Model", value=default_model, help="Để trống để dùng model mặc định của provider.")
-        version = st.text_input("Version label", value="v2", help="Nhãn ghi vào transcript, ví dụ v2, v3.")
+
+        # Each version's prompt/tools snapshot lives in artifacts/versions/<v>/.
+        # "current" = the working files in artifacts/ (what TV1 is editing now).
+        versions = available_versions()
+        choices = [*versions, CURRENT]
+        default_index = len(versions) - 1 if versions else 0
+        chosen = st.selectbox(
+            "Version prompt/tools", choices, index=default_index,
+            help="Chọn version để chat thử và so sánh hành vi. Đổi xong bấm Cuộc trò chuyện mới.",
+        )
+        if chosen == CURRENT:
+            default_prompt, default_tools = ARTIFACTS_DIR / "system_prompt.md", ARTIFACTS_DIR / "tools.yaml"
+            default_label = "current"
+        else:
+            default_prompt, default_tools = version_paths(chosen)
+            default_label = chosen
+        version = st.text_input("Version label", value=default_label, help="Nhãn ghi vào transcript.")
         with st.expander("Nâng cao"):
-            system_prompt = st.text_input("System prompt", value=str(ARTIFACTS_DIR / "system_prompt.md"))
-            tools = st.text_input("Tools YAML", value=str(ARTIFACTS_DIR / "tools.yaml"))
+            system_prompt = st.text_input("System prompt", value=str(default_prompt))
+            tools = st.text_input("Tools YAML", value=str(default_tools))
             history_window = st.number_input("History window (cặp lượt)", 0, 20, 5)
             max_tool_rounds = st.number_input("Max tool rounds", 1, 10, 4)
 
@@ -299,22 +327,101 @@ def sidebar() -> dict[str, Any]:
     return config
 
 
-def main() -> None:
-    st.set_page_config(page_title="Research Agent", page_icon="🔎", layout="wide")
-    config = sidebar()
-    if "config" not in st.session_state:
-        try:
-            new_session(config)
-        except Exception as exc:
-            st.error(f"Không đọc được prompt/tools: {type(exc).__name__}: {exc}")
-            st.stop()
+def markdown_table(rows: list[dict[str, Any]]) -> str:
+    """Render rows as a markdown table (st.dataframe needs pandas, whose DLLs
+    Windows Smart App Control may block)."""
+    if not rows:
+        return ""
+    headers = list(rows[0])
 
-    st.title("🔎 Research Agent")
+    def cell(value: Any) -> str:
+        return str(value if value is not None else "").replace("|", "\\|").replace("\n", " ")
+
+    lines = ["| " + " | ".join(headers) + " |", "|" + "---|" * len(headers)]
+    lines += ["| " + " | ".join(cell(r.get(h)) for h in headers) + " |" for r in rows]
+    return "\n".join(lines)
+
+
+def render_eval_tab(runs: dict) -> None:
+    st.subheader("📊 Kết quả eval theo version")
+    if not runs:
+        st.info("Chưa có run nào trong `runs/`. Chạy `python run_eval.py ...` trước.")
+        return
+
+    base = {v: r for (v, s), r in runs.items() if s == "base"}
+    if base:
+        st.markdown("**Bộ base (case_accuracy)**")
+        versions = sorted(base, key=lambda v: available_versions().index(v) if v in available_versions() else 99)
+        cols = st.columns(len(versions))
+        previous = None
+        for col, version in zip(cols, versions):
+            s = base[version]["summary"]
+            acc = s.get("case_accuracy") or 0
+            delta = None if previous is None else f"{(acc - previous) * 100:+.0f} điểm"
+            col.metric(version, f"{acc:.0%}", delta=delta,
+                       help=f"{s.get('passed_cases')}/{s.get('total_cases')} case pass")
+            previous = acc
+
+    rows = summary_rows(runs)
+    for row in rows:
+        for label in METRIC_LABELS.values():
+            value = row.get(label)
+            row[label] = "—" if value is None else f"{value:.0%}"
+        row["Run file"] = f"`{row['Run file']}`"
+    st.markdown(markdown_table(rows))
+
+    log = {row["version"]: row for row in load_version_log()}
+    if log:
+        st.markdown("**Mỗi version đổi gì (từ `version_log.csv`)**")
+        for version, row in log.items():
+            with st.expander(f"{version} · đổi `{row.get('changed_artifact')}` · "
+                             f"{row.get('metric_before') or '—'} → {row.get('metric_after')}"):
+                st.markdown(f"**Lý do:** {row.get('reason')}")
+                st.markdown(f"**Giả thuyết:** {row.get('hypothesis')}")
+                st.caption(f"`{row.get('artifact_version')}` · `{row.get('run_file')}`")
+
+    st.markdown("**Case pass/fail qua các version**")
+    suites = sorted({s for (_, s) in runs})
+    c1, c2 = st.columns([1, 2])
+    suite = c1.selectbox("Bộ eval", suites, index=suites.index("base") if "base" in suites else 0)
+    only_changed = c2.toggle("Chỉ hiện case từng fail", value=True)
+    matrix = case_matrix(runs, suite, only_changed=only_changed)
+    if matrix:
+        st.markdown(markdown_table(matrix))
+    else:
+        st.success("Mọi case đều pass ở mọi version đã chạy.")
+
+
+def render_compare_tab(runs: dict) -> None:
+    st.subheader("🧪 Câu hỏi để thấy khác biệt giữa các version")
+    st.markdown(
+        "Cách thử: chọn version ở thanh bên → **🆕 Cuộc trò chuyện mới** → bấm **Gửi** dưới câu hỏi → "
+        "mở tab **💬 Chat** xem agent gọi tool gì. Đổi sang version khác rồi hỏi lại đúng câu đó.\n\n"
+        "Bảng dưới mỗi câu là tool call **thật** của từng version lúc chạy eval (từ `runs/*.json`)."
+    )
+    current = st.session_state.get("config", {}).get("version", "")
+    st.caption(f"Phiên chat hiện tại đang dùng: **{current}**")
+    for i, item in enumerate(COMPARE_PROMPTS):
+        with st.container(border=True):
+            st.markdown(f"**`{item['case']}`**")
+            for j, turn in enumerate(item["turns"]):
+                c1, c2 = st.columns([5, 1])
+                prefix = f"Lượt {j + 1}: " if len(item["turns"]) > 1 else ""
+                c1.markdown(f"{prefix}> {turn}")
+                if c2.button("Gửi", key=f"cmp_{i}_{j}", width="stretch"):
+                    st.session_state.pending = turn
+                    st.rerun()
+            st.markdown(f"👀 **Để ý:** {item['watch']}")
+            calls = case_calls(runs, item["case"])
+            if calls:
+                st.markdown(markdown_table(calls))
+
+
+def render_chat_tab() -> None:
     st.caption(
         "Agent tự chọn tool (tìm tin, đọc tweet, đọc URL, tìm paper, tra policy...), "
         "gọi tool thật, rồi trả lời. Mở mục **Tool calls** để xem agent đã gọi gì."
     )
-
     turns = st.session_state.turns
     if not turns:
         st.markdown("**Thử nhanh một câu hỏi mẫu:**")
@@ -327,15 +434,38 @@ def main() -> None:
     for i, turn in enumerate(turns):
         render_turn(turn, is_last=i == len(turns) - 1)
 
-    typed = st.chat_input("Hỏi agent...")
-    user_text = typed or st.session_state.pop("pending", None)
-    if user_text:
-        with st.chat_message("user"):
-            st.markdown(user_text)
-        with st.chat_message("assistant"):
-            with st.spinner("Agent đang suy nghĩ và gọi tool..."):
-                run_turn(user_text)
-        st.rerun()
+
+def main() -> None:
+    st.set_page_config(page_title="Research Agent", page_icon="🔎", layout="wide")
+    config = sidebar()
+    if "config" not in st.session_state:
+        try:
+            new_session(config)
+        except Exception as exc:
+            st.error(f"Không đọc được prompt/tools: {type(exc).__name__}: {exc}")
+            st.stop()
+
+    st.title("🔎 Research Agent")
+    st.caption(f"Đang chat với version **{st.session_state.config['version']}** · "
+               f"`{st.session_state.artifact_version.artifact_version}`")
+
+    runs = load_runs()
+    tab_chat, tab_eval, tab_compare = st.tabs(["💬 Chat", "📊 Eval theo version", "🧪 So sánh version"])
+    with tab_eval:
+        render_eval_tab(runs)
+    with tab_compare:
+        render_compare_tab(runs)
+    with tab_chat:
+        render_chat_tab()
+        typed = st.chat_input("Hỏi agent...")
+        user_text = typed or st.session_state.pop("pending", None)
+        if user_text:
+            with st.chat_message("user"):
+                st.markdown(user_text)
+            with st.chat_message("assistant"):
+                with st.spinner("Agent đang suy nghĩ và gọi tool..."):
+                    run_turn(user_text)
+            st.rerun()
 
 
 main()
