@@ -1,7 +1,7 @@
 {
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Case do NHÓM tự viết thêm: 10 single-turn + 7 multi-turn cho 4 tool mới (hn_search, citations, wiki, github_repo): định tuyến, phân biệt HN/Twitter, wiki/lookup, github_repo/fetch, và xử lý tham số.",
+  "description": "Case do NHÓM tự viết thêm: 12 single-turn + 7 multi-turn cho 4 tool mới (hn_search, citations, wiki, github_repo): định tuyến, phân biệt HN/Twitter, wiki/lookup, github_repo/fetch, và xử lý tham số.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
   "cases": [
     {
@@ -177,6 +177,24 @@
       "failure_type": "wrong_tool",
       "expect": {"tool_calls": [{"name": "lookup", "args": {"topic": "news", "timeframe": "week"}}]},
       "metadata": {"skill": "multiturn_wiki_to_lookup", "difficulty": "hard", "what_it_tests": "Lượt 1 là định nghĩa (wiki), lượt 2 hỏi tin tuần này -> chuyển sang lookup news, timeframe week."}
+    },
+    {
+      "id": "G11_wiki_concept_rlhf",
+      "phase": "B",
+      "suite": "group",
+      "query": "RLHF là gì?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "wiki", "args": {"query": "RLHF"}}]},
+      "metadata": {"skill": "routing_wiki_vs_lookup", "difficulty": "easy", "author": "TV5", "what_it_tests": "Hỏi định nghĩa khái niệm nền tảng → wiki, không phải lookup."}
+    },
+    {
+      "id": "G12_lookup_vs_wiki_news_rlhf",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tin tức mới nhất về RLHF hôm nay",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "RLHF", "topic": "news", "timeframe": "day"}}]},
+      "metadata": {"skill": "routing_news_vs_wiki", "difficulty": "medium", "author": "TV5", "what_it_tests": "Tin tức thời sự hôm nay → lookup topic=news, không dùng wiki vì wiki không có tin nóng."}
     }
   ]
 }

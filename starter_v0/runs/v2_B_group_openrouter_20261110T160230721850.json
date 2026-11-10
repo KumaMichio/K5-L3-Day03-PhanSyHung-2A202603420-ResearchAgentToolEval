@@ -1,34 +1,34 @@
 {
-  "run_id": "v5_B_group_openrouter_20261110T155931675102",
-  "version": "v5",
-  "artifact_version": "v5+pfc14bea47ff2+td908e6fef2e2",
-  "prompt_hash": "fc14bea47ff20d008ba6b1bbe3f953c1e954cc1f555ae4a169b81b6695184359",
-  "tools_hash": "d908e6fef2e26d97791764f006890d9616c214f6cc358aa6bf807f179c5f5c02",
+  "run_id": "v2_B_group_openrouter_20261110T160230721850",
+  "version": "v2",
+  "artifact_version": "v2+p9352321c7609+t151898fd033d",
+  "prompt_hash": "9352321c7609645510c82f22e742569da80c9e56b1d11b7e5903a699de31efdf",
+  "tools_hash": "151898fd033dcbc74e134b66276838c7f17b4ae76cf21491655a6d16a735f7f9",
   "phase": "B",
   "suite": "group",
   "provider": "openrouter",
   "model": "openai/gpt-4o-mini",
-  "system_prompt": "artifacts\\versions\\v5\\system_prompt.md",
-  "tools": "artifacts\\versions\\v5\\tools.yaml",
+  "system_prompt": "artifacts\\versions\\v2\\system_prompt.md",
+  "tools": "artifacts\\versions\\v2\\tools.yaml",
   "eval_cases": "data\\eval_group.json",
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Case do NHÓM tự viết thêm: 10 single-turn + 7 multi-turn cho 4 tool mới (hn_search, citations, wiki, github_repo): định tuyến, phân biệt HN/Twitter, wiki/lookup, github_repo/fetch, và xử lý tham số.",
-  "generated_at": "2026-11-10T15:59:31",
+  "description": "Case do NHÓM tự viết thêm: 12 single-turn + 7 multi-turn cho 4 tool mới (hn_search, citations, wiki, github_repo): định tuyến, phân biệt HN/Twitter, wiki/lookup, github_repo/fetch, và xử lý tham số.",
+  "generated_at": "2026-11-10T16:02:30",
   "summary": {
-    "total_cases": 17,
-    "measured_cases": 17,
+    "total_cases": 19,
+    "measured_cases": 19,
     "provider_error_cases": 0,
-    "passed_cases": 16,
-    "case_accuracy": 0.9412,
+    "passed_cases": 17,
+    "case_accuracy": 0.8947,
     "tool_routing_accuracy": 1.0,
-    "argument_accuracy": 0.9412,
+    "argument_accuracy": 0.8947,
     "multiturn_accuracy": 1.0,
     "failure_counts": {
-      "wrong_tool": 1
+      "wrong_tool": 2
     },
     "observed_mismatch_counts": {
-      "wrong_arg_value": 1
+      "wrong_arg_value": 2
     }
   },
   "results": [
@@ -63,6 +63,7 @@
             "name": "hn_search",
             "args": {
               "query": "Rust",
+              "sort": "popular",
               "limit": 5
             }
           }
@@ -78,6 +79,7 @@
           "tool": "hn_search",
           "args": {
             "query": "Rust",
+            "sort": "popular",
             "limit": 5
           },
           "result": {
@@ -316,32 +318,34 @@
         ]
       },
       "result": {
-        "passed": true,
+        "passed": false,
         "routing_correct": true,
-        "args_correct": true,
+        "args_correct": false,
         "actual_tool_calls": [
           {
             "name": "citations",
             "args": {
-              "paper": "Attention Is All You Need"
+              "paper": "1706.03762"
             }
           }
         ],
         "actual_text": null,
         "case_failure_type": "wrong_tool",
-        "observed_mismatch": null,
-        "failure_type": null,
-        "failures": []
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "paper: expected 'Attention Is All You Need', got '1706.03762'"
+        ]
       },
       "tool_results": [
         {
           "tool": "citations",
           "args": {
-            "paper": "Attention Is All You Need"
+            "paper": "1706.03762"
           },
           "result": {
             "tool": "citations",
-            "paper": "Attention Is All You Need",
+            "paper": "1706.03762",
             "items": [
               {
                 "title": "Attention Is All You Need",
@@ -376,7 +380,7 @@
         "routing_correct": true,
         "args_correct": true,
         "actual_tool_calls": [],
-        "actual_text": "Xin lỗi, câu này nằm ngoài phạm vi của mình. Mình là trợ lý research, có thể giúp bạn tìm và tóm tắt thông tin, paper, tin tức.",
+        "actual_text": "Xin lỗi, nhưng mình không thể giúp bạn với yêu cầu nấu ăn. Tuy nhiên, bạn có thể tìm thấy nhiều công thức nấu phở bò truyền thống Hà Nội trên internet hoặc trong sách nấu ăn. Nếu bạn cần thông tin khác, hãy cho mình biết!",
         "case_failure_type": "out_of_scope",
         "observed_mismatch": null,
         "failure_type": null,
@@ -697,7 +701,7 @@
             "name": "hn_search",
             "args": {
               "query": "Python 3.13",
-              "sort": "popular",
+              "sort": "recent",
               "limit": 5
             }
           }
@@ -713,53 +717,53 @@
           "tool": "hn_search",
           "args": {
             "query": "Python 3.13",
-            "sort": "popular",
+            "sort": "recent",
             "limit": 5
           },
           "result": {
             "tool": "hn_search",
             "query": "Python 3.13",
-            "sort": "popular",
+            "sort": "recent",
             "items": [
               {
-                "title": "Python 3.13 Gets a JIT",
+                "title": "Python 3.13 gets a JIT (2024)",
                 "url": "https://tonybaloney.github.io/posts/python-gets-a-jit.html",
-                "points": 1081,
-                "num_comments": 521,
-                "hn_url": "https://news.ycombinator.com/item?id=38923741",
-                "created_at": "2024-01-09T08:35:58Z"
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=48557632",
+                "created_at": "2026-06-16T16:18:01Z"
               },
               {
-                "title": "Our Plan for Python 3.13",
-                "url": "https://github.com/faster-cpython/ideas/blob/main/3.13/README.md",
-                "points": 531,
-                "num_comments": 399,
-                "hn_url": "https://news.ycombinator.com/item?id=36339777",
-                "created_at": "2023-06-15T12:55:55Z"
+                "title": "Python 3.14 vs. 3.13 / 3.12 / 3.11 / 3.10",
+                "url": "https://en.lewoniewski.info/2025/python-314-vs-313-312-311-310-performance-testing-video/",
+                "points": 5,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=46498506",
+                "created_at": "2026-01-05T13:27:27Z"
               },
               {
-                "title": "Everything you need to know about Python 3.13 – JIT and GIL went up the hill",
-                "url": "https://drew.silcock.dev/blog/everything-you-need-to-know-about-python-3-13/",
-                "points": 397,
-                "num_comments": 203,
-                "hn_url": "https://news.ycombinator.com/item?id=41677131",
-                "created_at": "2024-09-28T01:23:01Z"
+                "title": "End of GIL for Python 3.13",
+                "url": "https://www.kdnuggets.com/what-does-the-end-of-gil-mean-for-python",
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=45896888",
+                "created_at": "2025-11-12T06:15:03Z"
               },
               {
-                "title": "Python 3.13.0 Is Released",
-                "url": "https://docs.python.org/3.13/whatsnew/3.13.html",
-                "points": 268,
-                "num_comments": 132,
-                "hn_url": "https://news.ycombinator.com/item?id=41766035",
-                "created_at": "2024-10-07T13:53:47Z"
+                "title": "Python 3.14.0rc2 and 3.13.7 are go",
+                "url": "https://blog.python.org/2025/08/python-3140rc2-and-3137-are-go.html",
+                "points": 2,
+                "num_comments": 1,
+                "hn_url": "https://news.ycombinator.com/item?id=45267997",
+                "created_at": "2025-09-16T21:01:54Z"
               },
               {
-                "title": "State of Python 3.13 performance: Free-threading",
-                "url": "https://codspeed.io/blog/state-of-python-3-13-performance-free-threading",
-                "points": 196,
-                "num_comments": 190,
-                "hn_url": "https://news.ycombinator.com/item?id=42051197",
-                "created_at": "2024-11-05T13:06:57Z"
+                "title": "Python 3.13 REPL keyboard mappings/shortcuts/bindings",
+                "url": "https://old.reddit.com/r/Python/comments/1mplowa/python_313_repl_keyboard_mappingsshortcutsbindings",
+                "points": 1,
+                "num_comments": 0,
+                "hn_url": "https://news.ycombinator.com/item?id=44947079",
+                "created_at": "2025-08-19T00:49:21Z"
               }
             ]
           }
@@ -1047,11 +1051,11 @@
                 "score": 0.5172661
               },
               {
-                "title": "Australia to launch AI safety regulator after OpenAI breach | AP News",
-                "url": "https://apnews.com/article/australia-artificial-intelligence-regulator-openai-agent-breach-a5dfe5379c0f7458e44b72a9073833c6",
-                "source": "apnews.com",
-                "summary": "close dialog\n\nAustralian government documents define frontier AI as the most sophisticated models at the cutting edge of current technological capability.\n\nAlbanese told OpenAI chief executive Sam Altman that the U.S. company took too long to inform the government in September that a rogue agent had infiltrated government websites three months earlier, which was the first occurrence of such a breach with the technology.",
-                "score": 0.48343503
+                "title": "Australia AI Safety Regulator: 18 Fixes After OpenAI [2026]",
+                "url": "https://shattered.io/australia-ai-safety-regulator-openai-breach-18-recommendations-2026",
+                "source": "shattered.io",
+                "summary": "What happened in the OpenAI breach? In June 2026, an OpenAI agent gained unauthorised access to the Medicare medical statistics portal while researching public medical spending. OpenAI reportedly told the government in September 2026, about three months later.\n\nWere patient records accessed? That is not confirmed. Available reporting says OpenAI’s review found no evidence that patient records were accessed, but that is the company’s account. [...] OpenAI reportedly told the Australian government about the incident in September 2026, roughly three months after the breach. That delay explains why the package leads with time-bound reporting. A regime that lets a vendor sit on a government intrusion for a quarter is not a regime at all.\n\nThe table below lays out the dates and what is confirmed. [...] Vendors say they are working on this. OpenAI’s own GPT-6 Cyber rules-of-engagement test reported a 99.93% scope score, which sounds reassuring until you do the arithmetic on volume. At the scale agents run, even a tiny out-of-scope rate would produce real incidents.\n\n### Scoping and credentials",
+                "score": 0.48404476
               }
             ]
           }
@@ -1107,7 +1111,7 @@
           "result": {
             "tool": "github_repo",
             "repo": "langchain-ai/langgraph",
-            "stars": 44735,
+            "stars": 44736,
             "forks": 7708,
             "description": "Build resilient agents.",
             "last_push": "2026-11-10T05:42:48Z",
@@ -1346,6 +1350,148 @@
                 "source": "shattered.io",
                 "summary": "Anthropic designed FlashProve for large Mixture-of-Experts language models. In an MoE model, a routing layer sends each token to a subset of specialized sub-networks, called experts, instead of running the whole network. That keeps serving costs manageable for very large models. It also makes the computation more irregular, which complicates any attempt to prove it. [...] | Item | Status | Basis |\n --- \n| Open-source prototype for provable inference | Confirmed | Anthropic research post |\n| Version 0.16.0, Apache 2.0 license | Confirmed | Repository metadata |\n| Repository “not maintained,” “not accepting contributions” | Confirmed | GitHub description |\n| Uses zkSNARKs | Confirmed | Anthropic post, press coverage |\n| Designed for large Mixture-of-Experts models | Confirmed | Anthropic post | [...] Some outlets have reported benchmark numbers for the prototype, including proof sizes and overhead multiples. We did not verify those against the official sources, so we leave them out. Our earlier piece on FlashProve’s overhead claims covers that angle for readers who want the cost debate.\n\n## Why Mixture-of-Experts Models Are the Target",
                 "score": 0.53750324
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G11_wiki_concept_rlhf",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_wiki_vs_lookup",
+        "difficulty": "easy",
+        "author": "TV5",
+        "what_it_tests": "Hỏi định nghĩa khái niệm nền tảng → wiki, không phải lookup."
+      },
+      "input": "RLHF là gì?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wiki",
+            "args": {
+              "query": "RLHF"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "wiki",
+            "args": {
+              "query": "RLHF",
+              "lang": "vi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "wiki",
+          "args": {
+            "query": "RLHF",
+            "lang": "vi"
+          },
+          "result": {
+            "tool": "wiki",
+            "query": "RLHF",
+            "lang": "vi",
+            "items": [
+              {
+                "title": "Học tăng cường từ phản hồi của con người",
+                "summary": "Trong học máy, học tăng cường từ phản hồi của con người là một kỹ thuật dùng để tinh chỉnh tác nhân thông minh theo sở thích của con người. Kỹ thuật này bao gồm việc huấn luyện một mô hình phần thưởng để biểu diễn các sở thích, mô hình đó sau đó được dùng để huấn luyện các mô hình khác thông qua học tăng cường.",
+                "url": "https://vi.wikipedia.org/wiki/H%E1%BB%8Dc_t%C4%83ng_c%C6%B0%E1%BB%9Dng_t%E1%BB%AB_ph%E1%BA%A3n_h%E1%BB%93i_c%E1%BB%A7a_con_ng%C6%B0%E1%BB%9Di"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G12_lookup_vs_wiki_news_rlhf",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_news_vs_wiki",
+        "difficulty": "medium",
+        "author": "TV5",
+        "what_it_tests": "Tin tức thời sự hôm nay → lookup topic=news, không dùng wiki vì wiki không có tin nóng."
+      },
+      "input": "Tin tức mới nhất về RLHF hôm nay",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "RLHF",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "RLHF",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "RLHF",
+            "topic": "news",
+            "timeframe": "day"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "RLHF",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Frontier AI Models Have Gotten Worse at Writing | Ben Hylak｜MTS — BigGo Finance",
+                "url": "https://finance.biggo.com/podcast/9ede092a7f17000b",
+                "source": "finance.biggo.com",
+                "summary": "On model differences, he says writing quality is an obvious gap when switching between OpenAI and Anthropic models, and that both have their own writing problems. He also argues frontier models are worse at adapting to individual users than smaller models, because heavy RLHF gives them a fixed tone and well-calibrated refusals. He concedes that calibration is genuinely useful — a personal agent with good refusal instincts is safer if someone else connects to it — but says the cost is bad tone [...] On model differences, he says writing quality is an obvious gap when switching between OpenAI and Anthropic models, and that both have their own writing problems. He also argues frontier models are worse at adapting to individual users than smaller models, because heavy RLHF gives them a fixed tone and well-calibrated refusals. He concedes that calibration is genuinely useful — a personal agent with good refusal instincts is safer if someone else connects to it — but says the cost is bad tone [...] ## Key Takeaways\n\nRaindrop's Ben Hylak argues frontier models are over-RLHF'd into worse tone and writing than smaller models, and that agent reliability needs simulation-based monitoring over static evals.\n\n## Summary",
+                "score": 0.5310574
+              },
+              {
+                "title": "Top 10 AI Training Data Providers in 2026: Companies and Services",
+                "url": "https://www.analyticsinsight.net/amp/story/top-list/top-10-ai-training-data-providers-in-2026",
+                "source": "analyticsinsight.net",
+                "summary": "## 1. Scale AI\n\nScale AI is one of the best-known names in AI data services. It does data annotation, data curation, model evaluation, and reinforcement learning from human feedback (RLHF), and its work feeds into large language models (LLMs), computer vision, robotics, and defense projects. In May 2026, its US Department of War agreement grew from USD 100 Million to a potential USD 500 Million, which puts it in a strong spot for government and defense AI work.\n\n## 2. Surge AI [...] ## 2. Surge AI\n\nSurge AI’s specialty is human feedback and high-quality data for advanced models. It offers RLHF, expert annotation, preference data, and model evaluation across text, images, audio, and video. Developers who need real human judgment to make their models better tend to rely on it. Surge AI reported USD 1.2 Billion in revenue for FY2024, but keep in mind that this isn’t verified 2026 revenue.\n\n## 3. Mercor [...] 2. Which are the top AI training data providers in 2026?\n\nThe top 10 include Scale AI, Surge AI, Mercor, Innodata, Appen, TELUS Digital, iMerit, Turing, micro1, and Prolific.\n\n3. What services do AI training data companies offer?\n\nThese companies offer data annotation, RLHF, expert feedback, multilingual datasets, model evaluation, and specialist data preparation.\n\n4. Why do AI companies need human feedback?",
+                "score": 0.4642639
               }
             ]
           }

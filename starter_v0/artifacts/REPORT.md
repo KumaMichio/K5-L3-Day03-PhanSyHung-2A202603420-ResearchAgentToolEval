@@ -126,7 +126,18 @@ Lấy từ `results[*].result.failures` của các run. Cột Fix ghi version đ
 
 ## B3. Team Eval Cases
 
-10 case trong `data/eval_group.json` (5 single-turn G01–G05, 5 multi-turn GM01–GM05), viết cho 2 tool mới `hn_search` và `citations`. Kết quả theo run v3 (`runs/v3_B_group_openrouter_20261110T124558509816.json`): **9/10 pass**, giống v2. Ở v4 (`runs/v4_B_group_openrouter_20261110T141530922633.json`) là 10/10, nhưng G04 chưa ổn định (xem B2).
+19 case trong `data/eval_group.json` cho cả 4 tool mới: 12 single-turn (G01–G12) và 7 multi-turn (GM01–GM07). G01–G05, GM01–GM05 viết cho `hn_search`/`citations`; G06–G10, GM06–GM07 cho `wiki`/`github_repo`; G11–G12 lấy từ nhánh `eval` của TV5.
+
+Kết quả bộ 19 case (cùng bộ case, chạy lại cho mọi version có khai báo 4 tool mới):
+
+| Version | Pass | case_accuracy | Case fail | Run file |
+|---|---:|---:|---|---|
+| v2 | 17/19 | 0.89 | G04, G06 | `runs/v2_B_group_openrouter_20261110T160230721850.json` |
+| v3 | 17/19 | 0.89 | G04, G06 | `runs/v3_B_group_openrouter_20261110T160342324651.json` |
+| v4 | 16/19 | 0.84 | G04, G06, G10 | `runs/v4_B_group_openrouter_20261110T160435901355.json` |
+| v5 | **18/19** | **0.95** | G06 | `runs/v5_B_group_openrouter_20261110T160546446167.json` |
+
+(Con số group 0.90 / 1.00 ở B1 là bộ 10 case cũ, trước khi thêm case cho `wiki`/`github_repo`; các run đó vẫn giữ trong `runs/`.)
 
 | Case ID | What It Tests | Expected Tool/Behavior | Result |
 |---|---|---|---|
@@ -140,8 +151,15 @@ Lấy từ `results[*].result.failures` của các run. Cột Fix ghi version đ
 | GM03_hn_search_limit_update | Lượt 2 "chỉ lấy đúng 3 bài" | `hn_search(query="AI agents", limit=3)` | ✅ pass |
 | GM04_clarify_then_hn_query | Lượt 1 thiếu từ khoá, lượt 2 bổ sung | `hn_search(query="Python 3.13")` | ✅ pass |
 | GM05_citations_doi_correction | User đính chính arXiv id ở lượt 2 | `citations(paper="2106.09685")` | ✅ pass |
-
-Chưa có case cho `wiki` và `github_repo` (tool của TV3).
+| G06_wiki_person_background | "Andrej Karpathy là ai?" → `wiki`, `lang` phải là `en` vì user không yêu cầu Wikipedia tiếng Việt | `wiki(query="Andrej Karpathy", lang="en")` | ❌ fail ở v2–v5: model truyền `lang="vi"` vì câu hỏi bằng tiếng Việt. Wikipedia tiếng Việt không có bài về Karpathy nên tool trả về rỗng (`en` thì có). Lỗi thật, chưa sửa |
+| G07_wiki_lang_vi | User nói rõ "Wikipedia tiếng Việt" | `wiki(lang="vi")` | ✅ pass |
+| G08_news_not_wiki | Tin tức hôm nay về OpenAI → `lookup`, không phải `wiki` | `lookup(query="OpenAI", topic="news", timeframe="day")` | ✅ pass |
+| G09_github_repo_from_url | User đưa URL GitHub → chỉ truyền `owner/name` | `github_repo(repo="langchain-ai/langgraph")` | ✅ pass |
+| G10_readme_fetch_not_github_repo | Đọc README → `fetch`, không phải `github_repo` (chỉ cho số liệu) | `fetch(url="https://github.com/openai/openai-python")` | ✅ pass ở v2, v3, v5; ❌ v4 gọi `github_repo` (pass ở lần chạy trước, nên là dao động) |
+| GM06_github_release_followup | Lượt 2 "Bản release mới nhất của **nó**" → giữ repo của lượt 1 | `github_repo(repo="vllm-project/vllm")` | ✅ pass |
+| GM07_wiki_then_news | Lượt 1 định nghĩa (wiki), lượt 2 "tin mới tuần này" → chuyển sang `lookup` | `lookup(topic="news", timeframe="week")` | ✅ pass |
+| G11_wiki_concept_rlhf (TV5) | "RLHF là gì?" → `wiki` | `wiki(query="RLHF")` | ✅ pass |
+| G12_lookup_vs_wiki_news_rlhf (TV5) | "Tin tức mới nhất về RLHF hôm nay" → `lookup`, không phải `wiki` | `lookup(query="RLHF", topic="news", timeframe="day")` | ✅ pass |
 
 ## B4. Live Chat Evidence
 

@@ -74,13 +74,14 @@ ROOT = Path(__file__).parent
 ARTIFACTS_DIR = ROOT / "artifacts"
 TRANSCRIPTS_DIR = Path(os.getenv("AGENT_TRANSCRIPTS_DIR") or ROOT / "transcripts")
 
-PROVIDERS = ["openrouter", "openai", "anthropic", "gemini", "ollama"]
+PROVIDERS = ["openrouter", "openai", "anthropic", "gemini", "ollama", "groq"]
 PROVIDER_KEY_ENV = {
     "openrouter": "OPENROUTER_API_KEY",
     "openai": "OPENAI_API_KEY",
     "anthropic": "ANTHROPIC_API_KEY",
     "gemini": "GEMINI_API_KEY",
     "ollama": None,
+    "groq": "GROQ_API_KEY",
 }
 TOOL_KEY_ENV = {
     "lookup": "TAVILY_API_KEY",
