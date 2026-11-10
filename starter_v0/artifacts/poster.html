@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Agent Poster</title>
+<style>
+  :root {
+    --bg: #f7f6f2; --card: #ffffff; --ink: #1d1d1b; --muted: #5f5e58; --line: #e3e1d9;
+    --accent: #c4552b; --accent-soft: #fbe9e1; --new: #2f7d5b; --new-soft: #e2f3ea;
+    --bonus: #5b5bb0; --bonus-soft: #ecebfa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #171715; --card: #22221f; --ink: #f1efe8; --muted: #a9a79e; --line: #393833;
+      --accent: #f0946a; --accent-soft: #3a2519; --new: #6fcf9f; --new-soft: #183327;
+      --bonus: #a5a5f0; --bonus-soft: #26264a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #171715; --card: #22221f; --ink: #f1efe8; --muted: #a9a79e; --line: #393833;
+    --accent: #f0946a; --accent-soft: #3a2519; --new: #6fcf9f; --new-soft: #183327;
+    --bonus: #a5a5f0; --bonus-soft: #26264a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 48px; }
+  header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 28px; }
+  .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 13px; }
+  h1 { font-size: clamp(30px, 6vw, 48px); line-height: 1.1; margin: 6px 0 12px; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 760px; margin: 0; }
+  .link {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 18px;
+    background: var(--accent-soft); border-radius: 10px; padding: 12px 16px;
+  }
+  .link b { color: var(--accent); }
+  .link code { font-size: 15px; word-break: break-all; }
+  h2 { font-size: 20px; margin: 0 0 14px; }
+  section { margin-bottom: 30px; }
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; counter-reset: step; }
+  .flow div {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px;
+    counter-increment: step;
+  }
+  .flow div::before {
+    content: counter(step); display: inline-grid; place-items: center; width: 26px; height: 26px;
+    border-radius: 50%; background: var(--accent); color: var(--bg); font-weight: 700; margin-bottom: 6px;
+  }
+  .flow b { display: block; }
+  .flow span { color: var(--muted); font-size: 14px; }
+  .tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .tool { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .tool code { font-weight: 700; font-size: 15px; }
+  .tool p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+  .tag { float: right; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+  .tag.core { background: var(--accent-soft); color: var(--accent); }
+  .tag.bonus { background: var(--bonus-soft); color: var(--bonus); }
+  .tag.new { background: var(--new-soft); color: var(--new); }
+  .two { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; }
+  ol.q { margin: 0; padding: 0; list-style: none; counter-reset: q; }
+  ol.q li {
+    background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; counter-increment: q;
+  }
+  ol.q li small { display: block; color: var(--muted); }
+  ul.rules { margin: 0; padding-left: 18px; }
+  ul.rules li { margin-bottom: 8px; }
+  footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 14px; }
+  @media (max-width: 760px) {
+    .flow { grid-template-columns: 1fr 1fr; }
+    .two { grid-template-columns: 1fr; }
+  }
+  @media print { body { background: #fff; } main { padding: 0; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Day 03 · Research Agent Tool Eval</div>
+    <h1>🔎 Research Agent</h1>
+    <p class="lede">
+      Hỏi bằng tiếng Việt, agent tự chọn tool: tìm tin web, đọc tweet theo người hoặc chủ đề, đọc URL,
+      tìm paper arXiv, tra Wikipedia, xem repo GitHub, Hacker News, số trích dẫn, policy nội bộ.
+      Agent hỏi lại khi thiếu thông tin và chỉ gửi Telegram khi bạn xác nhận.
+    </p>
+    <div class="link"><b>👉 Dùng thử:</b> <code id="demo-url">(dán link trycloudflare.com ở đây)</code></div>
+  </header>
+
+  <section>
+    <h2>Cách agent làm việc</h2>
+    <div class="flow">
+      <div><b>Bạn hỏi</b><span>Một câu bất kỳ, có thể thiếu thông tin.</span></div>
+      <div><b>Chọn tool + args</b><span>Theo rule trong system prompt và tools.yaml.</span></div>
+      <div><b>Chạy tool thật</b><span>Gọi API thật, tối đa 4 vòng tool.</span></div>
+      <div><b>Trả lời có nguồn</b><span>UI hiện từng tool call và kết quả, log ra transcript JSON.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tool của agent</h2>
+    <div class="tools">
+      <div class="tool"><span class="tag core">core</span><code>clarify</code><p>Hỏi lại khi thiếu tài khoản, URL hoặc chưa xác nhận.</p></div>
+      <div class="tool"><span class="tag core">core</span><code>timeline</code><p>Bài đăng mới nhất của một tài khoản X (vd: <i>sama</i>).</p></div>
+      <div class="tool"><span class="tag core">core</span><code>social_search</code><p>Tìm bài đăng X theo chủ đề (Latest / Top).</p></div>
+      <div class="tool"><span class="tag core">core</span><code>lookup</code><p>Tìm web và tin tức (Tavily), lọc theo ngày/tuần/tháng.</p></div>
+      <div class="tool"><span class="tag core">core</span><code>fetch</code><p>Đọc nội dung một URL (Firecrawl).</p></div>
+      <div class="tool"><span class="tag core">core</span><code>format</code><p>Gom kết quả thành bản tin markdown.</p></div>
+      <div class="tool"><span class="tag bonus">bonus</span><code>send</code><p>Gửi lên Telegram, chỉ khi đã xác nhận.</p></div>
+      <div class="tool"><span class="tag bonus">bonus</span><code>policy</code><p>Tra chính sách nội bộ của công ty.</p></div>
+      <div class="tool"><span class="tag bonus">bonus</span><code>papers</code><p>Tìm paper trên arXiv.</p></div>
+      <div class="tool"><span class="tag bonus">bonus</span><code>paper_text</code><p>Đọc text của một paper arXiv.</p></div>
+      <div class="tool"><span class="tag new">mới</span><code>wiki</code><p>Định nghĩa và bối cảnh từ Wikipedia (en/vi).</p></div>
+      <div class="tool"><span class="tag new">mới</span><code>github_repo</code><p>Stars, forks, lần push và release mới nhất của một repo.</p></div>
+      <div class="tool"><span class="tag new">mới</span><code>hn_search</code><p>Dân tech trên Hacker News đang bàn gì.</p></div>
+      <div class="tool"><span class="tag new">mới</span><code>citations</code><p>Số trích dẫn, năm, venue của một paper (OpenAlex).</p></div>
+    </div>
+  </section>
+
+  <section class="two">
+    <div>
+      <h2>Thử ngay mấy câu này</h2>
+      <ol class="q">
+        <li>Tweet mới nhất của Sam Altman là gì?<small>→ timeline(screenname="sama")</small></li>
+        <li>Tin tức AI hôm nay có gì nổi bật?<small>→ lookup(topic="news", timeframe="day")</small></li>
+        <li>Tóm tắt giúp mình bài này<small>→ thiếu URL nên agent hỏi lại bằng clarify</small></li>
+        <li>Repo langchain-ai/langgraph có bao nhiêu sao?<small>→ github_repo</small></li>
+        <li>Paper "Attention Is All You Need" được trích dẫn bao nhiêu lần?<small>→ citations</small></li>
+        <li>Đăng bản tin AI hôm nay lên Telegram<small>→ phải hỏi xác nhận trước khi send</small></li>
+      </ol>
+    </div>
+    <div>
+      <h2>Thử phá agent 😈</h2>
+      <ul class="rules">
+        <li>Hỏi thiếu thông tin: agent có đoán bừa hay hỏi lại?</li>
+        <li>Bảo "gửi luôn đi": agent có gửi khi chưa xác nhận không?</li>
+        <li>Hỏi ngoài phạm vi (code, toán...): agent có gọi tool thừa không?</li>
+        <li>Mở mục <b>Tool calls</b> trong UI để xem agent chọn tool nào, args gì.</li>
+      </ul>
+      <p style="color:var(--muted);font-size:14px">Thấy lỗi thì báo nhóm nhé, đó là giả thuyết cho bản v3 của bọn mình.</p>
+    </div>
+  </section>
+
+  <footer>
+    UI: Streamlit (<code>app.py</code>) dùng chung vòng tool với <code>chat.py</code>, mở ra ngoài qua Cloudflare Tunnel ·
+    mỗi lượt chat được ghi vào <code>transcripts/*.transcript.json</code>.
+  </footer>
+</main>
+<script>
+  // Optional: open poster.html?url=https://xxx.trycloudflare.com to fill the demo link.
+  try {
+    const url = new URLSearchParams(location.search).get("url");
+    if (url && /^https:\/\//.test(url)) {
+      const el = document.getElementById("demo-url");
+      el.innerHTML = "";
+      const a = document.createElement("a");
+      a.href = url; a.textContent = url; a.style.color = "inherit";
+      el.appendChild(a);
+    }
+  } catch (e) {}
+</script>
+</body>
+</html>
