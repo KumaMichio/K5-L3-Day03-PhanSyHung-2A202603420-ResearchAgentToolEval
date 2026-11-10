@@ -1,0 +1,35 @@
+{
+  "transcript_id": "v0_openrouter_20261110T121650361629",
+  "version": "v0",
+  "artifact_version": "v0+paca7fa98322f+t852f380cc2e1",
+  "prompt_hash": "aca7fa98322f3b8c1f0bdd9e67fbb72a9c299a29f74f363cb7d8907420123174",
+  "tools_hash": "852f380cc2e19d04c4567071b1c4d0b0de590a57001a5f6dc22dcdda82aa7b4a",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-oss-120b",
+  "system_prompt": "artifacts\\system_prompt.md",
+  "tools": "artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T12:16:50",
+  "updated_at": "2026-11-10T12:16:56",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T12:16:55",
+      "user": "1 chia 0 bằng mấy",
+      "status": "answered",
+      "assistant_text": "Xin lỗi, tôi không thể trả lời câu hỏi này vì nó nằm ngoài phạm vi hỗ trợ của tôi.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Xin lỗi, tôi không thể trả lời câu hỏi này vì nó nằm ngoài phạm vi hỗ trợ của tôi.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T12:16:56"
+    }
+  ]
+}

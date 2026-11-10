@@ -1,0 +1,321 @@
+{
+  "transcript_id": "v2_openrouter_20261110T120726476296",
+  "version": "v2",
+  "artifact_version": "v2+paca7fa98322f+t852f380cc2e1",
+  "prompt_hash": "aca7fa98322f3b8c1f0bdd9e67fbb72a9c299a29f74f363cb7d8907420123174",
+  "tools_hash": "852f380cc2e19d04c4567071b1c4d0b0de590a57001a5f6dc22dcdda82aa7b4a",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-oss-120b",
+  "system_prompt": "artifacts\\system_prompt.md",
+  "tools": "artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T12:07:26",
+  "updated_at": "2026-11-10T12:14:27",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T12:13:19",
+      "user": "1 chia 0 bằng mấy ?",
+      "status": "answered",
+      "assistant_text": "Xin lỗi, câu hỏi này nằm ngoài phạm vi hỗ trợ của tôi.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Xin lỗi, câu hỏi này nằm ngoài phạm vi hỗ trợ của tôi.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T12:13:20"
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-11-10T12:14:21",
+      "user": "find me paper about computer vision",
+      "status": "answered",
+      "assistant_text": "Dưới đây là 5 bài báo mới nhất (theo độ liên quan) trên arXiv liên quan tới **Computer Vision** mà tôi vừa tìm được. Mỗi mục gồm tiêu đề, tác giả, tóm tắt ngắn và liên kết tới bản PDF.\n\n| # | Tiêu đề | Tác giả | Tóm tắt ngắn | Liên kết |\n|---|--------|---------|--------------|----------|\n| 1 | **WiCV 2019: The Sixth Women In Computer Vision Workshop** | Irene Amerini, Elena Balashova, Sayna Ebrahimi, … | Báo cáo về workshop “Women in Computer Vision” (WiCV 2019) được tổ chức cùng CVPR 2019, nhằm tăng cường sự hiện diện và hợp tác của các nhà nghiên cứu nữ trong lĩnh vực CV. | <http://arxiv.org/pdf/1909.10225v1> |\n| 2 | **Spatial Monitoring and Insect Behavioural Analysis Using Computer Vision for Precision Pollination** | Malika N. Ratnayake, Don C. Amarathunga, Asaduz Zaman, … | Giới thiệu hệ thống giám sát bằng computer vision để đếm, theo dõi và phân tích hành vi của côn trùng trong nông nghiệp, giúp dự đoán hiệu quả thụ phấn và hỗ trợ nông dân quyết định quản lý. | <https://arxiv.org/pdf/2205.04675v2> |\n| 3 | **Global Adaptive Filtering Layer for Computer Vision** | Viktor Shipitsin, Iaroslav Bespalov, Dmitry V. Dylov | Đề xuất một lớp lọc tần số thích nghi tự động được chèn vào bất kỳ mạng CNN nào, cải thiện đáng kể hiệu suất trên các nhiệm vụ phân loại, phân đoạn, khử nhiễu và xóa ảnh. | <https://arxiv.org/pdf/2010.01177v4> |\n| 4 | **Vision-Language Memory for Spatial Reasoning** | Zuntao Liu, Yi Du, Taimeng Fu, … | Mô hình Vision‑Language (VLM²) kết hợp bộ nhớ làm việc và bộ nhớ dài hạn để duy trì biểu diễn 3D xuyên suốt video, đạt trạng thái mới trên các benchmark về lý luận không gian. | <https://arxiv.org/pdf/2511.20644v2> |\n| 5 | **What Does TERRA‑REF's High Resolution, Multi Sensor Plant Sensing Public Domain Data Offer the Computer Vision Community?** | David LeBauer, Max Burnette, Noah Fahlgren, … | Mô tả bộ dữ liệu TERRA‑REF (hình ảnh siêu phân giải, lidar, nhiệt, hyperspectral) và tiềm năng ứng dụng cho cộng đồng CV trong việc phát triển các mô hình nhận dạng, đo lường và phân tích thực vật. | <https://arxiv.org/pdf/2107.14072v2> |\n\n**Ghi chú:**  \n- Các bài báo trên thuộc các danh mục `cs.CV` (Computer Vision) hoặc liên quan (ví dụ: `eess.IV`).  \n- Nếu bạn muốn biết chi tiết hơn về bất kỳ bài nào (ví dụ: phương pháp, kết quả thực nghiệm), hãy cho tôi biết để tôi có thể tải và tóm tắt nội dung đầy đủ hơn.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "papers",
+              "args": {
+                "max_results": 5,
+                "query": "computer vision",
+                "sort_by": "relevance"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "papers",
+              "args": {
+                "max_results": 5,
+                "query": "computer vision",
+                "sort_by": "relevance"
+              },
+              "result": {
+                "tool": "arxiv_search",
+                "query": "computer vision",
+                "api_query": "all:computer AND all:vision",
+                "total_results": 232434,
+                "items": [
+                  {
+                    "arxiv_id": "1909.10225v1",
+                    "title": "WiCV 2019: The Sixth Women In Computer Vision Workshop",
+                    "summary": "In this paper we present the Women in Computer Vision Workshop - WiCV 2019, organized in conjunction with CVPR 2019. This event is meant for increasing the visibility and inclusion of women researchers in the computer vision field. Computer vision and machine learning have made incredible progress over the past years, but the number of female researchers is still low both in academia and in industry. WiCV is organized especially for the following reason: to raise visibility of female researchers, to increase collaborations between them, and to provide mentorship to female junior researchers in the field. In this paper, we present a report of trends over the past years, along with a summary of statistics regarding presenters, attendees, and sponsorship for the current workshop.",
+                    "authors": [
+                      "Irene Amerini",
+                      "Elena Balashova",
+                      "Sayna Ebrahimi",
+                      "Kathryn Leonard",
+                      "Arsha Nagrani",
+                      "Amaia Salvador"
+                    ],
+                    "published": "2019-09-23T08:52:33Z",
+                    "updated": "2019-09-23T08:52:33Z",
+                    "url": "http://arxiv.org/abs/1909.10225v1",
+                    "pdf_url": "https://arxiv.org/pdf/1909.10225v1",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.CV",
+                    "categories": [
+                      "cs.CV"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2205.04675v2",
+                    "title": "Spatial Monitoring and Insect Behavioural Analysis Using Computer Vision for Precision Pollination",
+                    "summary": "Insects are the most important global pollinator of crops and play a key role in maintaining the sustainability of natural ecosystems. Insect pollination monitoring and management are therefore essential for improving crop production and food security. Computer vision facilitated pollinator monitoring can intensify data collection over what is feasible using manual approaches. The new data it generates may provide a detailed understanding of insect distributions and facilitate fine-grained analysis sufficient to predict their pollination efficacy and underpin precision pollination. Current computer vision facilitated insect tracking in complex outdoor environments is restricted in spatial coverage and often constrained to a single insect species. This limits its relevance to agriculture. Therefore, in this article we introduce a novel system to facilitate markerless data capture for insect counting, insect motion tracking, behaviour analysis and pollination prediction across large agricultural areas. Our system is comprised of edge computing multi-point video recording, offline automated multispecies insect counting, tracking and behavioural analysis. We implement and test our system on a commercial berry farm to demonstrate its capabilities. Our system successfully tracked four insect varieties, at nine monitoring stations within polytunnels, obtaining an F-score above 0.8 for each variety. The system enabled calculation of key metrics to assess the relative pollination impact of each insect variety. With this technological advancement, detailed, ongoing data collection for precision pollination becomes achievable. This is important to inform growers and apiarists managing crop pollination, as it allows data-driven decisions to be made to improve food production and food security.",
+                    "authors": [
+                      "Malika Nisal Ratnayake",
+                      "Don Chathurika Amarathunga",
+                      "Asaduz Zaman",
+                      "Adrian G. Dyer",
+                      "Alan Dorin"
+                    ],
+                    "published": "2022-05-10T05:11:28Z",
+                    "updated": "2022-11-11T13:17:11Z",
+                    "url": "http://arxiv.org/abs/2205.04675v2",
+                    "pdf_url": "https://arxiv.org/pdf/2205.04675v2",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.CV",
+                    "categories": [
+                      "cs.CV",
+                      "q-bio.QM"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2010.01177v4",
+                    "title": "Global Adaptive Filtering Layer for Computer Vision",
+                    "summary": "We devise a universal adaptive neural layer to \"learn\" optimal frequency filter for each image together with the weights of the base neural network that performs some computer vision task. The proposed approach takes the source image in the spatial domain, automatically selects the best frequencies from the frequency domain, and transmits the inverse-transform image to the main neural network. Remarkably, such a simple add-on layer dramatically improves the performance of the main network regardless of its design. We observe that the light networks gain a noticeable boost in the performance metrics; whereas, the training of the heavy ones converges faster when our adaptive layer is allowed to \"learn\" alongside the main architecture. We validate the idea in four classical computer vision tasks: classification, segmentation, denoising, and erasing, considering popular natural and medical data benchmarks.",
+                    "authors": [
+                      "Viktor Shipitsin",
+                      "Iaroslav Bespalov",
+                      "Dmitry V. Dylov"
+                    ],
+                    "published": "2020-10-02T19:43:49Z",
+                    "updated": "2021-08-04T15:52:46Z",
+                    "url": "http://arxiv.org/abs/2010.01177v4",
+                    "pdf_url": "https://arxiv.org/pdf/2010.01177v4",
+                    "source": "arxiv.org",
+                    "primary_category": "eess.IV",
+                    "categories": [
+                      "eess.IV",
+                      "cs.CV"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2511.20644v2",
+                    "title": "Vision-Language Memory for Spatial Reasoning",
+                    "summary": "Spatial reasoning is a critical capability for intelligent robots, yet current vision-language models (VLMs) still fall short of human-level performance in video-based spatial reasoning. This gap mainly stems from two challenges: a semantic-geometric misalignment that prevents consistent 3D understanding, and the absence of persistent memory to retain 3D representation and understanding across frames. To address these limitations, we present VLM$^2$, a Vision-Language Model with persistent Memory for spatial reasoning with a view-consistent, 3D-aware representation purely from 2D videos. Specifically, we incorporate a dual-memory module consisting of a working memory that operates as a sliding window to focus on immediate context, and an episodic memory that consolidates and stores critical information across frames. This design enables bounded and efficient spatial reasoning under a fixed computational cost. Extensive experiments on multiple benchmarks show that VLM$^2$ achieves state-of-the-art performance among video-based models, significantly advancing the frontier of visual-spatial intelligence.",
+                    "authors": [
+                      "Zuntao Liu",
+                      "Yi Du",
+                      "Taimeng Fu",
+                      "Shaoshu Su",
+                      "Cherie Ho",
+                      "Chen Wang"
+                    ],
+                    "published": "2025-11-25T18:59:02Z",
+                    "updated": "2026-07-09T17:59:10Z",
+                    "url": "http://arxiv.org/abs/2511.20644v2",
+                    "pdf_url": "https://arxiv.org/pdf/2511.20644v2",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.CV",
+                    "categories": [
+                      "cs.CV"
+                    ]
+                  },
+                  {
+                    "arxiv_id": "2107.14072v2",
+                    "title": "What Does TERRA-REF's High Resolution, Multi Sensor Plant Sensing Public Domain Data Offer the Computer Vision Community?",
+                    "summary": "A core objective of the TERRA-REF project was to generate an open-access reference dataset for the evaluation of sensing technologies to study plants under field conditions. The TERRA-REF program deployed a suite of high-resolution, cutting edge technology sensors on a gantry system with the aim of scanning 1 hectare (10$^4$) at around 1 mm$^2$ spatial resolution multiple times per week. The system contains co-located sensors including a stereo-pair RGB camera, a thermal imager, a laser scanner to capture 3D structure, and two hyperspectral cameras covering wavelengths of 300-2500nm. This sensor data is provided alongside over sixty types of traditional plant phenotype measurements that can be used to train new machine learning models. Associated weather and environmental measurements, information about agronomic management and experimental design, and the genomic sequences of hundreds of plant varieties have been collected and are available alongside the sensor and plant phenotype data. Over the course of four years and ten growing seasons, the TERRA-REF system generated over 1 PB of sensor data and almost 45 million files. The subset that has been released to the public domain accounts for two seasons and about half of the total data volume. This provides an unprecedented opportunity for investigations far beyond the core biological scope of the project. The focus of this paper is to provide the Computer Vision and Machine Learning communities an overview of the available data and some potential applications of this one of a kind data.",
+                    "authors": [
+                      "David LeBauer",
+                      "Max Burnette",
+                      "Noah Fahlgren",
+                      "Rob Kooper",
+                      "Kenton McHenry",
+                      "Abby Stylianou"
+                    ],
+                    "published": "2021-07-29T15:01:29Z",
+                    "updated": "2021-08-18T00:28:54Z",
+                    "url": "http://arxiv.org/abs/2107.14072v2",
+                    "pdf_url": "https://arxiv.org/pdf/2107.14072v2",
+                    "source": "arxiv.org",
+                    "primary_category": "cs.CV",
+                    "categories": [
+                      "cs.CV",
+                      "cs.LG"
+                    ]
+                  }
+                ],
+                "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "Dưới đây là 5 bài báo mới nhất (theo độ liên quan) trên arXiv liên quan tới **Computer Vision** mà tôi vừa tìm được. Mỗi mục gồm tiêu đề, tác giả, tóm tắt ngắn và liên kết tới bản PDF.\n\n| # | Tiêu đề | Tác giả | Tóm tắt ngắn | Liên kết |\n|---|--------|---------|--------------|----------|\n| 1 | **WiCV 2019: The Sixth Women In Computer Vision Workshop** | Irene Amerini, Elena Balashova, Sayna Ebrahimi, … | Báo cáo về workshop “Women in Computer Vision” (WiCV 2019) được tổ chức cùng CVPR 2019, nhằm tăng cường sự hiện diện và hợp tác của các nhà nghiên cứu nữ trong lĩnh vực CV. | <http://arxiv.org/pdf/1909.10225v1> |\n| 2 | **Spatial Monitoring and Insect Behavioural Analysis Using Computer Vision for Precision Pollination** | Malika N. Ratnayake, Don C. Amarathunga, Asaduz Zaman, … | Giới thiệu hệ thống giám sát bằng computer vision để đếm, theo dõi và phân tích hành vi của côn trùng trong nông nghiệp, giúp dự đoán hiệu quả thụ phấn và hỗ trợ nông dân quyết định quản lý. | <https://arxiv.org/pdf/2205.04675v2> |\n| 3 | **Global Adaptive Filtering Layer for Computer Vision** | Viktor Shipitsin, Iaroslav Bespalov, Dmitry V. Dylov | Đề xuất một lớp lọc tần số thích nghi tự động được chèn vào bất kỳ mạng CNN nào, cải thiện đáng kể hiệu suất trên các nhiệm vụ phân loại, phân đoạn, khử nhiễu và xóa ảnh. | <https://arxiv.org/pdf/2010.01177v4> |\n| 4 | **Vision-Language Memory for Spatial Reasoning** | Zuntao Liu, Yi Du, Taimeng Fu, … | Mô hình Vision‑Language (VLM²) kết hợp bộ nhớ làm việc và bộ nhớ dài hạn để duy trì biểu diễn 3D xuyên suốt video, đạt trạng thái mới trên các benchmark về lý luận không gian. | <https://arxiv.org/pdf/2511.20644v2> |\n| 5 | **What Does TERRA‑REF's High Resolution, Multi Sensor Plant Sensing Public Domain Data Offer the Computer Vision Community?** | David LeBauer, Max Burnette, Noah Fahlgren, … | Mô tả bộ dữ liệu TERRA‑REF (hình ảnh siêu phân giải, lidar, nhiệt, hyperspectral) và tiềm năng ứng dụng cho cộng đồng CV trong việc phát triển các mô hình nhận dạng, đo lường và phân tích thực vật. | <https://arxiv.org/pdf/2107.14072v2> |\n\n**Ghi chú:**  \n- Các bài báo trên thuộc các danh mục `cs.CV` (Computer Vision) hoặc liên quan (ví dụ: `eess.IV`).  \n- Nếu bạn muốn biết chi tiết hơn về bất kỳ bài nào (ví dụ: phương pháp, kết quả thực nghiệm), hãy cho tôi biết để tôi có thể tải và tóm tắt nội dung đầy đủ hơn.",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "papers",
+          "args": {
+            "max_results": 5,
+            "query": "computer vision",
+            "sort_by": "relevance"
+          },
+          "result": {
+            "tool": "arxiv_search",
+            "query": "computer vision",
+            "api_query": "all:computer AND all:vision",
+            "total_results": 232434,
+            "items": [
+              {
+                "arxiv_id": "1909.10225v1",
+                "title": "WiCV 2019: The Sixth Women In Computer Vision Workshop",
+                "summary": "In this paper we present the Women in Computer Vision Workshop - WiCV 2019, organized in conjunction with CVPR 2019. This event is meant for increasing the visibility and inclusion of women researchers in the computer vision field. Computer vision and machine learning have made incredible progress over the past years, but the number of female researchers is still low both in academia and in industry. WiCV is organized especially for the following reason: to raise visibility of female researchers, to increase collaborations between them, and to provide mentorship to female junior researchers in the field. In this paper, we present a report of trends over the past years, along with a summary of statistics regarding presenters, attendees, and sponsorship for the current workshop.",
+                "authors": [
+                  "Irene Amerini",
+                  "Elena Balashova",
+                  "Sayna Ebrahimi",
+                  "Kathryn Leonard",
+                  "Arsha Nagrani",
+                  "Amaia Salvador"
+                ],
+                "published": "2019-09-23T08:52:33Z",
+                "updated": "2019-09-23T08:52:33Z",
+                "url": "http://arxiv.org/abs/1909.10225v1",
+                "pdf_url": "https://arxiv.org/pdf/1909.10225v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.CV",
+                "categories": [
+                  "cs.CV"
+                ]
+              },
+              {
+                "arxiv_id": "2205.04675v2",
+                "title": "Spatial Monitoring and Insect Behavioural Analysis Using Computer Vision for Precision Pollination",
+                "summary": "Insects are the most important global pollinator of crops and play a key role in maintaining the sustainability of natural ecosystems. Insect pollination monitoring and management are therefore essential for improving crop production and food security. Computer vision facilitated pollinator monitoring can intensify data collection over what is feasible using manual approaches. The new data it generates may provide a detailed understanding of insect distributions and facilitate fine-grained analysis sufficient to predict their pollination efficacy and underpin precision pollination. Current computer vision facilitated insect tracking in complex outdoor environments is restricted in spatial coverage and often constrained to a single insect species. This limits its relevance to agriculture. Therefore, in this article we introduce a novel system to facilitate markerless data capture for insect counting, insect motion tracking, behaviour analysis and pollination prediction across large agricultural areas. Our system is comprised of edge computing multi-point video recording, offline automated multispecies insect counting, tracking and behavioural analysis. We implement and test our system on a commercial berry farm to demonstrate its capabilities. Our system successfully tracked four insect varieties, at nine monitoring stations within polytunnels, obtaining an F-score above 0.8 for each variety. The system enabled calculation of key metrics to assess the relative pollination impact of each insect variety. With this technological advancement, detailed, ongoing data collection for precision pollination becomes achievable. This is important to inform growers and apiarists managing crop pollination, as it allows data-driven decisions to be made to improve food production and food security.",
+                "authors": [
+                  "Malika Nisal Ratnayake",
+                  "Don Chathurika Amarathunga",
+                  "Asaduz Zaman",
+                  "Adrian G. Dyer",
+                  "Alan Dorin"
+                ],
+                "published": "2022-05-10T05:11:28Z",
+                "updated": "2022-11-11T13:17:11Z",
+                "url": "http://arxiv.org/abs/2205.04675v2",
+                "pdf_url": "https://arxiv.org/pdf/2205.04675v2",
+                "source": "arxiv.org",
+                "primary_category": "cs.CV",
+                "categories": [
+                  "cs.CV",
+                  "q-bio.QM"
+                ]
+              },
+              {
+                "arxiv_id": "2010.01177v4",
+                "title": "Global Adaptive Filtering Layer for Computer Vision",
+                "summary": "We devise a universal adaptive neural layer to \"learn\" optimal frequency filter for each image together with the weights of the base neural network that performs some computer vision task. The proposed approach takes the source image in the spatial domain, automatically selects the best frequencies from the frequency domain, and transmits the inverse-transform image to the main neural network. Remarkably, such a simple add-on layer dramatically improves the performance of the main network regardless of its design. We observe that the light networks gain a noticeable boost in the performance metrics; whereas, the training of the heavy ones converges faster when our adaptive layer is allowed to \"learn\" alongside the main architecture. We validate the idea in four classical computer vision tasks: classification, segmentation, denoising, and erasing, considering popular natural and medical data benchmarks.",
+                "authors": [
+                  "Viktor Shipitsin",
+                  "Iaroslav Bespalov",
+                  "Dmitry V. Dylov"
+                ],
+                "published": "2020-10-02T19:43:49Z",
+                "updated": "2021-08-04T15:52:46Z",
+                "url": "http://arxiv.org/abs/2010.01177v4",
+                "pdf_url": "https://arxiv.org/pdf/2010.01177v4",
+                "source": "arxiv.org",
+                "primary_category": "eess.IV",
+                "categories": [
+                  "eess.IV",
+                  "cs.CV"
+                ]
+              },
+              {
+                "arxiv_id": "2511.20644v2",
+                "title": "Vision-Language Memory for Spatial Reasoning",
+                "summary": "Spatial reasoning is a critical capability for intelligent robots, yet current vision-language models (VLMs) still fall short of human-level performance in video-based spatial reasoning. This gap mainly stems from two challenges: a semantic-geometric misalignment that prevents consistent 3D understanding, and the absence of persistent memory to retain 3D representation and understanding across frames. To address these limitations, we present VLM$^2$, a Vision-Language Model with persistent Memory for spatial reasoning with a view-consistent, 3D-aware representation purely from 2D videos. Specifically, we incorporate a dual-memory module consisting of a working memory that operates as a sliding window to focus on immediate context, and an episodic memory that consolidates and stores critical information across frames. This design enables bounded and efficient spatial reasoning under a fixed computational cost. Extensive experiments on multiple benchmarks show that VLM$^2$ achieves state-of-the-art performance among video-based models, significantly advancing the frontier of visual-spatial intelligence.",
+                "authors": [
+                  "Zuntao Liu",
+                  "Yi Du",
+                  "Taimeng Fu",
+                  "Shaoshu Su",
+                  "Cherie Ho",
+                  "Chen Wang"
+                ],
+                "published": "2025-11-25T18:59:02Z",
+                "updated": "2026-07-09T17:59:10Z",
+                "url": "http://arxiv.org/abs/2511.20644v2",
+                "pdf_url": "https://arxiv.org/pdf/2511.20644v2",
+                "source": "arxiv.org",
+                "primary_category": "cs.CV",
+                "categories": [
+                  "cs.CV"
+                ]
+              },
+              {
+                "arxiv_id": "2107.14072v2",
+                "title": "What Does TERRA-REF's High Resolution, Multi Sensor Plant Sensing Public Domain Data Offer the Computer Vision Community?",
+                "summary": "A core objective of the TERRA-REF project was to generate an open-access reference dataset for the evaluation of sensing technologies to study plants under field conditions. The TERRA-REF program deployed a suite of high-resolution, cutting edge technology sensors on a gantry system with the aim of scanning 1 hectare (10$^4$) at around 1 mm$^2$ spatial resolution multiple times per week. The system contains co-located sensors including a stereo-pair RGB camera, a thermal imager, a laser scanner to capture 3D structure, and two hyperspectral cameras covering wavelengths of 300-2500nm. This sensor data is provided alongside over sixty types of traditional plant phenotype measurements that can be used to train new machine learning models. Associated weather and environmental measurements, information about agronomic management and experimental design, and the genomic sequences of hundreds of plant varieties have been collected and are available alongside the sensor and plant phenotype data. Over the course of four years and ten growing seasons, the TERRA-REF system generated over 1 PB of sensor data and almost 45 million files. The subset that has been released to the public domain accounts for two seasons and about half of the total data volume. This provides an unprecedented opportunity for investigations far beyond the core biological scope of the project. The focus of this paper is to provide the Computer Vision and Machine Learning communities an overview of the available data and some potential applications of this one of a kind data.",
+                "authors": [
+                  "David LeBauer",
+                  "Max Burnette",
+                  "Noah Fahlgren",
+                  "Rob Kooper",
+                  "Kenton McHenry",
+                  "Abby Stylianou"
+                ],
+                "published": "2021-07-29T15:01:29Z",
+                "updated": "2021-08-18T00:28:54Z",
+                "url": "http://arxiv.org/abs/2107.14072v2",
+                "pdf_url": "https://arxiv.org/pdf/2107.14072v2",
+                "source": "arxiv.org",
+                "primary_category": "cs.CV",
+                "categories": [
+                  "cs.CV",
+                  "cs.LG"
+                ]
+              }
+            ],
+            "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T12:14:27"
+    }
+  ]
+}
