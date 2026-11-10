@@ -1,4 +1,4 @@
-# So sánh các version v0 → v3
+# So sánh các version v0 → v4
 
 Model: `openai/gpt-4o-mini` qua OpenRouter. Mỗi version chỉ đổi **một file** và kiểm **một giả thuyết**, nên mức tăng điểm gắn được với đúng thay đổi đó.
 Nguồn số liệu: `artifacts/version_log.csv` và các file trong `runs/`.
@@ -11,11 +11,14 @@ Nguồn số liệu: `artifacts/version_log.csv` và các file trong `runs/`.
 | v1 | `system_prompt.md` | `v1+p9352321c7609+t5b22a2476d41` | Lỗi hành vi do prompt starter cố tình ra lệnh xấu | **0.85** (17/20) | — |
 | v2 | `tools.yaml` | `v2+p9352321c7609+t151898fd033d` | Lỗi chọn tool và args do mô tả tool sơ sài | **0.90** (18/20) | 0.90 (9/10) |
 | v3 | `system_prompt.md` | `v3+pe20a0025fb65+t151898fd033d` | Model làm theo suy đoán thay vì câu chữ của user | **1.00** (20/20) | 0.90 (9/10) |
+| v4 | `system_prompt.md` | `v4+pfc14bea47ff2+t151898fd033d` | Câu ngoài phạm vi bị xử lý không nhất quán vì rule chỉ liệt kê ví dụ | 1.00 (20/20) | 1.00 (10/10)* |
 
 Hash trong artifact version chứng minh mỗi bước chỉ đổi một file:
 - v0 → v1: `p…` đổi, `t…` giữ nguyên.
 - v1 → v2: `t…` đổi, `p…` giữ nguyên.
-- v2 → v3: `p…` đổi, `t…` giữ nguyên.
+- v2 → v3 và v3 → v4: `p…` đổi, `t…` giữ nguyên.
+
+\* G04 pass ở v4 nhưng chạy lại 3 lần chỉ 2/3, nên chưa ổn định.
 
 ### Chi tiết metric (bộ base, 20 case)
 
@@ -25,22 +28,23 @@ Hash trong artifact version chứng minh mỗi bước chỉ đổi một file:
 | v1 | 0.85 | 0.95 | 0.85 | 0.83 |
 | v2 | 0.90 | 0.95 | 0.90 | 0.83 |
 | v3 | 1.00 | 1.00 | 1.00 | 1.00 |
+| v4 | 1.00 | 1.00 | 1.00 | 1.00 |
 
 ## 2. Case fail qua từng version
 
 ✗ = fail, ✓ = pass.
 
-| Case | Kiểm tra gì | v0 | v1 | v2 | v3 |
-|---|---|:-:|:-:|:-:|:-:|
-| R03 | Tin AI hôm nay: `query="AI"`, `topic=news` | ✗ | ✓ | ✓ | ✓ |
-| R08 | Câu toán, ngoài phạm vi: không gọi tool | ✗ | ✓ | ✓ | ✓ |
-| R10 | Thiếu handle: phải `clarify` | ✗ | ✓ | ✓ | ✓ |
-| R11 | Thiếu URL: phải `clarify` | ✗ | ✓ | ✓ | ✓ |
-| R12 | Đăng Telegram: `clarify` `yes_no` trước | ✗ | ✗ | ✗ | ✓ |
-| R13 | Web và tweet song song, `topic=news` | ✗ | ✗ | ✓ | ✓ |
-| R14 | Viết code, ngoài phạm vi: không gọi tool | ✗ | ✓ | ✓ | ✓ |
-| M06 | "Bỏ Twitter" thì chuyển sang `lookup` news | ✓ | ✗ | ✗ | ✓ |
-| G04 (group) | Hỏi số trích dẫn theo tên paper | — | — | ✗ | ✗ |
+| Case | Kiểm tra gì | v0 | v1 | v2 | v3 | v4 |
+|---|---|:-:|:-:|:-:|:-:|:-:|
+| R03 | Tin AI hôm nay: `query="AI"`, `topic=news` | ✗ | ✓ | ✓ | ✓ | ✓ |
+| R08 | Câu toán, ngoài phạm vi: không gọi tool | ✗ | ✓ | ✓ | ✓ | ✓ |
+| R10 | Thiếu handle: phải `clarify` | ✗ | ✓ | ✓ | ✓ | ✓ |
+| R11 | Thiếu URL: phải `clarify` | ✗ | ✓ | ✓ | ✓ | ✓ |
+| R12 | Đăng Telegram: `clarify` `yes_no` trước | ✗ | ✗ | ✗ | ✓ | ✓ |
+| R13 | Web và tweet song song, `topic=news` | ✗ | ✗ | ✓ | ✓ | ✓ |
+| R14 | Viết code, ngoài phạm vi: không gọi tool | ✗ | ✓ | ✓ | ✓ | ✓ |
+| M06 | "Bỏ Twitter" thì chuyển sang `lookup` news | ✓ | ✗ | ✗ | ✓ | ✓ |
+| G04 (group) | Hỏi số trích dẫn theo tên paper | — | — | ✗ | ✗ | ✓* |
 
 ---
 
@@ -140,6 +144,26 @@ Hash trong artifact version chứng minh mỗi bước chỉ đổi một file:
 - Group giữ **0.90**. G04 vẫn truyền `1706.03762`.
 
 **Vì sao G04 vẫn fail, và có phải bug không:** tool `citations` nhận cả arXiv id lẫn tiêu đề. Kết quả trả về là đúng paper ("Attention Is All You Need", 135k trích dẫn). Như vậy hành vi của model **đúng về mặt chức năng**; chỉ là grader so khớp chuỗi chính xác với tiêu đề. Đây là ví dụ cho câu hỏi B6 "failure nào cần review tay". Hướng xử lý tiếp nếu muốn: cho eval case chấp nhận cả hai giá trị, hoặc thử một v4 chỉ sửa param `paper` trong `tools.yaml`.
+
+---
+
+## 6b. v4: viết lại mục "Stay in scope"
+
+**Giả thuyết:** eval v3 đạt 1.00 nhưng chat thật xử lý câu ngoài phạm vi không nhất quán, vì rule v3 chỉ liệt kê ví dụ ("such as math, code…") nên model tự đoán ranh giới. Định nghĩa rõ phạm vi và cho một câu trả lời mẫu sẽ làm agent từ chối nhất quán, đúng `behavior: refuse` của R08, R14, G05.
+
+**Thay đổi:** chỉ mục "Stay in scope" trong `system_prompt.md` (diff đầy đủ: `SYSTEM_PROMPT_DIFF.md` mục 6).
+
+**Bằng chứng** (chat thật, `tool_choice` auto):
+
+| Câu hỏi | v3 | v4 |
+|---|---|---|
+| 1 chia 0 bằng mấy? | Từ chối nhưng vẫn trả lời "không xác định" | Từ chối |
+| giải phương trình x^2 = -1 | Trả lời | Từ chối |
+| Viết hàm Python đảo ngược chuỗi | Trả lời (đưa code) | Từ chối |
+| 2 + 2, nguyên hàm x^2, nấu phở | Từ chối | Từ chối, cùng một câu |
+| Bạn là gì và làm được những gì? | Trả lời | Trả lời |
+
+**Kết quả:** base giữ 1.00, group 0.90 → 1.00. Eval không đo được thay đổi chính, vì grader chỉ chấm "không gọi tool". G04 pass là phụ, và chạy lại 3 lần chỉ đạt 2/3.
 
 ---
 

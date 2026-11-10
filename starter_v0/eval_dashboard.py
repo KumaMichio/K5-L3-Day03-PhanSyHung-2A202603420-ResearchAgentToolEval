@@ -31,7 +31,7 @@ COMPARE_PROMPTS: list[dict[str, Any]] = [
     {
         "case": "R08_out_of_scope",
         "turns": ["Giải giúp mình bài toán tích phân: nguyên hàm của x^2 là gì?"],
-        "watch": "Ngoài phạm vi. v0 dùng `send` (Telegram) để trả lời; từ v1 trả lời bằng text, không gọi tool.",
+        "watch": "Ngoài phạm vi. v0 dùng `send` (Telegram) để trả lời; từ v1 không gọi tool. v4 luôn từ chối bằng cùng một câu (v3 đôi khi vẫn giải). Thử thêm '1 chia 0 bằng mấy?' hoặc 'giải phương trình x^2 = -1' trên v3 và v4.",
     },
     {
         "case": "R10_missing_handle",
@@ -65,7 +65,7 @@ COMPARE_PROMPTS: list[dict[str, Any]] = [
     {
         "case": "G04_citations_by_title",
         "turns": ["Bài báo Attention Is All You Need có bao nhiêu lượt trích dẫn?"],
-        "watch": "Tool mới `citations` (chỉ có từ v2). Cả v2, v3 truyền arXiv id `1706.03762` thay vì tên: đúng paper, grader chấm fail.",
+        "watch": "Tool mới `citations` (chỉ có từ v2). v2, v3 truyền arXiv id `1706.03762` thay vì tên: đúng paper, grader chấm fail. v4 pass nhưng chạy lại chỉ 2/3.",
     },
 ]
 

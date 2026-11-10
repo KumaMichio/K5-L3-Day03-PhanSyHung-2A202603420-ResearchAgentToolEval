@@ -1,6 +1,6 @@
-# System prompt: v0 → v3
+# System prompt: v0 → v4
 
-Bản đầy đủ của từng version nằm trong `artifacts/versions/<v>/system_prompt.md`. Bản đang dùng, `artifacts/system_prompt.md`, giống hệt v3.
+Bản đầy đủ của từng version nằm trong `artifacts/versions/<v>/system_prompt.md`. Bản đang dùng, `artifacts/system_prompt.md`, giống hệt **v4** (mục 6). Mục 5 là bản v3 đầy đủ.
 
 | Version | Prompt đổi? | Prompt hash | Tóm tắt |
 |---|---|---|---|
@@ -8,6 +8,7 @@ Bản đầy đủ của từng version nằm trong `artifacts/versions/<v>/syst
 | v1 | **Viết lại toàn bộ** | `9352321c7609` | 4 mục rule: hỏi lại, xác nhận, phạm vi, đủ tool |
 | v2 | Không đổi (v2 chỉ sửa `tools.yaml`) | `9352321c7609` | giống v1 |
 | v3 | **Thêm 1 mục** | `e20a0025fb65` | rule "làm theo câu chữ của user" |
+| v4 | **Viết lại mục Stay in scope** | `fc14bea47ff2` | từ chối mọi câu ngoài phạm vi bằng một câu mẫu |
 
 ---
 
@@ -139,3 +140,35 @@ You are a careful research assistant. You help the user find, read and summarize
 - When the user drops a source ("bỏ Twitter", "không cần web nữa"), stop calling that source's tools for the rest of the conversation. Only call the source they switched to.
 - Pass names, titles, handles and IDs into arguments as the user wrote them. Do not replace a paper title with an arXiv ID (or the reverse) from your own memory.
 ```
+
+---
+
+## 6. v3 → v4: viết lại mục "Stay in scope"
+
+Bản đang dùng (`artifacts/system_prompt.md`) giờ là **v4**, prompt hash `fc14bea47ff2`. Chỉ mục "Stay in scope" thay đổi:
+
+```diff
+  ## Stay in scope
+- - You are a research assistant. For requests outside research, such as solving math problems, writing code, recipes or personal tasks, do not call any tool. Reply briefly in text that this is outside what you can help with.
++ - You only help with research: finding, reading and summarizing information from sources.
++ - Everything else is out of scope, including ANY math question (even 2+2 or 1/0), solving equations, writing or fixing code, recipes, advice and personal tasks. Treat them all the same way, no matter how easy.
++ - For an out-of-scope request: do not call any tool and do not answer it, not even partly. Reply with one short sentence in the user's language, for example: "Xin lỗi, câu này nằm ngoài phạm vi của mình. Mình là trợ lý research, có thể giúp bạn tìm và tóm tắt thông tin, paper, tin tức." Then stop.
+  - For questions about yourself or your capabilities, answer in text without calling a tool.
+```
+
+**Vì sao:** rule v3 chỉ liệt kê ví dụ ("such as …"), nên model tự đoán câu nào là ngoài phạm vi.
+
+| Câu hỏi | v3 | v4 |
+|---|---|---|
+| 1 chia 0 bằng mấy? | Từ chối nhưng vẫn trả lời "không xác định" | Từ chối |
+| giải phương trình x^2 = -1 | Trả lời | Từ chối |
+| Viết hàm Python đảo ngược chuỗi | Trả lời (đưa code) | Từ chối |
+| 2 + 2, nguyên hàm x^2, nấu phở | Từ chối (mỗi câu một kiểu) | Từ chối, cùng một câu |
+| Bạn là gì và làm được những gì? | Trả lời | Trả lời |
+
+Ba thay đổi làm rule chặt hơn:
+1. **Định nghĩa phạm vi** ("only research: finding, reading, summarizing") thay vì liệt kê ví dụ.
+2. **Nói rõ trường hợp biên:** "ANY math question (even 2+2 or 1/0)", "no matter how easy", "not even partly".
+3. **Một câu trả lời mẫu cố định**, kèm định hướng về việc research, đúng ý "từ chối/định hướng" của R08 trong eval.
+
+**Kết quả:** base giữ 1.00. Group 0.90 → 1.00, nhưng G04 chỉ pass 2/3 lần khi chạy lại nên chưa ổn định. Eval không phân biệt được v3 và v4 vì grader chỉ chấm "không gọi tool"; bằng chứng của v4 là bảng chat thật ở trên.
