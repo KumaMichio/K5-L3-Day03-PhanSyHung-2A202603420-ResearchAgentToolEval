@@ -1,1 +1,2 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_before,metric_after,run_file
+v0,Team,baseline,v0+pf0c107a9d7a1+t91e05ebb6285,f0c107a9d7a1,91e05ebb6285,initial_run,starter_code_baseline,0.0,0.5263,runs/v0_B_base_gemini_20261110T104854137099.json

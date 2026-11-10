@@ -57,3 +57,4 @@ def citations(paper: str = "") -> dict[str, Any]:
         return {"tool": "citations", "paper": paper_clean, "items": items}
     except Exception as exc:
         return err("citations", exc)
+

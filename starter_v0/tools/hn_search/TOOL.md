@@ -15,3 +15,4 @@ requires_confirmation: false
 Tìm thảo luận, bài đăng và ý kiến cộng đồng trên Hacker News (HN).
 Dùng khi người dùng hỏi dân dev, cộng đồng tech, hoặc Hacker News đang bàn gì về một chủ đề.
 Không dùng khi hỏi về bài đăng trên Twitter/X (dùng social_search).
+

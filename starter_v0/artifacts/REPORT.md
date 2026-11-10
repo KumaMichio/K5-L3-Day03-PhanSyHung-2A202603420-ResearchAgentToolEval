@@ -16,15 +16,13 @@
 
 ## A1. Agent này làm được gì
 
-> 1–2 câu mô tả agent dùng để làm gì (cho team khác hiểu nhanh).
-
-Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc URL, tổng hợp thành digest, và gửi lên Telegram khi được xác nhận."
+Research Agent đa nguồn: Tra cứu thông tin trên Web, Twitter/X, cộng đồng công nghệ Hacker News, paper khoa học arXiv, số trích dẫn OpenAlex và policy nội bộ; tự động hỏi lại khi thiếu thông tin (clarify), tổng hợp digest và gửi Telegram khi có xác nhận.
 
 **Link dùng thử (deploy):**
 
 > Dán link public để team khác mở thử ngay. Cách deploy nhanh bằng Cloudflare Tunnel xem README. Nếu deploy Vercel/Streamlit Cloud thì dán link đó.
 >
-> URL: 
+> URL: http://localhost:8501 (hoặc link Cloudflare Tunnel trycloudflare.com)
 
 ## A2. Tool agent có
 
@@ -47,11 +45,11 @@ Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc 
 
 ## A3. Câu hỏi mẫu để thử
 
-> 3–5 câu hỏi/yêu cầu mẫu để team khác tự thử agent ngay.
-
-1.
-2.
-3.
+1. "Dân Hacker News đang bàn gì về Rust?" *(Thử tool mới `hn_search`)*
+2. "Paper 2106.09685 được cite bao nhiêu lần và đăng ở đâu?" *(Thử tool mới `citations`)*
+3. "Tweet mới nhất của Sam Altman là gì?" *(Thử map tên sang handle `sama` và lấy timeline)*
+4. "Tin tức AI hôm nay có gì nổi bật trên web?" *(Thử `lookup` với topic=news, timeframe=day)*
+5. "Tóm tắt bài viết này giúp mình: https://openai.com/research/overview" *(Thử `fetch` URL)*
 
 ---
 
