@@ -7,8 +7,8 @@
 ## Team
 
 - Team:
-- Members: Phan Sỹ Hùng (TV1 – Lead, prompt & eval), TV2 – UI, TV3 – tool `wiki`/`github_repo`, TV4 – tool `hn_search`/`citations`, TV5 – eval cases
-- Provider/model: OpenRouter, `openai/gpt-4o-mini` (mọi run eval v0–v3 và transcript v3)
+- Members: Phan Sỹ Hùng - Lead, prompt & eval, Nguyễn Tiến Hưng – UI, Dương Thị Huệ – tool `wiki`/`github_repo`, Dương Minh Tân – tool `hn_search`/`citations`, Dương Ngọc Tuyên – eval cases
+- Provider/model: OpenRouter, `openai/gpt-4o-mini` (mọi run eval v0–v5 và transcript v3)
 
 ---
 
@@ -22,7 +22,7 @@ Research Agent đa nguồn: Tra cứu thông tin trên Web, Twitter/X, cộng đ
 
 > Dán link public để team khác mở thử ngay. Cách deploy nhanh bằng Cloudflare Tunnel xem README. Nếu deploy Vercel/Streamlit Cloud thì dán link đó.
 >
-> URL: http://localhost:8501 (hoặc link Cloudflare Tunnel trycloudflare.com)
+> URL: https://cindy-locked-remark-witness.trycloudflare.com/ (hoặc link Cloudflare Tunnel trycloudflare.com)
 
 ## A2. Tool agent có
 
