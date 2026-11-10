@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -42,6 +43,15 @@ from eval_dashboard import (
     version_paths,
 )
 import ui_parts as ui
+
+# chat.run_model_tool_loop prints a log line with an emoji for every tool call.
+# On Windows the server console is often cp1252, so that print raised
+# UnicodeEncodeError and the whole turn failed as a "provider error".
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
 
 CURRENT = "current (artifacts/)"
 ROOT = Path(__file__).parent
@@ -227,7 +237,7 @@ def render_turn(turn: dict[str, Any], *, is_last: bool) -> None:
                         st.markdown("_Không gọi tool, trả lời trực tiếp._")
                     for event in rnd.get("tool_results") or []:
                         render_tool_event(event)
-        else:
+        elif turn.get("status") != "provider_error":
             st.caption("Trả lời trực tiếp, không gọi tool")
 
         status = turn.get("status")

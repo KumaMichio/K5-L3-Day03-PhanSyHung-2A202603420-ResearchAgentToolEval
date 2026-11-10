@@ -115,6 +115,26 @@ def test_clarify_pauses_and_choice_button_sends_answer(ui, tmp_path: Path) -> No
     assert statuses == ["waiting_for_user", "answered"]
 
 
+def test_tool_call_works_on_cp1252_console(ui, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Regression: on a Windows cp1252 console the emoji log line printed by
+    chat.run_model_tool_loop raised UnicodeEncodeError and the turn failed."""
+    import io
+    import sys
+
+    console = io.TextIOWrapper(io.BytesIO(), encoding="cp1252")
+    monkeypatch.setattr(sys, "stdout", console)
+    items = [{"title": "Tin A", "url": "https://example.com/a", "source": "example.com"}]
+    app, _ = ui([
+        ModelResponse(tool_calls=[ToolCall("format", {"items": items, "template": "bullets"})]),
+        ModelResponse(text="Xong."),
+    ])
+    app.chat_input[0].set_value("Tin AI hôm nay?").run()
+
+    assert not app.exception
+    assert not app.error, [e.value for e in app.error]
+    assert transcript(tmp_path)["turns"][0]["status"] == "answered"
+
+
 def test_provider_error_is_shown_not_raised(ui, tmp_path: Path) -> None:
     app, _ = ui([RuntimeError("Missing API key env var: OPENROUTER_API_KEY")])
 
