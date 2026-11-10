@@ -17,11 +17,13 @@ class OpenAIProvider:
         base_url: str | None = None,
         default_model: str = "gpt-4o-mini",
         api_key_default: str | None = None,
+        max_tokens: int | None = None,
     ) -> None:
         self.api_key_env = api_key_env
         self.api_key_default = api_key_default
         self.base_url = base_url
         self.default_model = default_model
+        self.max_tokens = max_tokens
 
     def complete(
         self,
@@ -51,6 +53,8 @@ class OpenAIProvider:
             kwargs["tools"] = tools
         if tool_choice is not None:
             kwargs["tool_choice"] = tool_choice
+        if self.max_tokens:
+            kwargs["max_tokens"] = self.max_tokens
 
         resp = client.chat.completions.create(**kwargs)
         msg = resp.choices[0].message

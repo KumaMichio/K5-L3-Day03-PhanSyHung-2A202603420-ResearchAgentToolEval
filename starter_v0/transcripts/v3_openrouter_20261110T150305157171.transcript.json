@@ -1,0 +1,29 @@
+{
+  "transcript_id": "v3_openrouter_20261110T150305157171",
+  "version": "v3",
+  "artifact_version": "v3+pe20a0025fb65+t151898fd033d",
+  "prompt_hash": "e20a0025fb658811898fc4c90ae75dc3e8448835ba8ef430f925c3e64972cfe4",
+  "tools_hash": "151898fd033dcbc74e134b66276838c7f17b4ae76cf21491655a6d16a735f7f9",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "artifacts\\versions\\v3\\system_prompt.md",
+  "tools": "artifacts\\versions\\v3\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T15:03:05",
+  "updated_at": "2026-11-10T15:04:30",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T15:04:26",
+      "user": "Tin tức AI hôm nay có gì nổi bật?",
+      "status": "provider_error",
+      "assistant_text": null,
+      "rounds": [],
+      "tool_events": [],
+      "error": "UnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f527' in position 0: character maps to <undefined>",
+      "ended_at": "2026-11-10T15:04:30"
+    }
+  ]
+}

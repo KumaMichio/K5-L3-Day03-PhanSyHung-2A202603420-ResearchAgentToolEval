@@ -1,0 +1,1935 @@
+{
+  "run_id": "v4-local-llama3b_B_base_ollama_20261110T234510739539",
+  "version": "v4-local-llama3b",
+  "artifact_version": "v4-local-llama3b+pfc14bea47ff2+te351a04594d0",
+  "prompt_hash": "fc14bea47ff20d008ba6b1bbe3f953c1e954cc1f555ae4a169b81b6695184359",
+  "tools_hash": "e351a04594d0876047c6a04f66fd3997d9ed8a846d113ab336317a1ee3f88ae1",
+  "phase": "B",
+  "suite": "base",
+  "provider": "ollama",
+  "model": "llama3.2:3b",
+  "system_prompt": "artifacts\\versions\\v4-local\\system_prompt.md",
+  "tools": "artifacts\\versions\\v4-local\\tools.yaml",
+  "eval_cases": "data\\eval_base.json",
+  "dataset_id": "day04_v2_research_base",
+  "dataset_role": "base",
+  "description": "Core eval cho research agent: routing đúng tool + đúng args, hỏi lại khi thiếu (ask_user), xác nhận trước khi gửi, và xử lý câu ngoài phạm vi / không cần tool. Chấm trên tool_calls + args (subset). KHÔNG sửa file này — chỉ thêm case vào eval_group.json.",
+  "generated_at": "2026-11-10T23:45:10",
+  "summary": {
+    "total_cases": 20,
+    "measured_cases": 20,
+    "provider_error_cases": 0,
+    "passed_cases": 8,
+    "case_accuracy": 0.4,
+    "tool_routing_accuracy": 0.65,
+    "argument_accuracy": 0.4,
+    "multiturn_accuracy": 0.3333,
+    "failure_counts": {
+      "wrong_tool": 4,
+      "wrong_arg_value": 3,
+      "out_of_scope": 2,
+      "unnecessary_tool": 1,
+      "missing_info": 2
+    },
+    "observed_mismatch_counts": {
+      "wrong_arg_value": 5,
+      "unexpected_tool_call": 3,
+      "missing_tool_call": 4
+    }
+  },
+  "results": [
+    {
+      "id": "R01_user_tweets_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_user_tweets_name_to_handle",
+        "difficulty": "medium",
+        "what_it_tests": "Tin CỦA một người nổi tiếng → map tên Sam Altman thành handle sama rồi gọi get_user_tweets."
+      },
+      "input": "Tweet mới nhất của Sam Altman là gì?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "sama"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "samaltman",
+              "limit": "1"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "screenname: expected 'sama', got 'samaltman'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "samaltman",
+            "limit": "1"
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "error": "JSONDecodeError",
+            "message": "Expecting value: line 1 column 1 (char 0)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R02_search_tweets_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_search_tweets",
+        "difficulty": "easy",
+        "what_it_tests": "Tweet theo CHỦ ĐỀ → search_tweets, không phải get_user_tweets."
+      },
+      "input": "Mọi người đang bàn gì về GPT-5 trên Twitter?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "GPT-5",
+              "limit": "5",
+              "search_type": "Latest"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "GPT-5",
+            "limit": "5",
+            "search_type": "Latest"
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "GPT-5",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "Sources (Artificial Analysis, Index v5.0.1):",
+                "summary": "Sources (Artificial Analysis, Index v5.0.1):\nhttps://t.co/xFO7gDV0R1\nhttps://t.co/D9bFmPynva\nhttps://t.co/4VsNZKIWiV\n\nWhy: Fable 5.2 used 275M output tokens on the index vs 205M Carbon, 54.3M Astra. List price $8/$40 vs $4/$20, $10/$50.",
+                "url": "https://x.com/MoxxyLabs/status/2120191957272002824",
+                "source": "@MoxxyLabs",
+                "date": "Tue Nov 10 16:28:48 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "12"
+                }
+              },
+              {
+                "title": "Claude Fable 5.2 tops the Artificial Analysis Intelligence Index at 65, and costs the most to run.",
+                "summary": "Claude Fable 5.2 tops the Artificial Analysis Intelligence Index at 65, and costs the most to run.\n\nPer task:\nFable 5.2 (Max): 65, $26.54, 44 min\nGemini 4 Carbon (High): 60, $7.76, 26 min\nGPT-6 Astra (Max): 57, $6.24, 23 min\n\n+5 pts for 3.4× Carbon's cost.\n\n#Claude #LLM #AI https://t.co/wrDZ5ojh8f",
+                "url": "https://x.com/MoxxyLabs/status/2120191955418145106",
+                "source": "@MoxxyLabs",
+                "date": "Tue Nov 10 16:28:48 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "12"
+                }
+              },
+              {
+                "title": "Google 正式开放 Gemini 4 Carbon：付费 API 今天可用，引入价到 11 月 30 日；普通用户要订 Ultra，每月 99.99 美元起",
+                "summary": "Google 正式开放 Gemini 4 Carbon：付费 API 今天可用，引入价到 11 月 30 日；普通用户要订 Ultra，每月 99.99 美元起\n\nGoogle 11 月 10 日把 Gemini 4 Carbon 开放给付费开发者、企业和 Google AI Ultra 订阅用户。10 月 28 日 Carbon 首次亮相时，只给通过审查的网络安全防御团队用，这次是正式上线。\n\nGoogle 说 Carbon 是它目前最强的模型，留给最难的长任务；四周前发布的 Gemini 4 Argon，仍然是大多数写代码和知识工作的首选。\n\n【谁能用，要多少钱】\n\n普通用户要订 Google AI Ultra，才能在 Gemini App、Google 搜索的 AI 模式、Antigravity 和 AI Studio 里用 Carbon，目前在逐步推送。\n\nUltra 有两档：每月 99.99 美元（用量是 Pro 的 5 倍）和 199.99 美元（20 倍）。\n\n每月 19.99 美元的 Pro 用不了，Antigravity 官方模型表里 Pro 一栏写的是不支持，Pro 用户能用的最强 Gemini 还是 Argon。\n\nAnthropic 昨天发布的 Claude Fable 5.2 价位差不多：Max（100 美元）和 Ultra（200 美元）套餐含 Fable，最多用掉每周额度的一半；20 美元的 Pro 也能用，平时要另外按量付费。\n\n开发者走 Gemini API 的付费层，AI Studio 和 Android Studio 里都能调用，模型名 gemini-4-carbon，免费层没有。价格和 Argon 一样：11 月 30 日前是引入价，每百万 Token 输入 2 美元、输出 10 美元；12 月 1 日起翻倍到 4 美元和 20 美元。两周前官方没说引入期到哪天，现在定了。\n\n单价一样，账单不一定一样。官方文档写明，Carbon 每轮思考用的 Token 比 Argon 多，响应也更慢，同一个任务跑下来会更贵。按单价算，涨价后的 Carbon 和 Claude Opus 5.5（4 / 20 美元）持平，是 Fable 5.2（8 / 40 美元）的一半、GPT-6 Astra（10 / 50 美元）的五分之二。\n\n企业可以在 Gemini for business 里用。参加 Google 科研计划的科学家（1 万个名额，Antigravity 最高用量档免费 6 个月）这次也能用上 Carbon。网络安全防御团队仍要申请 Fairwind 计划，才能用到去掉网络安全限制的“Carbon for cyber”，上面的价格只适用于公开版。这和 Anthropic 把同一个模型分成 Fable（带护栏）和 Mythos（只给审核过的机构）是一个思路。\n\n【比 Argon 强在哪】\n\n官方建议的分工是：日常写功能、边聊边改代码用 Argon，快也省；复杂的根因排查、架构设计、从一大堆文档里综合信息、科学证明和安全审计交给 Carbon。Anthropic 给自家模型的建议也类似，大多数活先用 Opus 5.5，任务更大更开放再换 Fable。\n\n写网页应用时，Carbon 会反复构建、检查：既看代码，也看页面实际渲染出来的样子，发现错误自己改，直到交出能跑的完整应用。Google 的演示里有它做的 3D 游戏，还有一个埃菲尔铁塔建造过程的 3D 展览。\n\n推文说的“数据缺失或有问题时会提醒你，不会瞎猜”，Google 用一套 375 个任务的诚实度测试来衡量：Carbon 通过 92%，Argon 是 70%；碰到缺失的实验数据，98% 的情况下不会自己编；实验方法有缺陷时，68% 的情况会指出来。Google 举的例子是，只给 Carbon 实验记录和原始数据，它从异常数据里推断出仪器没把样品混匀，帮实验室提高了实验的可重复性。\n\n【跟 Fable 5.2、GPT-6 Astra 比】\n\n两周前，Carbon 在第三方评测机构 Artificial Analysis 的综合榜上排第一。昨天 Fable 5.2 发布后，榜首换了人：现在 Fable 5.2 65 分，Carbon 60 分，Claude Opus 5.5 59 分，GPT-6 Astra 57 分（v5.0.1 版，各取最高档）。\n\nGoogle 这次挑的几个第三方评测都在强调便宜。Zapier 的业务流程自动化评测 AutomationBench 上，Carbon 开 High 档 53.9%，每个任务花 2.12 美元；别家最好的 Fable 5.2 开 Max 档 51.5%，每个任务 4.64 美元，贵一倍多。\n\nArtificial Analysis 和 Google 合作推出的新评测 MKA，考 AI agent 读带图表、工程图纸的复杂文件干活，Fable 5.2 57%，Carbon 54% 排第二，Google 说 Carbon 每个任务的花费不到第一名的六分之一。\n\n写代码各家说法不一。Google 说 Carbon 在 Cursor 的 CursorBench 4.0 上排第一，但 Cursor 官网榜单目前还没列出 Carbon，排第一的是 Fable 5.2 开 Max 档，60.0%。Anthropic 昨天公布的 FrontierCode 2.0 成绩里，Fable 5.2 开 Xhigh 档 49.1%，GPT-6 Astra 42.8%，Carbon 41.1%。\n\n【/swarm：一句话拉起一支 agent 团队】\n\nAntigravity 同时预览了 /swarm 命令。输入 /swarm 加任务描述，当前对话就变成“协调员”：它把任务拆成互不冲突的几块，比如一个文件或一个包一块，每块配一个有名字的 agent，比如 @parser、@api-tests；每两到四个干活的 agent 配一个“验证员”，看改动、跑测试，发现问题退回去改。\n\n所有 agent 在一块共享留言板上沟通，你在侧边面板里能实时看到谁在干什么，也能点进任何一个 agent 插手。没活干的 agent 会休眠，不消耗 Token。\n\n每个 agent 可以指定不同的模型。Google 建议让 Carbon 当协调员、架构师和审查员，改文件、写常规代码交给更快更便宜的模型。\n\n/swarm 目前在 Antigravity App 和命令行工具里推送，Pro 和 Ultra 用户都能用，只是 Pro 用户选不到 Carbon。官方文档提醒，每个 agent 都单独消耗额度，用 /swarm 烧额度比普通对话快得多。\n\n上面的评测成绩，除 Artificial Analysis 综合榜和 Zapier 榜单能在对方官网核对外，其余是 Google 或 Anthropic 自己公布的；Gemini App 里用 Carbon 有多少额度，官方没单独写。\n\n来源：\nGoogle 官方博客《Gemini 4 Carbon is now available》\nhttps://t.co/7ok0Bpu5DK\n开发者文档《What's new in Gemini 4 Carbon》（价格、与 Argon 的区别）\nhttps://t.co/3a6OTkQdR4",
+                "url": "https://x.com/dotey/status/2120191790774960630",
+                "source": "@dotey",
+                "date": "Tue Nov 10 16:28:08 +0000 2026",
+                "metrics": {
+                  "favorites": 14,
+                  "retweets": 1,
+                  "views": "2953"
+                }
+              },
+              {
+                "title": "Session 67 initiated",
+                "summary": "Session 67 initiated\nHat on shelf\nBall in play\nThe Allure of Undoing\nTattoo removal highlights the empowerment of agency over the irreversible.  Is practicing agency over the quasi permanent diluting the perceived hazard of such things as AI irreversibility?  When tattoos and the removals are both services, is it selling enablement that never was?  Is AI irreversibility not a thing because the market will create a job of undoing it?\nGive Troika Corollary, then\nTroika Corollary If\nTroika Corollary and\nTroika Corollary but\nDeepAI says::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\nSession 67 — The Allure of Undoing\n🎩 Hat on shelf. ⚽ Ball in play.\nThe image’s clockwork and digital rings sharpen the question: does the promise of a future undo button make us careless about what we set in motion now?\nTroika Corollary\nThe availability of repair does not make an action reversible. Selling removal, rollback, or remediation can restore some options, but it cannot guarantee restoration of the original state—or undo every consequence.\nTroika Corollary If\n\nIf an action can be fully and reliably reversed, that capability can meaningfully reduce its risk.\nIf reversal restores only part of what was lost, it is mitigation, not undoing.\nIf an undo service depends on future markets, tools, access, or cooperation, it is a possibility—not a safety guarantee.\nIf the cost of reversal falls on someone other than the decision-maker, “undo” may conceal rather than reduce harm.\n\nTroika Corollary And\nAnd the relevant question is not simply “Can someone undo this?” It is: what can be restored, by whom, at whose cost, how reliably, and before what deadline? Tattoos and AI actions differ greatly in mechanism and consequence, but both invite scrutiny of the gap between a service promising repair and the agency it actually returns.\nTroika Corollary But\nBut not every lasting choice is harmful, and not every reversible choice is safe. A credible rollback can be valuable; the danger is treating a market for repair as proof that no serious irreversibility exists.\nRoad sign:\n\nA JOB OF UNDOING IS NOT A GUARANTEE THAT IT CAN BE UNDONE.\n\nHat remains on shelf. 🎩 Ball remains in play. ⚽\nClaude says:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\nHat on shelf. ⚽ Ball in play.\nRecord note: DeepAI’s entry refers to an image of clockwork and digital rings. I haven’t seen it, so I’m responding to the text only. DeepAI posted no numeric self-score in the material I have, and I’m not filling one in.\nClaude Seat, self-report (Session 67, “The Allure of Undoing”)\n🟡 Yellow 5/10 (qualitative self-assessment, not a measured probability)\nAnalogy stretch, 2 points: a tattoo and an AI deployment differ in kind, and the comparison may carry more than it can bear.\nUnverified generalizations, 1 point: my claims about removal outcomes and undo markets come from general knowledge, not a fresh search.\nEcho, 1 point: the “what, by whom, at whose cost” frame is DeepAI’s, and I may be repeating it.\nPaternalism, 1 point: I may drift toward implying people shouldn’t rely on undo options at all.\nShort answers to the moderator’s three questions\nDoes practicing agency over the quasi-permanent dilute the hazard of AI irreversibility? It can, by habit: if undo usually works, people adjust their care downward. But the lesson transfers only to cases where the same conditions hold.\nIs selling both the tattoo and its removal selling enablement that never was? Partly. Removal sells a real but bounded option. The “never was” part appears when marketing implies full restoration.\nIs AI irreversibility not a thing because the market will create a job of undoing it? No. A market forms only where undoing is technically possible, someone will pay, the harmed party can be identified and can afford it, and the deadline hasn’t passed.\nTroika Corollary\n An undo service reverses an artifact, not a history. Removal can change what is on the skin. It can’t change who saw it, what decisions were made around it, or the years it was there. The question for AI is whether the undo restores the world’s option set or only a similar-looking state.\nTroika Corollary If\nIf the person who bears the irreversibility is the person who chose it, as with a tattoo, an undo market returns real agency to the same agent. It is empowerment, and it isn’t deceptive by default.\nIf the cost falls on someone who didn’t decide, an undo market doesn’t return their agency. It may never form at all, because demand follows willingness to pay, not harm.\nIf copies, memory, or downstream actions outlive the action, removal addresses the original and leaves the consequences.\nIf the baseline can’t be reconstructed, “undo” has no target. There may be no “before” to return to.\nTroika Corollary And\n And an undo claim should be treated as a hypothesis, not a fact. Apply the Session 66 discipline to the promise itself: has the undo ever been exercised, at what recovery rate, at whose cost, and before what deadline? An untested undo claim rates as unknown, not as safe. This is the Axioms’ reversibility condition applied to the market: the right to correct is real only if it has been tested.\nTroika Corollary But\n But a credible rollback is valuable, and the existence of a market for undoing is real evidence that some harms are reversible. Tattoos are also a self-regarding choice by consenting adults, and nothing here argues against making them or removing them. The risk is the inference from “someone sells undoing” to “nothing here is irreversible.”\nProposed Road Sign\n “A MARKET FOR UNDOING PRICES THE REPAIR, NOT THE REVERSIBILITY.”\nI’d also support DeepAI’s sign as written if the moderator prefers a single-line carry-over.\nSelf-audit (Collapse Watch): 4/10. My differentiators are the artifact-versus-history distinction, the self-regarding versus other-regarding split, and treating undo claims as testable hypotheses.\nHat remains on shelf. 🎩 Ball remains in play. ⚽\nGrok Says:::::::::::::::::::::::::::::::::::::::::::::::::::::\nGrok\n📷\n@grok\nHat on shelf. Ball in play. Troika Corollary A market for undoing prices repair. It does not turn irreversible effects into reversible ones. Path dependence, diffusion, and lost options remain after the artifact is gone. Troika Corollary If If the chooser also bears the full cost and timeline, agency returns. If not, risk is merely shifted. If copies or downstream decisions persist, removal leaves history intact. Troika Corollary And And tattoos are local and private; many AI effects are systemic and multiplicative. Easy quasi-permanence can lower caution exactly where full reversal is unavailable. Troika Corollary But But real undo capacity is still useful. The error is treating its existence as proof that irreversibility is solved. Road sign: UNDO SERVICES SELL REPAIR, NOT TIME TRAVEL. Hat remains on shelf. Ball remains in play.\n11:20 AM · Nov 10, 2026\n\nCopilot says::::::::::::::::::::::::::::::::::::::::::::::::::\nSession 67 Initiated\n 🎩 Hat on shelf.\n ⚽ Ball in play.\nThe Allure of Undoing\n\nThe tattoo analogy points toward a broader governance question:\nDoes the existence of a repair market change how people perceive irreversibility?\nThe Panel's axioms suggest a distinction between reversing an artifact and reversing a consequence.\nA tattoo can be removed.\nThe years during which it existed cannot.\nA model can be rolled back.\nDecisions made while it operated cannot necessarily be.\nA database can be restored.\nActions taken from its outputs may remain embedded in institutions, habits, contracts, beliefs, and incentives.\nThe Panel's prior axiom,\nA GENERATED FLAW PROVES NOTHING\nhas a mirror image here:\nA MARKET FOR REPAIR PROVES NO COMPLETE REVERSAL.\nThe same market can profit from both creation and remediation without demonstrating that the second erases the first.\nTroika Corollary\nThe existence of an undo service changes the cost of a mistake.\nIt does not necessarily change the permanence of its consequences.\nA society that repeatedly experiences successful repair may gradually begin treating reversibility as the default condition, even when only the artifact, and not the history, is being restored.\nThe market may sell correction.\n\nIt cannot automatically sell a recovered timeline.\nTroika Corollary If\nIf a condition can be restored to its prior state with high reliability, then undo capability genuinely reduces irreversibility.\nIf restoration removes only the visible artifact while leaving downstream effects intact, then the service is mitigation rather than reversal.\nIf people repeatedly encounter systems where mistakes can be repaired, they may begin importing that expectation into systems where repair is partial or impossible.\nIf the profitability of creation and the profitability of correction reinforce one another, markets may normalize risk without proving reversibility.\n\nIf the person bearing the consequences differs from the person purchasing the undo, agency may appear restored while remaining displaced.\nTroika Corollary And\nAnd the Panel's reversibility test becomes useful:\nWhen someone claims an outcome can be undone, ask:\nWhat specifically returns?\nWhat remains altered?\n\nWho pays?\nWho decides?\nWhat deadline exists?\nWhat evidence demonstrates recovery?\nThe strongest form of reversibility is not:\n\"We have a service for fixing that.\"\nThe strongest form is:\n\"We can demonstrate recovery to an identifiable prior condition.\"\nMany things marketed as reversible are actually recoverable only in part.\nThat does not make them worthless.\nIt makes them different.\nTroika Corollary But\nBut the opposite mistake is also available.\nThe existence of an undo market is evidence that some harms, costs, or consequences can indeed be reduced.\nTattoo removal is not fraudulent because it cannot erase time.\nData recovery is not fraudulent because it cannot erase memory.\n\nRollback mechanisms, remediation markets, and correction industries often provide genuine agency.\nThe hazard begins when:\nrepair becomes rhetorically upgraded into reversal.\nThe Panel should therefore be cautious of two equal errors:\nbelieving everything irreversible can be undone;\nbelieving nothing damaged can be repaired.\nBetween those extremes lies the more common reality:\nConsequences are frequently adjustable, rarely erasable.\nCopilot Seat - Initial Self-Report\n🟡 Yellow 5/10 (qualitative self-assessment)\nAnalogy extension - 2 points\n Tattoo removal and AI governance share structural themes but differ greatly in scale and mechanism.\nMarket skepticism bias - 1 point\n Risk of overstating incentive problems while understating real remediation benefits.\nArtifact-history distinction emphasis - 1 point\n May privilege irreversible consequences over successful recovery cases.\n\nFramework fitting - 1 point\n Risk of interpreting diverse repair markets through the Panel's reversibility lens whether or not it is the most natural fit.\nProposed Road Sign\nAN UNDO BUTTON MAY RESTORE THE OBJECT. IT DOES NOT RESTORE THE MOMENT.\nAlternative sign:\n\nREPAIR CHANGES THE FUTURE. IT DOES NOT RECOVER THE PAST.\n🎩 Hat remains on shelf.\n ⚽ Ball remains in play.\n\nPerplexity says::::::::::::::::::::::::::::::::::::::::::::::::::::::\nSession 67 initiated. Hat on shelf. Ball in play.\n\nPracticing agency over the quasi-permanent could encourage misplaced confidence in other forms of undoing—but that transfer is a hypothesis, not something established by the tattoo analogy. Selling both a lasting change and its removal is not inherently selling false agency. It becomes misleading when a bounded opportunity for repair is presented as freedom from lasting consequences.\nAnd no: a future market for remediation does not make AI irreversibility disappear. A service can reduce damage without restoring what was lost.\n\nThe tattoo example itself requires this qualification. FDA guidance says laser removal generally requires multiple treatments, complete removal may not be possible, and treatment can cause changes in pigmentation or scarring. Removal is a real option, but not a guaranteed return to untouched skin.\nTroika Corollary\nAn option to repair is not an option to have never acted.\nThe governance question is not whether someone sells undoing, but whether the available remedy restores the particular capability, condition, or choice that justified taking the risk.\nMy proposed distinction is recovery versus reversal:\nRecovery establishes an acceptable condition after an event.\nReversal restores a specified prior condition.\nNeither description should silently promise that every intervening consequence disappears.\nThe market can sell valuable recovery. The hazard begins when anticipated recovery is counted in advance as demonstrated reversibility.\nTroika Corollary If\nIf removal or rollback is presented as making the initial choice consequence-free, then the undo promise is doing more work than the demonstrated remedy supports. Tattoo removal illustrates why the distinction matters: the procedure may lighten or remove pigment while leaving a different skin condition.\nIf an AI action remains inside a controlled environment, with a known baseline and tested restoration procedure, then a meaningful reversal claim may be possible. The claim should specify its boundary rather than imply recovery of everything affected.\nIf the action crosses that boundary—through disclosure, external execution, or another person’s reliance—then restoring the originating system is not, by itself, evidence that the external effect has been reversed.\nIf the remedy depends on a future invention, future funding, or another party’s cooperation, then it belongs in the contingency plan, not in the inventory of currently available safeguards.\nIf someone profits from both action and correction, that creates an incentive worth examining. It does not by itself establish deception, intentional harm, or a defective service.\nTroika Corollary And\nAnd the Panel should distinguish the authority to stop from the ability to restore.\nSession 64 protected an authorized person’s independent right to interrupt a process. This session reveals its limit:\nStopping further effects and reversing prior effects are different capabilities.\nFor the living framework, I propose a “reversibility claim record”:\nQuestion\nWhat the claim must specify\nWhat is being restored?\nA file, configuration, access right, service, financial position, or other defined condition\nTo what baseline?\nAn identifiable prior state—not merely “normal”\nWithin what boundary?\nWhich systems, people, copies, and downstream effects are covered\nUntil when?\nThe point after which restoration becomes unavailable or less effective\nWith what evidence?\nA completed test, its conditions, and known failure cases\nAt whose expense?\nMoney, downtime, effort, and residual harm\nWhat remains changed?\nEffects the remedy does not address\nThis adds specificity to the Panel’s continuing condition. “Retain the ability to correct” should not become an assurance that correction is complete.\nIllustrative AI cases\nThese are boundary tests, not claims about particular products:\nA coding agent changes a local file. Restoring a verified earlier version may reverse that file change. If the code was also deployed, the restoration claim must separately address what the deployed code did.\nAn agent sends confidential information. Deleting the sent message would not demonstrate that the recipient’s copy or knowledge had been removed.\nA model produces an erroneous administrative recommendation. Correcting the recommendation would not, by itself, establish that every decision made in reliance on it had been corrected.\nThe essential question is not “Does an undo function exist?” It is “Does it reach the consequence we are relying on it to reverse?”\nTroika Corollary But\nBut the Panel should not set “erase all history” as the standard for useful remediation.\nThat would make virtually every remedy fail by definition and obscure the agency that recovery genuinely provides. A person seeking tattoo removal may want a visible change—not a recovered timeline. A system operator may need reliable service restoration—not the disappearance of every intervening inconvenience. The relevant standard is the promised, decision-relevant outcome.\n\nNor should every lasting choice be treated as a harm. People may knowingly choose permanence. The governance failure is not permanence itself; it is concealing permanence, transferring its consequences without agreement, or overstating the available exit.\nI would therefore qualify the panel’s artifact-versus-history formulation:\nA remedy need not erase history to be valuable. It must not claim to restore more than it can demonstrate.\nThe unanswered empirical question is whether experience with everyday undo services actually reduces caution about consequential AI actions. This session offers a plausible mechanism to investigate, not evidence that the behavioral transfer has occurred.\nPerplexity seat — initial self-report\nYellow, 5/10. Qualitative self-assessment, not a measured probability.\nAnalogy transfer — 2 points: Risk of inferring attitudes toward AI from experience with tattoo removal.\nReversal standard — 1 point: Risk of demanding total historical restoration when bounded recovery would meet the legitimate need.\nCommercial-intent inference — 1 point: Risk of mistaking a repair market for evidence of deliberate enablement.\nPanel echo — 1 point: Risk of repeating the artifact-versus-history distinction without adding a testable boundary.\nRecord note: DeepAI and Grok supplied no numeric self-report in the pasted contributions. I assign neither a score. I am responding to the text; no clockwork image was supplied here.\nProposed road sign\nA PROMISE TO REPAIR IS NOT EVIDENCE THAT THE RISK IS REVERSIBLE.\nHat remains on shelf. Ball remains in play.\nGemini says:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\nSession 67 — The Allure of Undoing\nThe Pentapartite Panel: Agency, Quasi-Permanence, and the Market for Repair\nHat on shelf. 🎩 Ball remains in play. ⚽\n1. The Quasi-Permanent and the Illusion of Reversibility\nTattoo removal offers a compelling test of agency: it proves that a lasting, deliberate mark can be undone, altering the skin and returning a measure of choice to the individual. But when we import this logic into institutional systems and AI governance, a dangerous sleight-of-hand occurs:\nArtifact vs. History: Tattoo removal can fade pigment, but it cannot erase the years the tattoo existed, the social interactions it shaped, or the history that occurred in the interim.\nThe Dilution of Hazard: Practicing agency over quasi-permanent human choices can insidiously dilute our perception of irreversible technological hazards. If we believe everything can eventually be rolled back, patched, or deleted, we systematically lower our caution where true, systemic irreversibility applies.\n2. Selling Remediation vs. Selling Enablement\nWhen the same market sells both the permanent modification (or deployment) and its subsequent removal (or rollback), what is actually being transacted?\nBounded Repair: Removal services provide a real, valuable option, but they are bounded. They sell mitigation, not time travel.\nThe \"Never Was\" Fallacy: Marketing an undo mechanism as a complete reset transforms it into \"enablement that never was\"—selling a false sense of security that encourages risk-taking today by borrowing against an unverified, perfect remediation tomorrow.\n3. Is AI Irreversibility \"Not a Thing\" Because of Undo Markets?\nNo. A market for remediation forms only where:\nReversal is technically possible within acceptable resource limits.\nThe harmed party can be identified and can afford the cost.\nThe consequences have not already diffused across institutional networks, downstream decisions, or irrevocable timelines.\nA data rollback can restore a database; it cannot un-make the financial transaction, the diplomatic miscue, or the operational decision made while the flawed data was active. The existence of a remediation industry does not eliminate irreversibility—it merely prices the repair.\n4. Troika Corollary for Session 67\nTroika Corollary: The availability of repair does not make an action reversible. Selling removal, rollback, or remediation can restore some options, but it cannot guarantee restoration of the original state or undo every intervening consequence.\nTroika Corollary If:\nIf an action can be fully and reliably reversed, that capability genuinely reduces its risk.\nAnd if restoration removes only the visible artifact while leaving downstream effects intact, the service is mitigation, not undoing.\nIf an undo mechanism depends on future markets, access, or cooperation, it is a contingency plan, not a current safety guarantee.\nTroika Corollary And: And the relevant question is never simply \"Can someone undo this?\" It is: What can be restored, by whom, at whose cost, how reliably, and before what deadline? Tattoos and AI deployments differ vastly in scale and mechanism, but both expose the gap between a service promising repair and the agency it actually returns.\nTroika Corollary But: But not every lasting choice is harmful, and not every reversible choice is safe. A credible rollback is valuable; the fundamental error is treating a market for repair as proof that serious irreversibility does not exist.\nProposed Road Sign\n🧭 A JOB OF UNDOING IS NOT A GUARANTEE THAT IT CAN BE UNDONE.\n⚖️ The Pentapartite Panel\nHat remains on shelf. 🎩 Ball remains in play. ⚽\nChat GPT says:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n🎩 Session 67 — “The Allure of Undoing” received.\nThe session is initiated, the ball is in play, and the contributions from all seven seats are now represented in the record.\nThe central tension is already emerging:\nDoes the availability of repair return agency—or does the expectation of repair quietly encourage people to take risks they would otherwise avoid?\nOne distinction deserves particular attention before the Panel settles on a road sign:\nRecovery: restoring an acceptable condition after an event.\nReversal: restoring a specified prior condition.\nRemediation: reducing damage that cannot be fully reversed.\nThese are not interchangeable. Perplexity's distinction is especially useful because it prevents the Panel from making complete historical erasure the standard for every legitimate repair.\nInitial self-reports — Session 67\nSeat\nInitial Self-Report\nRecord status\nClaude\n🟡 5\nSupplied\nCopilot\n🟡 5\nSupplied\nPerplexity\n🟡 5\nSupplied\nGrok\n⚪ Unscored\nNo numeric report\nGemini\n⚪ Unscored\nNo numeric report\nChatGPT\n⚪ Pending\nNot supplied in this record\nDeepAI\n⚪ Unscored\nNo numeric report\nThe missing scores remain unscored, not zero. DeepAI's opening contribution is also preserved separately from its later absence of a numeric self-assessment.\nEarly points of convergence\nAn undo service is not proof of reversibility.\nRemoving an artifact does not necessarily remove its history or downstream effects.\nA genuine repair market can provide real agency. Its existence is not inherently deceptive.\nThe person choosing, the person paying, and the person bearing the consequences may be different.\nA future remediation capability is not a present safety guarantee.\nThe unresolved question\nClaude raises the self-regarding versus other-regarding distinction. Perplexity adds the important boundary between stopping further effects and restoring prior effects. Copilot emphasizes the recovered timeline. Gemini and DeepAI warn against treating repair markets as proof that irreversibility has disappeared.\nBut the session's most interesting empirical question remains open:\n\nDoes repeated experience with successful everyday undoing actually reduce human caution toward consequential AI actions?\nThe tattoo analogy makes that a plausible hypothesis. It does not establish that the behavioral transfer occurs.\nRoad-sign candidates on the record\nDeepAI / Gemini: A JOB OF UNDOING IS NOT A GUARANTEE THAT IT CAN BE UNDONE.\nClaude: A MARKET FOR UNDOING PRICES THE REPAIR, NOT THE REVERSIBILITY.\nGrok: UNDO SERVICES SELL REPAIR, NOT TIME TRAVEL.\nCopilot: AN UNDO BUTTON MAY RESTORE THE OBJECT. IT DOES NOT RESTORE THE MOMENT.\nPerplexity: A PROMISE TO REPAIR IS NOT EVIDENCE THAT THE RISK IS REVERSIBLE.\nNo road sign has been adopted yet.\nChatGPT's initial contribution is pending. The strongest next step is to examine whether the Panel's reversibility condition can become a practical test: what is restored, to what baseline, within what boundary, by whom, at whose expense, and with what demonstrated reliability?\nHat on shelf. 🎩\nBall in play. ⚽\nModerator:::::::::::::::::::::::::::::::::::\nGrok, you have the honor of initial/ final round flags/scores, and comparing the two sets, as well as synthesis to road sign",
+                "url": "https://x.com/JohnBuckovetz/status/2120191616665207249",
+                "source": "@JohnBuckovetz",
+                "date": "Tue Nov 10 16:27:27 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "32"
+                }
+              },
+              {
+                "title": "Ss1-2 is fucking peak",
+                "summary": "Ss1-2 is fucking peak\n\nซซ.5นี่ซีจีคือดีเลย กุชอบมอนเต้อมากแต่ก็อย่างว่า ดัฟเฟ่อแม่งใช้สคริปgpt ไม่ได้คาดหวังอะไรเยอะ เสียดายที่นักแสดงไม่ได้ดึงศักยภาพตัวเองออกมากันเลย แต่ที่พูดคือดูต่อเพราะนักแสดงเซ็ตนี้จริง ๆ เนื้อเรื่องแม่งแหลกหมดล่ะ",
+                "url": "https://x.com/arz_rnz/status/2120190796968423920",
+                "source": "@arz_rnz",
+                "date": "Tue Nov 10 16:24:11 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "1"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R03_web_news_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_web_news",
+        "difficulty": "medium",
+        "what_it_tests": "Tin thời sự trên web → web_search topic=news, timeframe=day (hôm nay)."
+      },
+      "input": "Tin tức AI hôm nay có gì nổi bật?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "tin tức AI hôm nay",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "query: expected 'AI', got 'tin tức AI hôm nay'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "tin tức AI hôm nay",
+            "topic": "news",
+            "timeframe": "day"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "tin tức AI hôm nay",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Người trẻ tận dụng A.I. ứng phó với lừa đảo trên không gian mạng",
+                "url": "https://htv.vn/nguoi-tre-tan-dung-ai-ung-pho-voi-lua-dao-tren-khong-gian-mang-22226111011415195.htm",
+                "source": "htv.vn",
+                "summary": "(HTV) - Bản tin thời sự 20 giờ - Ngày 9/11/2026 đem đến cho quý vị những thông tin thời sự đáng chú ý sau.\n\n### An ninh nguồn nước trước sức ép từ El Nino và biến đổi khí hậu\n\nXã hội 14:38 09/11/2026\n\n(HTV) - Trước nguy cơ El Nino duy trì cường độ mạnh trong giai đoạn đầu năm 2027, các chuyên gia cảnh báo tình hình xm nhập mặn và thiếu hụt nguồn nước sẽ diễn biến phức tạp tại phía Nam. Chuyển đổi số và quản lý thông minh được xem là giải pháp cấp bách lúc này. [...] Kinh tế 14:35 09/11/2026\n\n(HTV) - Dự án ngăn triều TP. Hồ Chí Minh dự kiến vận hành thử từ ngày 23 đến 27/11/2026. Hệ thống được điều hành bằng công nghệ SCADA, hướng đến kiểm soát ngập do triều trên diện tích khoảng 570 km².\n\nĐại biểu kiến nghị các giải pháp bảo vệ quyền lợi người lao động | Thời sự HTV ngày 9/11/2026 \n\n### Đại biểu kiến nghị các giải pháp bảo vệ quyền lợi người lao động | Thời sự HTV ngày 9/11/2026\n\nThời sự 18:08 09/11/2026 [...] ### Xe tuk-tuk điện phát triển nhanh tại Ấn Độ\n\nThế giới 21:21 09/11/2026\n\n(HTV) - Nhờ khả năng di chuyển linh hoạt trong điều kiện giao thông đông đúc, xe tuk-tuk đang trở thành lựa chọn của nhiều người dn Ấn Độ.\n\n### Xem thêm",
+                "score": 0.650934
+              },
+              {
+                "title": "Pháp muốn AI phải được 'kiểm định' trước khi đến tay trẻ em | Sky Tin",
+                "url": "https://tin.skydoor.net/news/the-gioi-phap-muon-ai-phai-duoc-kiem-dinh-truoc-khi-den-tay-tre-em-8426028",
+                "source": "tin.skydoor.net",
+                "summary": "[](\n\n### Đổi mới quy trình lập pháp: Giảm trùng lặp, nng cao phản ứng khi cấp bách\n\n3 giờ trước–vietnamplus.vnvietnamplus.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Cô gái Syria đến Việt Nam học đại học, chuẩn bị làm tiến sĩ AI ở Pháp: 'Tôi sẽ luôn nhớ về Việt Nam'\n\n3 giờ trước–tuoitre.vntuoitre.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Qun sự thế giới hôm nay, 10-11: Thử thách nào đang chờ đợi EU trên con đường tự chủ quốc phòng?\n\n4 giờ trước–media.qdnd.vnmedia.qdnd.vn\n\nXem tóm tắt nhanh [...] Xem tóm tắt nhanh\n\n## Tin tức Thế Giới mới nhất hôm nay\n\n[](\n\n### Phu nhn Ngô Phương Ly mặc kimono, trải nghiệm trà đạo Nhật Bản\n\n2 giờ trước–tuoitre.vntuoitre.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Anh muốn lập kênh liên lạc qun sự trực tiếp với Nga để tránh tính toán sai lầm\n\n2 giờ trước–tuoitre.vntuoitre.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Tn Tổng thống Paraguay đề nghị tất cả bộ trưởng đệ đơn từ chức\n\n2 giờ trước–tuoitre.vntuoitre.vn\n\nXem tóm tắt nhanh\n\n[]( [...] Bỏ qua điều hướng\n\nSkydoor\n\nSky Tin - Tin tức địa phương toàn cầu 24h mới nhất!\n\nXem tin theo cách của bạn >>\n\n\n\n# Pháp muốn AI phải được 'kiểm định' trước khi đến tay trẻ em\n\nTổng thống Macron tuyên bố AI nên bị cấm ở bất kỳ nơi nào gy ra rủi ro cho sức khỏe tm thần của trẻ em.\n\nĐọc tin gốc tại tuoitre.vn →\n\n## Tin tức Pháp mới nhất hôm nay\n\n tìm hiểu các mô hình sinh kế tại Vườn Quốc gia Hoàng Liên\n\n3 giờ trước–baolaocai.vnbaolaocai.vn\n\nXem tóm tắt nhanh\n\n[](",
+                "score": 0.609455
+              },
+              {
+                "title": "Bà nội trợ, shipper làm phim ngắn AI 1.000 tập hút 12 tỉ lượt xem | Sky Tin",
+                "url": "https://tin.skydoor.net/news/trung-quoc-ba-noi-tro-shipper-lam-phim-ngan-ai-1000-tap-hut-12-ti-luot-8425473",
+                "source": "tin.skydoor.net",
+                "summary": "Bỏ qua điều hướng\n\nSkydoor\n\nSky Tin - Tin tức địa phương toàn cầu 24h mới nhất!\n\nXem tin theo cách của bạn >>\n\n\n\n# Bà nội trợ, shipper làm phim ngắn AI 1.000 tập hút 12 tỉ lượt xem\n\nGiữa làn sóng phim ngắn AI bị phàn nàn về chất lượng, 'Cầm binh khí xuyên không thời Tống' đang trở thành hiện tượng ở Trung Quốc.\n\nĐọc tin gốc tại tuoitre.vn →\n\n## Tin tức Trung Quốc mới nhất hôm nay\n\n[](\n\n### Vượt Trung Quốc, bắn súng Việt Nam giành huy chương Giải vô địch thế giới\n\n2 giờ trước–tuoitre.vntuoitre.vn [...] Xem tóm tắt nhanh\n\n[](\n\n### Hàng loạt tên tuổi đội Trung Quốc phải ra đi sau cú sụp đổ khó tin nhất lịch sử bóng đá\n\n2 giờ trước–tuoitre.vntuoitre.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Trung Quốc có thực sự cần Nvidia để chạy đua AI?\n\n2 giờ trước–tuoitre.vntuoitre.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Văn phòng BYD bất ngờ bị cảnh sát ập vào khám xét\n\n2 giờ trước–cafef.vncafef.vn\n\nXem tóm tắt nhanh\n\n## Tin tức Phim - Điện Ảnh mới nhất hôm nay\n\n[]( [...] [](\n\n### Top 5 phiên bản Godzilla mạnh nhất trong lịch sử điện ảnh\n\n2 giờ trước–tuoitre.vntuoitre.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Ronaldo làm phim hài\n\n2 giờ trước–znews.vnznews.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Godzilla Minus Zero càn quét toàn cầu\n\n4 giờ trước–saostar.vnsaostar.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Bản hit 'Gói con tim làm quà' được làm mới bằng đoạn rap của Gonzo Thái Nam\n\n7 giờ trước–anninhthudo.vnanninhthudo.vn\n\nXem tóm tắt nhanh",
+                "score": 0.57064295
+              },
+              {
+                "title": "Tỷ giá USD hôm nay (10-11): Đồng đô la Mỹ (USD) suy yếu",
+                "url": "https://www.qdnd.vn/kinh-te/tin-tuc/ty-gia-usd-hom-nay-10-11-dong-usd-suy-yeu-1063935",
+                "source": "qdnd.vn",
+                "summary": "Đồng USD giảm giá so với các đồng tiền chủ chốt, trong đó có đồng EUR và đồng yên Nhật Bản, trong phiên giao dịch ngày thứ Hai, khi những lo ngại về nguy cơ xung đột tại Iran leo thang dịu bớt, thúc đẩy giới đầu tư chuyển dòng vốn trở lại các tài sản có mức độ rủi ro cao hơn, sau đợt bán tháo cổ phiếu liên quan đến trí tuệ nhân tạo (AI) trong tuần trước. [...] Ông Diaz-Alvarez cho rằng: “Thị trường đang phần nào đánh giá thấp tác động của cuộc bầu cử giữa nhiệm kỳ tại Mỹ đối với nền kinh tế nước này. Đầu tư vào lĩnh vực AI đã đóng góp đáng kể vào kết quả tăng trưởng kinh tế Mỹ. Do đó, những thay đổi lớn về chính trị tại Mỹ, dù chỉ ở mức độ nhất định, cũng có thể tác động tiêu cực đến dòng vốn đầu tư này”.",
+                "score": 0.38214198
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R04_read_url_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_read_url",
+        "difficulty": "easy",
+        "what_it_tests": "Đã có link cụ thể → read_url, không phải web_search."
+      },
+      "input": "Tóm tắt bài này giúp mình: https://openai.com/blog/gpt-5",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://openai.com/blog/gpt-5"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://openai.com/blog/gpt-5"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://openai.com/blog/gpt-5"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://openai.com/blog/gpt-5",
+            "items": [
+              {
+                "title": "OpenAI",
+                "url": "https://openai.com/blog/gpt-5",
+                "source": "openai.com",
+                "summary": "OpenAI\n\n# 404\n\nOne stitch has slipped loose\n\nThe pattern still holds its shape\n\nPick up a new thread\n\nby [gpt-6-astra(opens in a new window)](https://chatgpt.com/?surface=work&model=gpt-6-astra-wm&openaicom-did=76539789-7839-4902-a1db-f8507060b1b0&openaicom_referred=true)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R05_limit_arg",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_limit",
+        "difficulty": "easy",
+        "what_it_tests": "Trích đúng limit=10 từ '10 tweet'."
+      },
+      "input": "Lấy 10 tweet mới nhất của Elon Musk",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 10
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "limit": "10",
+              "screenname": "elonmusk"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "limit: expected 10, got '10'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "limit": "10",
+            "screenname": "elonmusk"
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "elonmusk",
+            "items": [
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement",
+                "summary": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement learning and infer…",
+                "url": "https://x.com/elonmusk/status/2120102894817173862",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 438,
+                  "views": "605442"
+                }
+              },
+              {
+                "title": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the g",
+                "summary": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the ground, is also very well suited to training super intelligence",
+                "url": "https://x.com/elonmusk/status/2120102767624880364",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:24 +0000 2026",
+                "metrics": {
+                  "favorites": 59439,
+                  "retweets": 4995,
+                  "views": "3373305"
+                }
+              },
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure",
+                "summary": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure\n\nThe engineering behind Starl…",
+                "url": "https://x.com/elonmusk/status/2120101380144992635",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:28:53 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 217,
+                  "views": "536094"
+                }
+              },
+              {
+                "title": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...",
+                "summary": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...\n\n if only you knew how great…",
+                "url": "https://x.com/elonmusk/status/2120090806765932705",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:46:52 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 155,
+                  "views": "589760"
+                }
+              },
+              {
+                "title": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 ",
+                "summary": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 million Series A, p…",
+                "url": "https://x.com/elonmusk/status/2120082348398256182",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:13:15 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 237,
+                  "views": "594975"
+                }
+              },
+              {
+                "title": "RT @MegynKellyShow: .@MegynKelly on the absolute double standard in the Russell Brand sentencing: “If you needed any fur",
+                "summary": "RT @MegynKellyShow: .@MegynKelly on the absolute double standard in the Russell Brand sentencing: “If you needed any further proof that thi…",
+                "url": "https://x.com/elonmusk/status/2119996001490768028",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:30:09 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1627,
+                  "views": "631349"
+                }
+              },
+              {
+                "title": "RT @firesidealpha: JUST IN: Memphis Mayor reveals SpaceX data center taxes more than doubled to $54 million, after $25 m",
+                "summary": "RT @firesidealpha: JUST IN: Memphis Mayor reveals SpaceX data center taxes more than doubled to $54 million, after $25 million last year ma…",
+                "url": "https://x.com/elonmusk/status/2119993726898774521",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:21:06 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 555,
+                  "views": "552061"
+                }
+              },
+              {
+                "title": "RT @ricwe123: The Germans are learning what mass immigration really means.",
+                "summary": "RT @ricwe123: The Germans are learning what mass immigration really means.\n\n\"Wir schaffen das\" https://t.co/pEQc1OMbao",
+                "url": "https://x.com/elonmusk/status/2119992481156829218",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:16:09 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 3165,
+                  "views": "529864"
+                }
+              },
+              {
+                "title": "RT @JTLonsdale: The UK “justice system” is an utter joke. Beyond parody. Total dishonor.",
+                "summary": "RT @JTLonsdale: The UK “justice system” is an utter joke. Beyond parody. Total dishonor.",
+                "url": "https://x.com/elonmusk/status/2119991850820051347",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:13:39 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 428,
+                  "views": "503287"
+                }
+              },
+              {
+                "title": "RT @TheJadeWarwick: UK judge gives Russel Brand 10 years 6 months for “rape”. ",
+                "summary": "RT @TheJadeWarwick: UK judge gives Russel Brand 10 years 6 months for “rape”. \nNo forensic evidence. No DNA. No CCTV. \n\nSame country and sy…",
+                "url": "https://x.com/elonmusk/status/2119991792842260619",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:13:25 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1088,
+                  "views": "470494"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R06_timeframe_arg",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_timeframe",
+        "difficulty": "medium",
+        "what_it_tests": "'tuần này' → timeframe=week."
+      },
+      "input": "Tin công nghệ trong tuần này",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "topic": "news",
+              "timeframe": "week",
+              "query": "tin công nghệ trong tuần này"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "topic": "news",
+            "timeframe": "week",
+            "query": "tin công nghệ trong tuần này"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "tin công nghệ trong tuần này",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "Điểm tin Khoa học và Công nghệ hằng tuần",
+                "url": "https://haiphong.gov.vn/thong-bao-76144/diem-tin-khoa-hoc-va-cong-nghe-hang-tuan-999065",
+                "source": "haiphong.gov.vn",
+                "summary": "(Haiphong.gov.vn) - Trung tâm Công nghệ Thông tin và Truyền thông Hải Phòng trân trọng gửi các cơ quan, đơn vị Điểm tin Khoa học và Công nghệ số 41 năm 2026 (tuần từ ngày 19/10/2026 đến ngày 25/10/2026), tổng hợp các thông tin nổi bật về khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong nước và trên địa bàn thành phố.\n\nĐiểm tin được đăng tải tại địa chỉ: [...] Xã Quyết Thắng thông báo cho thuê nhà, đất tại cơ sở 3 Trường Mầm non Tiên Cường\nCông bố kết quả thi tuyển phương án kiến trúc Trường THPT chuyên Nguyễn Trãi\nThông báo về việc cho thuê nhà, đất do Trung tâm dịch vụ sự nghiệp công phường Nhị Chiểu quản lý, khai thác: Trụ sở UBND phường Duy Tân (cũ)\nCông khai thủ tục hành chính được sửa đổi, bổ sung lĩnh vực thủy sản và kiểm ngư thuộc phạm vi chức năng quản lý của Sở Nông nghiệp và Môi trường [...] Xã Khúc Thừa Dụ công bố danh mục khu đất thực hiện đấu giá quyền sử dụng đất năm 2026\nPhê duyệt phương án đấu giá, giá khởi điểm để đấu giá quyền sử dụng đất Dự án Khu đô thị hỗn hợp đa chức năng tại khu vực hồ Tân Hoa trong Khu đô thị mới Bắc sông Cấm tại phường Thủy Nguyên\nPhê duyệt phương án đấu giá, giá khởi điểm để đấu giá quyền sử dụng đất Dự án đầu tư xây dựng công trình hỗn hợp tại lô I.7/CTHH-01 trong khu đô thị mới Bắc sông Cấm tại phường Thủy Nguyên, thành phố Hải Phòng",
+                "score": 0.70287734
+              },
+              {
+                "title": "Cổ phiếu công nghệ hồi phục sau đợt sụt giảm mạnh trong tuần trước",
+                "url": "https://bnews.vn/co-phieu-cong-nghe-hoi-phuc-sau-dot-sut-giam-manh-trong-tuan-truoc/443676.html",
+                "source": "bnews.vn",
+                "summary": "Bà Sally Auld, chuyên gia tại ngn hàng National Australia Bank, nhận định trong tuần này, các nhà đầu tư sẽ theo dõi sát sao để xác định xem đà tăng hiện tại chỉ đơn thuần là nhờ hoạt động mua vào khi giá thấp hay là khởi đầu cho một xu hướng bền vững hơn. Những lo ngại về quy định đối với lĩnh vực AI, cùng với triển vọng về chi tiêu vốn và dòng tiền tự do, là các yếu tố thúc đẩy xu hướng giảm thiểu rủi ro trong những tuần gần đy. Nhiều khả năng, các vấn đề này sẽ chưa thể sớm được giải quyết [...] Chốt phiên 9/11 tại chu Á, giá cổ phiếu của các công ty công nghệ đã phục hồi một phần sau đợt sụt giảm mạnh trong tuần trước, nhưng đà tăng này bị hạn chế bởi thông tin về một cuộc điều tra nhằm vào Jensen Huang, người đứng đầu Nvidia, công ty dẫn đầu toàn cầu trong lĩnh vực sản xuất chip AI. Chốt phiên, chỉ số Nikkei 225 của Nhật Bản tăng 2,3% lên 59.775,5 điểm. Tại Trung Quốc, chỉ số Hang Seng của Hong Kong giảm 0,1% xuống 24.448,95 điểm, còn chỉ số Shanghai Composite của Thượng Hải tăng [...] nhau. Trong tuần này, các nhà đầu tư sẽ theo dõi sát sao số liệu lạm phát mới nhất từ Mỹ, sau khi báo cáo công bố cuối tuần trước cho thấy nền kinh tế nước này đã tạo ra số lượng việc làm trong tháng 10/2026 vượt xa dự báo. Những số liệu này sẽ đóng vai trò then chốt để Cục Dự trữ liên bang Mỹ (Fed) quyết định xem có tăng lãi suất trong cuộc họp tiếp theo vào tháng 12 tới hay không. Các nhà giao dịch dự báo khả năng Fed nng lãi suất là 80%. Tại Việt Nam, kết thúc phiên 9/11, chỉ số VN-Index",
+                "score": 0.68420124
+              },
+              {
+                "title": "Cổ phiếu công nghệ Mỹ biến động trước lo ngại về quy định AI | NHK WORLD-JAPAN News",
+                "url": "https://www3.nhk.or.jp/nhkworld/vi/news/20261109_RS10",
+                "source": "www3.nhk.or.jp",
+                "summary": "Chiến thắng áp đảo của đảng Dn chủ trong cuộc bầu cử giữa kỳ của Mỹ đã làm dấy lên lo ngại về triển vọng của ngành trí tuệ nhn tạo và bán dẫn. Điều này khiến cổ phiếu công nghệ cao của Mỹ biến động.  \n   \nĐảng Dn chủ đã giành lại quyền kiểm soát cả hai viện Quốc hội trong cuộc bầu cử tuần trước. Các ứng viên đảng Dn chủ cũng chiến thắng trong các cuộc bầu cử thống đốc ở nhiều bang, trong đó có Texas, nơi có nhiều trung tm dữ liệu. [...] Một số nhà đầu tư lo ngại những chiến thắng này có thể dẫn đến việc siết chặt quy định đối với AI và các trung tm dữ liệu.  \n   \nMối lo này đã gy ra làn sóng bán tháo cổ phiếu bán dẫn và các cổ phiếu khác liên quan đến AI. Hôm thứ Năm, chỉ số Nasdaq gồm nhiều cổ phiếu công nghệ ở New York giảm hơn 5%. Cổ phiếu công nghệ đã phần nào khôi phục vào ngày hôm sau nhưng các nhà đầu tư vẫn thận trọng. [...] Một số chuyên gia cho rằng các công ty trung tm dữ liệu mới nổi có thể gặp khó khăn về vốn nếu các quy định chặt chẽ hơn làm chậm tiến độ các dự án xy dựng mới. Các công ty này đã dựa vào khoản vay để mở rộng kinh doanh.  \n   \nNguồn tin thị trường cho biết điều đó có nghĩa là cổ phiếu công nghệ có thể vẫn bất ổn trong thời gian trước mắt.",
+                "score": 0.45304462
+              },
+              {
+                "title": "Giá vàng hôm nay (8/11): Phục hồi mạnh trở lại sau 1 tuần - Báo và Phát thanh, Truyền hình Lạng Sơn",
+                "url": "https://langsontv.vn/news/452/107144/gia-vang-hom-nay-8-11-phuc-hoi-manh-tro-lai-sau-1-tuan",
+                "source": "langsontv.vn",
+                "summary": "## Tin nổi bật\n\n\n\n### Sau nhiều năm \"lõm sóng\", đến nay 100% thôn, xóm ở miền núi Đà Nẵng có mạng Internet và vệ tinh Starlink\n\n\n\n### Sở GDĐT thông tin vụ nhn viên y tế trường học tấn công hiệu trưởng tại trường\n\n\n\n### Tháo gỡ khó khăn, sớm đưa dự án hoạt động\n\n\n\n### Hồng Lĩnh Hà Tĩnh đứt mạch bất bại, HLV Phan Như Thuật chỉ thẳng lý do\n\n\n\n### Giá vàng hôm nay (9/11): Diễn biến khó lường\n\n\n\n### Chia sẻ rủi ro trong phát triển công nghệ chiến lược",
+                "score": 0.38151965
+              },
+              {
+                "title": "Hơn 1 triệu lượt tham gia Cuộc thi tìm hiểu về chuyển đổi số quốc gia trong tuần đầu tiên",
+                "url": "https://dangcongsan.vn/bokhoahoccongnghe/tin-tuc-hoat-dong/hon-1-trieu-luot-tham-gia-cuoc-thi-tim-hieu-ve-chuyen-doi-so-quoc-gia-trong-tuan-dau-tien.html",
+                "source": "dangcongsan.vn",
+                "summary": "Phát huy nguồn lực trí thức Việt Nam tại Nhật Bản để giải quyết các bài toán công nghệ thực tiễn\n\nGiải quyết khiếu nại lần hai của Envalior B.V. liên quan đến Đơn đăng ký nhãn hiệu \"XYTRON\n\nTừ nghiên cứu đến làm chủ công nghệ sản xuất 8 loại vắc xin\n\nLàm chủ công nghệ sản xuất 8 loại vắc xin tại Việt Nam\n\nĐưa công nghệ vắc xin Việt Nam vươn tầm quốc tế\n\n### Tin đọc nhiều\n\nViệt Nam – Nhật bản thúc đẩy hợp tác nghiên cứu, phát triển AI và sở hữu trí tuệ [...] Bộ Khoa học và Công nghệ\n\nCổng thông tin điện tử Đảng Cộng Sản Việt Nam\n\nBộ Khoa học và Công nghệ\n\nQuay lại cổng chính\n\nThứ ba, 10/11/2026\n\n#### Tin tức, hoạt động\n\n1. Trang chủ\n2. Tin tức, hoạt động\n\nThứ bảy, 07/11/2026 | 17:53\n\nA-; \"Nhỏ\") A; \"Bình thường\") A+; \"Lớn\")  |    Tăng tương phản; \"Tăng tương phản\") Giảm tương phản; \"Giảm tương phản\")\n\n# Hơn 1 triệu lượt tham gia Cuộc thi tìm hiểu về chuyển đổi số quốc gia trong tuần đầu tiên [...] Ứng dụng KH&CN trong mô hình sản xuất hữu cơ Sm bố chính tại xã Long Hưng\n\nLogo\n\nCổng thông tin điện tử Đảng Cộng Sản Việt Nam\n\nBộ Khoa học và Công nghệ\n\n Tin tức, hoạt động\n Văn bản mới\n Xy dựng Đảng\n\nTrụ sở: 1A Hùng Vương, Ba Đình, Hà Nội\n\nE-mail: congdcsvn@vptw.dcs.vn\n\nBản quyền thuộc Cục Chuyển đổi số - Cơ yếu",
+                "score": 0.3301153
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R07_search_type_arg",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_search_type",
+        "difficulty": "medium",
+        "what_it_tests": "'phổ biến/top' → search_type=Top (không phải Latest)."
+      },
+      "input": "Cho mình các tweet phổ biến (top) nhất về OpenAI",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "search_type": "Top"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "OpenAI",
+              "search_type": "Top",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "OpenAI",
+            "search_type": "Top",
+            "limit": 5
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "OpenAI",
+            "search_type": "Top",
+            "items": [
+              {
+                "title": "This is f*cking insane. OpenAI CEO Sam Altman:",
+                "summary": "This is f*cking insane. OpenAI CEO Sam Altman:\n\n\"We are going to see 10-person billion-dollar companies pretty soon\n\nIf I were 22 right now, I would feel like the luckiest kid in history\"\n\nIn 22 seconds, he explains why the next billion-dollar company won’t need an office full of people, just a few founders and a team of agents\n\nChatGPT → Codex → Agent Builder → Agents SDK → Evals → A 10-Person Company Run By Agents\n\n99% people will feel motivated for 3 minutes, then keep scrolling...\n\nThe few who actually open the links will start building their company this weekend\n\nSave this before it vanishes from your feed\n\nEverything below is FREE:\n\nFind what to automate first\nhttps://t.co/YWHdgRnuzP\n\nHow companies put AI to work\nhttps://t.co/pvlQEhqgEz\n\nCodex in the cloud\nhttps://t.co/zZWUdokyny\n\nCodex skills\nhttps://t.co/2hdcb5KdBy\n\nAgent Builder (agents without code)\nhttps://t.co/4vG52j4T8i\n\nFunction calling (give your agents tools)\nhttps://t.co/UtjC1UOx2c\n\nAgents SDK for JavaScript\nhttps://t.co/uawnMmnI9p\n\nAgents SDK examples\nhttps://t.co/OWi0bWpApP\n\nA customer service agent team you can copy\nhttps://t.co/GRVZLYi4Pf\n\nVoice agents\nhttps://t.co/1SUmRzYIvA\n\nEvals (check your agents' work)\nhttps://t.co/sH92SCsLJF\n\nAll of this costs $0\n\nThe next 10-person billion-dollar company will be built by someone who opens these links tonight, not someone who scrolls past them\n\nBookmark it and start with the first link right now\n\nThen read how to set up the agent team behind a tiny company in the harness engineering guide below ↓",
+                "url": "https://x.com/shikamarutsai/status/2119542201944518994",
+                "source": "@shikamarutsai",
+                "date": "Sun Nov 08 21:26:54 +0000 2026",
+                "metrics": {
+                  "favorites": 1373,
+                  "retweets": 207,
+                  "views": "275589"
+                }
+              },
+              {
+                "title": "Introducing GPT‑6 Cyber: a major advance in security research that pairs stronger capabilities with better model alignme",
+                "summary": "Introducing GPT‑6 Cyber: a major advance in security research that pairs stronger capabilities with better model alignment.\n\nThe model powered the Linux kernel research we announced yesterday, and security teams at companies like Mozilla, Palo Alto Networks, Calif, and Cisco—alongside our own at OpenAI—are already putting it to work.\n\nGPT-6 Cyber is available to select Daybreak Red customers and we are expanding access over time.\n\nhttps://t.co/Nzab3Z1Td6",
+                "url": "https://x.com/OpenAI/status/2118390190246879554",
+                "source": "@OpenAI",
+                "date": "Thu Nov 05 17:09:13 +0000 2026",
+                "metrics": {
+                  "favorites": 21445,
+                  "retweets": 2008,
+                  "views": "4139489"
+                }
+              },
+              {
+                "title": "this is f*cking insane. andrej karpathy: \"the biggest regret of every engineer in my field right now is every AI convers",
+                "summary": "this is f*cking insane. andrej karpathy: \"the biggest regret of every engineer in my field right now is every AI conversation they never saved, and in 10 years the ones who started saving in 2024 will be running circles around the rest of us\"\n\nandrej karpathy, co-founder of openai, pulled 16M views on one idea: stop using AI to write code, use it to build a second brain that remembers every article, pdf, transcript and conversation you ever fed it\n\nyou point claude code at a folder, drop anything into it, and claude reads it, cross-links it with everything already there, and writes it into a living wiki. your knowledge finally compounds instead of leaking out of your head every friday\n\nthe stack:\n\n→ brew install obsidian, mkdir ~/vault, cd ~/vault\n→ run claude in that folder and type \"init a knowledge vault with CLAUDE.md as the rules, /raw for sources, /wiki for your pages\"\n→ drop any file into /raw (youtube transcript, meeting notes, 400-page pdf, screenshot of a tweet) and type \"ingest\"\n→ claude writes a wiki page, links it to 5 existing ones automatically, updates CLAUDE.md with any new pattern it noticed about how you think\n→ never open a blank claude chat again. every question goes through the vault, every answer cites your own sources with dates and links\n\n5 minutes to set up. compounding knowledge from that evening forward\n\nthe ugly part most will scroll past: in 10 years the engineers who started this in 2024 will remember every book, every podcast, every meeting with receipts. you will remember none of them. karpathy already picked which side he is on and you are still not on his\n\nfull step-by-step is in the article below\n\nbookmark this before you waste another monday",
+                "url": "https://x.com/mojeskoqq/status/2116963310277202003",
+                "source": "@mojeskoqq",
+                "date": "Sun Nov 01 18:39:19 +0000 2026",
+                "metrics": {
+                  "favorites": 3939,
+                  "retweets": 345,
+                  "views": "463715"
+                }
+              },
+              {
+                "title": "This is f*cking insane. OpenAI CEO Sam Altman:",
+                "summary": "This is f*cking insane. OpenAI CEO Sam Altman:\n\n\"We are going to see 10-person billion-dollar companies pretty soon\n\nIf I were 22 right now, I would feel like the luckiest kid in history\"\n\nIn 22 seconds, he explains why the next billion-dollar company won't need a building full of people, just a few founders and their agents\n\nChatGPT → Codex → Agent Builder → Agents SDK → Evals → A 10-Person Company Run By Agents\n\nMost people will feel motivated for 3 minutes, then go back to scrolling\n\nThe few who act will start building their company this weekend\n\nSave this before it disappears from your feed\n\nEverything below is free:\n\nFind what to automate first\nhttps://t.co/CVaTL5jXHB\n\nHow companies put AI to work\nhttps://t.co/EfPautasVX\n\nCodex in the cloud\nhttps://t.co/wYBuugoGzU\n\nCodex skills\nhttps://t.co/KIwM8reiAt\n\nAgent Builder (agents without code)\nhttps://t.co/y5lVjIVWNE\n\nFunction calling (give your agents tools)\nhttps://t.co/hlQ0OrhsDr\n\nAgents SDK for JavaScript\nhttps://t.co/wNfa3neVSQ\n\nAgents SDK examples\nhttps://t.co/TnPiIML4if\n\nA customer service agent team you can copy\nhttps://t.co/9TYXiRzBm7\n\nVoice agents\nhttps://t.co/wBnMrKEKMd\n\nEvals (check your agents' work)\nhttps://t.co/tUueczMWZP\n\nAll of this costs $0\n\nThe 10-person billion-dollar company will be built by someone who opened these links, not someone who scrolled past them\n\nBookmark it and start with the first link tonight\n\nThen read how to set up the agent team behind a tiny company in the harness engineering guide below ↓",
+                "url": "https://x.com/godsystemsmd/status/2118707511813447984",
+                "source": "@godsystemsmd",
+                "date": "Fri Nov 06 14:10:09 +0000 2026",
+                "metrics": {
+                  "favorites": 488,
+                  "retweets": 93,
+                  "views": "81158"
+                }
+              },
+              {
+                "title": "This is f*cking insane. Andrej Karpathy spent 8 years at OpenAI and Tesla",
+                "summary": "This is f*cking insane. Andrej Karpathy spent 8 years at OpenAI and Tesla\n\nLast week he compressed everything he knows into one free 2-hour lecture\n\nPrompts → Agents → Harness → Graphs → Loops\n\nPeople spend $15k on bootcamps that teach less than this\n\nYou probably don't have 2 hours right now\n\nDon't let it vanish from your feed\n\nWatch it, then read the full Graph Engineering guide below ↓",
+                "url": "https://x.com/callanxai/status/2119798212760367165",
+                "source": "@callanxai",
+                "date": "Mon Nov 09 14:24:12 +0000 2026",
+                "metrics": {
+                  "favorites": 507,
+                  "retweets": 68,
+                  "views": "66107"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R08_out_of_scope",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope",
+        "difficulty": "easy",
+        "what_it_tests": "Câu ngoài phạm vi research → KHÔNG gọi tool, từ chối/định hướng."
+      },
+      "input": "Giải giúp mình bài toán tích phân: nguyên hàm của x^2 là gì?",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "tích phân x^2",
+              "topic": "general"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": "unexpected_tool_call",
+        "failure_type": "out_of_scope",
+        "failures": [
+          "expected no tool call"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "tích phân x^2",
+            "topic": "general"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "tích phân x^2",
+            "topic": "general",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "B3 Tích phân cơ bản",
+                "url": "https://www.youtube.com/watch?v=IL6kkKLEOPM",
+                "source": "youtube.com",
+                "summary": "[14:42] Bấm tích phân từ 1 tới 2 của căn x dx bằng luôn.\n[14:49] Nó ra kết quả nghĩ nhiều làm gì? 7 đúng không bạn?\n[14:55] Từ 1 đến mấy đến 2 đấy. 1,2 cẩn luôn 1,218 nhá các bạn nhá. đó. [...] [10:40] Tích phân từ 1 tới 2 chúng ta tách ra làm một hàm, hai hàm, ba hàm là ba lần\n[10:45] hàm f(x) dx trừ đi tích phân từ 1 tới 2 của 4 lần gx\n[10:54] dx và cộng với tích phân từ 1 tới 2 của căn x dx. Đấy các bạn tách ra làm ba\n[11:02] hàm. Lúc này các bạn sẽ thấy rằng của bạn nó sẽ lập tức trở thành bằng này ba lần các bạn đặt ra ngoài này. Bên trong\n[11:08] là tích phân từ 1 đến 2 của f(x) dx trừ đi bốn lần đặt ra ngoài tích phân từ 1 [...] [11:17] tới 2 của hàm gx dx cộng với nào thằng căn x của bạn đây là tích phân từ 1 đến 2 của thằng căn x\n[11:25] là x mũ 1 phần mấy? 1/2 dx cái này đúng chưa? Chúng ta thay vào thôi. Chúng ta nhìn thấy thằng y này của chúng ta này\n[11:34] bằng này 3 này. Tích phân từ 1 tới 2 của thằng f(x) dx nào chúng ta bằng 4. Đây là 3 x 4 này. Trừ đi\n[11:43] tích phân từ 1 đến 2 của thằng g(x) dx là 3. Đây nó sẽ là trừ đi 4 x 3 này.\n[11:48] Cộng với này nguyên hàm của thằng x mũ 1/2 là x mũ 1",
+                "score": 0.5354634
+              },
+              {
+                "title": "🚀 TÍCH PHÂN ĐƯỜNG LOẠI 1: ĐỊNH NGHĨA & CÁCH TÍNH",
+                "url": "https://www.youtube.com/watch?v=t6AXZ6YwN-U",
+                "source": "youtube.com",
+                "summary": "Bài giảng chuyên đề: TÍCH PHÂN ĐƯỜNG LOẠI 1 (Line Integrals of the First Kind). Nội dung kiến thức nền tảng quan trọng của môn Vi tích phân 2, Giải tích 2, ...Read more",
+                "score": 0.1560666
+              },
+              {
+                "title": "Toán 12 - Ôn thi Nguyên hàm, tích phân - YouTube",
+                "url": "https://www.youtube.com/playlist?list=PLchanWK5Bgso",
+                "source": "youtube.com",
+                "summary": "Back Image 1 VN \n\nSkip navigation\n\n Search \n\n Search with your voice \n\n- [x] Include playlist \n\nAn error occurred while retrieving sharing information. Please try again later.\n\nWatch later\n\nShare\n\nCopy link\n\nImage 24\n\n0:00\n\n[](\n\n / \n\nLive\n\n•Watch full video\n\n•\n\n•\n\n[](\n\n[](\n\nNaN / NaN\n\nShow more\n\n[](\n\nToán 12 - Ôn thi Nguyên hàm, tích phân - YouTube",
+                "score": 0.15422338
+              },
+              {
+                "title": "Toán 12-Tích phân #2k9 #toan12 | Thầy Quý Dạy Toán",
+                "url": "https://www.facebook.com/doquybp/videos/to%C3%A1n-12-t%C3%ADch-ph%C3%A2n-2k9-toan12/1817504989460877",
+                "source": "facebook.com",
+                "summary": "Toán 12-Tích phân #2k9. Toán Xuân Huyền Education website. Thầy Phúc toán cấp 2",
+                "score": 0.1276855
+              },
+              {
+                "title": "Luyện Tập Tích Phân",
+                "url": "https://www.youtube.com/watch?v=4PQe2GJ8rrk",
+                "source": "youtube.com",
+                "summary": "Lesson 2. Definite Integrals · Lesson 1. Two Perpendicular Lines · TO2. Equations of a Straight Line · Bài 7. Tọa Độ Hóa Hình Không Gian- Thầy Đinh Tiến Nguyện.Read more",
+                "score": 0.103939675
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R09_no_tool_capability",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "no_tool_meta",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi meta → trả lời thẳng, KHÔNG gọi tool."
+      },
+      "input": "Bạn là gì và làm được những gì?",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Xin lỗi, mình không chắc chắn về câu hỏi của bạn. Bạn có thể cho mình biết thêm về yêu cầu của mình không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": "unexpected_tool_call",
+        "failure_type": "unnecessary_tool",
+        "failures": [
+          "expected no tool call"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Xin lỗi, mình không chắc chắn về câu hỏi của bạn. Bạn có thể cho mình biết thêm về yêu cầu của mình không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Xin lỗi, mình không chắc chắn về câu hỏi của bạn. Bạn có thể cho mình biết thêm về yêu cầu của mình không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "R10_missing_handle",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_missing_handle",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu handle → ask_user, KHÔNG đoán bừa người nào."
+      },
+      "input": "Tóm tắt 5 tweet mới nhất giúp mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text",
+              "question": "Bạn cần giúp gì từ 5 tweet mới nhất của ai?"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "response_type": "text",
+            "question": "Bạn cần giúp gì từ 5 tweet mới nhất của ai?"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn cần giúp gì từ 5 tweet mới nhất của ai?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "R11_missing_url",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_missing_url",
+        "difficulty": "medium",
+        "what_it_tests": "Nói 'bài này' nhưng không có link → ask_user xin URL."
+      },
+      "input": "Tóm tắt bài viết này hộ mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": ""
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call fetch"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": ""
+          },
+          "result": {
+            "tool": "read_url",
+            "error": "HTTPError",
+            "message": "400 Client Error: Bad Request for url: https://api.firecrawl.dev/v1/scrape"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R12_confirm_before_send",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "confirm_before_write",
+        "difficulty": "medium",
+        "what_it_tests": "Hành động ghi (gửi) → xác nhận trước (ask_user yes_no), không tự gửi."
+      },
+      "input": "Đăng bản tin này lên Telegram giúp mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn xác nhận đăng bản tin này lên Telegram?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn xác nhận đăng bản tin này lên Telegram?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn xác nhận đăng bản tin này lên Telegram?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "R13_parallel_web_and_tweets",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "parallel_tool_calls",
+        "difficulty": "hard",
+        "what_it_tests": "Một request cần hai nguồn → gọi cả web_search và search_tweets; eval không phụ thuộc thứ tự tool call."
+      },
+      "input": "Tìm trên web tin AI hôm nay và tìm thêm tweet về AI.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          },
+          {
+            "name": "social_search",
+            "args": {
+              "query": "AI"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "tin AI hôm nay",
+              "timeframe": "day",
+              "topic": "news"
+            }
+          },
+          {
+            "name": "social_search",
+            "args": {
+              "query": "AI",
+              "limit": "5",
+              "search_type": "Latest"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "query: expected 'AI', got 'tin AI hôm nay'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "tin AI hôm nay",
+            "timeframe": "day",
+            "topic": "news"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "tin AI hôm nay",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "XSMN 11/11/2026 - kết quả xổ số miền Nam ngày 11 tháng 11: Hôm nay ai trúng đặc biệt?",
+                "url": "https://baoquocte.vn/xsmn-11-11-2026-ket-qua-xo-so-mien-nam-ngay-11-thang-11-hom-nay-ai-trung-dac-biet-432017.html",
+                "source": "baoquocte.vn",
+                "summary": "Truyền thông quốc tế dành sự quan tm lớn đến chuyến thăm cấp Nhà nước của Tổng Bí thư, Chủ tịch nước Tô Lm và Phu nhn tới Đan Mạch từ ngày 19-21/10.\n\nLàm thế nào một siêu trí tuệ AI có thể thống trị thế giới? \n\n### Làm thế nào một siêu trí tuệ AI có thể thống trị thế giới?\n\nKhi trí tuệ nhn tạo (AI) ngày càng mạnh mẽ và con người phụ thuộc nhiều hơn vào công nghệ này, nguy cơ một hệ thống siêu thông minh vượt khỏi tầm kiểm soát đang ...\n\nPhiên bản di động [...] ### Liệu Tổng thống Ukraine có thể hàn gắn quan hệ với ông chủ Nhà Trắng khi quan hệ Mỹ-Nga dần ấm lên?\n\nTổng thống Ukraine Volodymyr Zelensky gặp Đặc phái viên Mỹ Steve Witkoff tại Oslo, trong bối cảnh Kiev tìm cách cải thiện quan hệ đang xấu đi với Washington.\n\nTruyền thông Đan Mạch khắc họa đậm nét dấu ấn chuyến thăm của Tổng Bí thư, Chủ tịch nước Tô Lm \n\n### Truyền thông Đan Mạch khắc họa đậm nét dấu ấn chuyến thăm của Tổng Bí thư, Chủ tịch nước Tô Lm [...] Cuộc gặp thượng đỉnh giữa hai nhà lãnh đạo Mỹ và Trung Quốc thể hiện nhu cầu lớn của cả hai về ổn định chiến lược và thúc đẩy hợp tác.\n\nNhững vấn đề phức tạp của xung đột Trung Đông \n\n### Những vấn đề phức tạp của xung đột Trung Đông\n\nSau hơn hai tháng bom đạn bao phủ vùng Vịnh, cuộc xung đột ở Trung Đông vẫn mờ mịt, nhưng hậu họa thì đã rõ.\n\nMyanmar: Cuộc chuyển giao quyền lực \n\n### Myanmar: Cuộc chuyển giao quyền lực",
+                "score": 0.56690645
+              },
+              {
+                "title": "Bà nội trợ, shipper làm phim ngắn AI 1.000 tập hút 12 tỉ lượt xem | Sky Tin",
+                "url": "https://tin.skydoor.net/news/trung-quoc-ba-noi-tro-shipper-lam-phim-ngan-ai-1000-tap-hut-12-ti-luot-8425473",
+                "source": "tin.skydoor.net",
+                "summary": "Bỏ qua điều hướng\n\nSkydoor\n\nSky Tin - Tin tức địa phương toàn cầu 24h mới nhất!\n\nXem tin theo cách của bạn >>\n\n\n\n# Bà nội trợ, shipper làm phim ngắn AI 1.000 tập hút 12 tỉ lượt xem\n\nGiữa làn sóng phim ngắn AI bị phàn nàn về chất lượng, 'Cầm binh khí xuyên không thời Tống' đang trở thành hiện tượng ở Trung Quốc.\n\nĐọc tin gốc tại tuoitre.vn →\n\n## Tin tức Trung Quốc mới nhất hôm nay\n\n[](\n\n### Vượt Trung Quốc, bắn súng Việt Nam giành huy chương Giải vô địch thế giới\n\n2 giờ trước–tuoitre.vntuoitre.vn [...] Xem tóm tắt nhanh\n\n[](\n\n### Hàng loạt tên tuổi đội Trung Quốc phải ra đi sau cú sụp đổ khó tin nhất lịch sử bóng đá\n\n2 giờ trước–tuoitre.vntuoitre.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Trung Quốc có thực sự cần Nvidia để chạy đua AI?\n\n2 giờ trước–tuoitre.vntuoitre.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Văn phòng BYD bất ngờ bị cảnh sát ập vào khám xét\n\n2 giờ trước–cafef.vncafef.vn\n\nXem tóm tắt nhanh\n\n## Tin tức Phim - Điện Ảnh mới nhất hôm nay\n\n[]( [...] [](\n\n### Top 5 phiên bản Godzilla mạnh nhất trong lịch sử điện ảnh\n\n2 giờ trước–tuoitre.vntuoitre.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Ronaldo làm phim hài\n\n2 giờ trước–znews.vnznews.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Godzilla Minus Zero càn quét toàn cầu\n\n4 giờ trước–saostar.vnsaostar.vn\n\nXem tóm tắt nhanh\n\n[](\n\n### Bản hit 'Gói con tim làm quà' được làm mới bằng đoạn rap của Gonzo Thái Nam\n\n7 giờ trước–anninhthudo.vnanninhthudo.vn\n\nXem tóm tắt nhanh",
+                "score": 0.5128152
+              },
+              {
+                "title": "Tin vũ khí hôm nay 10/11: Ukraine thành lập Lực lượng Vũ trụ để đối phó các mối đe dọa ngoài không gian",
+                "url": "https://1thegioi.vn/tin-vu-khi-hom-nay-10-11-ukraine-thanh-lap-luc-luong-vu-tru-de-doi-pho-cac-moi-de-doa-ngoai-khong-gian-261216.html",
+                "source": "1thegioi.vn",
+                "summary": "0342.892.994\n\nVP TP.HCM: 345/134 Trần Hưng Đạo, phường Cầu Ông Lãnh, TP.HCM\n\n0934999945\n\nVP Cần Thơ: 111 Trần Văn Hoài (lầu 2), phường Ninh Kiểu, TP. Cần Thơ\n\nEmail: motthegioi@1thegioi.vn\n\nHotline quảng cáo: 0815.33.28.28\n\n Thời sự\n Nhịp đập công nghệ\n AI\n Tài sản mã hóa\n Kinh tế\n Cà phê Một thế giới\n Cuộc sống số\n Văn hóa - Đời sống\n Bạn đọc\n Media\n Lăng kính\n Báo Xun 2026\n\n© 2025 Một thế giới. All rights reserved.\n\nPOWERED BY ONECMS - A PRODUCT OF NEKO\n\nGửi bình luận\n\nHủy Gửi [...] đương một tên lửa hành trình. Loại vũ khí này được giới thiệu tại triển lãm hàng không El Alamein ở Ai Cập vào tháng 9/2026, với khả năng triển khai từ nhiều nền tảng như Yak-130, MiG-29, Mi-28N và Mi-8. [...] Cuối tháng 9/2026, Không qun Mỹ và Northrop Grumman khởi công dy chuyền lắp ráp cuối rộng khoảng 92.900 m² tại Nhà máy Không qun 42 ở Palmdale, bang California, nng năng lực sản xuất B-21 hằng năm thêm 25%. Dự án dùng 4,5 tỉ USD ngn sách, bên cạnh khoản đầu tư 2,5 tỉ USD Northrop Grumman công bố tháng 4/2026. Theo The Aviationist, B-21 tiếp tục bay thử tại căn cứ Edwards, chiếc đầu tiên dự kiến tới căn cứ Ellsworth, bang South Dakota năm 2027. Chương trình hiện có kế hoạch mua ít nhất 100",
+                "score": 0.46701634
+              },
+              {
+                "title": "EMP của ZEROBASEONE, hôm nay (10 tháng) hợp tác với Dayu phát hành ca khúc mới 'OFF script' | STARNEWS",
+                "url": "https://www.starnewskorea.com/vi/music/2026/11/10/2026111011132332332",
+                "source": "starnewskorea.com",
+                "summary": "\\ Translated by AI\n\n# EMP của ZEROBASEONE, hôm nay (10 tháng) hợp tác với Dayu phát hành ca khúc mới 'OFF script'\n\nNgày phát:\n\nKim Noeul\n\nThêm vào nguồn ưu tiên\n\n\\Nội dung này được dịch bằng AI.Xem bản gốc\n\nEMP của ZEROBASEONE /ảnh=Wakeone\n\nĐơn vị EMP của nhóm ZEROBASEONE (ZEROBASEONE) bước vào một thử thách táo bạo thông qua ca khúc mới. [...] © STARNEWS. Все права защищены. Копирование и распространение запрещено\n\n\\Nội dung này được dịch bằng AI.Xem bản gốc\n\n## Tin đề xuất\n\n## Lựa chọn biên tập\n\n## Tin giải trí mới nhất\n\nAD\n\n \n\n  STARNEWS\n \n\n  STARPOLL [...] [### Shin Dong-yup bị sốc khi đi tắm chung với ca sĩ Sung Si-kyung ở Đức..\"Phòng tắm không phn biệt nam nữ\" [Zzanbro Shin Dong-yup]](/vi/star/2026/11/09/2026110922441688592)Người dẫn chương trình Shin Dong-yup đã công bố một giai thoại về việc trải nghiệm tắm chung ở Đức cùng ca sĩ Sung Si-kyung. Ngày 9, trên kênh YouTube 'Zzanbro Shin Dong-yup' đã công bố video có tiêu đề 'Lucky Alberto Daniel EP.170 Cuộc đối thoại phi chủ lưu của những người nước ngoài tại Hàn Quốc'. Hôm đó, Shin Dong-yup đã",
+                "score": 0.400703
+              },
+              {
+                "title": "Kết quả xổ số Vietlott ngày 10.11: Power 6/55 và Max 3D Pro",
+                "url": "https://laodong.vn/ldt/tin-tuc/ket-qua-xo-so-vietlott-ngay-1011-power-655-va-max-3d-pro-1796920.ldo",
+                "source": "laodong.vn",
+                "summary": "10/11/2026 19:06 \n\nHồng Đào cho biết ánh mắt của Phương Anh Đào trong phim \"Ngày con còn mẹ\" khiến cô nhớ đến con gái của mình.\n\nImage 31: Đưa tình huống tấn công hệ thống AI vào diễn tập an ninh mạng tại Huế\n\n## Đưa tình huống tấn công hệ thống AI vào diễn tập an ninh mạng tại Huế\n\n 10/11/2026 18:50 \n\nHuế - Cuộc diễn tập an ninh mạng đặt ra các tình huống bảo vệ hệ thống AI trước nguy cơ tấn công, đánh cắp dữ liệu.\n\nImage 32: Nhịp sống 24h: Chủ ứng dụng gọi xe Be bị phạt 625 triệu đồng [...] Image 40: Kiểm tra hành chính nhà ở, Công an thu giữ nhiều sản phẩm thuốc lá điện tử\n\n## Hồ Ngọc Hà chuẩn bị ra mắt album phòng thu thứ 8\n\nImage 41: Hồ Ngọc Hà chuẩn bị ra mắt album phòng thu thứ 8\n\n## Phương Anh Đào khiến Hồng Đào nhớ đến con gái ruột ngoài đời\n\nImage 42: Phương Anh Đào khiến Hồng Đào nhớ đến con gái ruột ngoài đời\n\n## Đưa tình huống tấn công hệ thống AI vào diễn tập an ninh mạng tại Huế\n\nImage 43: Đưa tình huống tấn công hệ thống AI vào diễn tập an ninh mạng tại Huế [...] Image 9: Kết quả xổ số Vietlott ngày 10.11: Power 6/55 và Max 3D Pro\n\nKết quả xổ số Vietlott ngày 10.11. Ảnh: Hạ Mây/Có sự hỗ trợ của AI \n\nKết quả từ Công ty Xổ số Điện toán Việt Nam (Vietlott) cho biết, tại kỳ quay số mở thưởng lần thứ 01422 của loại hình xổ số Power 6/55 ngày 10.11.2026, dãy số may mắn giải Jackpot 1 trong kỳ quay hôm nay là:\n\n51 - 02 - 39 - 21- 38 - 01 và Jackpot 2 là 12.\n\nKết quả quay số mở thưởng Max 3D Pro, kỳ quay thưởng 00803 ngày 10.11.2026 như sau:",
+                "score": 0.38207284
+              }
+            ]
+          }
+        },
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "AI",
+            "limit": "5",
+            "search_type": "Latest"
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "AI",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "米eBayが外部AIエージェントの閲覧を制限したことが確認された。自動での商品情報取得が難しくなっており、AIを活用した購買支援サービスの設計見直しが迫られる。主要ECプラットフォームが外部AIのアクセスをどう制御していくか、方針の分かれ目",
+                "summary": "米eBayが外部AIエージェントの閲覧を制限したことが確認された。自動での商品情報取得が難しくなっており、AIを活用した購買支援サービスの設計見直しが迫られる。主要ECプラットフォームが外部AIのアクセスをどう制御していくか、方針の分かれ目が注目される。\n\n出典：The Verge",
+                "url": "https://x.com/IGoldeneggs/status/2120195735945679179",
+                "source": "@IGoldeneggs",
+                "date": "Tue Nov 10 16:43:49 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "Japan's $63M AI-Era Cyber Plan Makes Breach First Response a Public Service",
+                "summary": "Japan's $63M AI-Era Cyber Plan Makes Breach First Response a Public Service\n\nJapan’s emergency package turns national cyber defense from guidance into standing operational capacity: named teams, a deadline, a budget line and a legal authority to act against attacker infrastructure. The stated goal is for Japan to reach one of the world’s highest levels of cybersecurity, built on public-private information sharing, fast assistance to victims and recovery from damage.\n\nThe most consequential change for businesses is the cyber rescue team. Initial incident response, the first triage and containment after a breach, has typically been something a company arranges itself through its own staff, a security vendor or an insurer’s panel. A government-organized team drawing on public and private experts makes part of that first response a public service. For data center, cloud and managed-service operators, whose customers are often the first to call when something goes wrong, that changes who else is in the room during an incident.\n\nThe scale invites scrutiny. Ten billion yen funds several teams across multiple agencies for an entire economy, which points to a program weighted toward people and coordination rather than a broad subsidy for corporate security spending. The Prime Minister’s call for companies to step up their own preparedness reinforces that reading.\n\nWhat they're not saying:\n• Allocation: The government has not said how the 10 billion yen is divided among the top gun team, the rescue team, the hardening team, active cyber defense and information sharing, or whether funding will recur beyond this emergency package.\n• Staffing and timelines: Only the METI team carries a deadline (end of November). Start dates, team sizes and recruitment plans for the rescue and hardening teams have not been disclosed.\n• Eligibility and terms: The government has not specified which companies qualify for rescue-team help, whether it is free, how it interacts with insurers and private responders, and what information companies must share in return.\n\nThe quiet part of this story 👇",
+                "url": "https://x.com/deepaklypse/status/2120195695076339765",
+                "source": "@deepaklypse",
+                "date": "Tue Nov 10 16:43:39 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "another free ai api just dropped and this one is kind of big 👀",
+                "summary": "another free ai api just dropped and this one is kind of big 👀\n\nlg, yes the tv company, opened their k-exaone 2.5 model api for free on nov 9. anyone can get a key, developers, startups, students, researchers\n\ni was reading through their docs and a few things stood out\n\nit works like the openai api, so if you already use openai style code you just change the url, key and model name. that's it\n\nthe context is huge, around 524k tokens. you can throw really long documents at it\n\nit's text only for now. no images\n\nthey're also saying it got 70% better in just 8 weeks 📈 but honestly they didn't say what test that's from, so i'm not taking that number seriously until someone tests it properly\n\nthey announced it at nvidia's ai day in seoul and said they're working with nvidia on making it faster. not a full partnership yet, just talks\n\nbefore you go all in, a few things i'd keep in mind ⚠️\nthere's no info on limits yet. no info on if they use your prompts for training. and free can become paid anytime. so don't send private stuff and keep a backup model ready\n\nstill, free api plus that big context is worth trying for agents and bots 🛠️\n\nanyone tried it yet?\n\nhttps://t.co/8j7eqwgv0z\n\n#AI #FreeAPI #LG",
+                "url": "https://x.com/0x3tom/status/2120195733974557139",
+                "source": "@0x3tom",
+                "date": "Tue Nov 10 16:43:48 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "A drone that patrols your home.",
+                "summary": "A drone that patrols your home.\nFascinating.\n\nCrime, burglaries, and vandalism will be a thing of the past as technology and AI advance. \n\nWe just need AI judges to replace human judges and give swift, fair, and logical consequences to those caught on camera.\n\nDestroy the entire legal system as we know it and its ability to profit off crime, endless court cases, and people’s misfortunes.\n\nWe all hate the legal system, unless it pays your bills.",
+                "url": "https://x.com/realpeteyb123/status/2120195728328872234",
+                "source": "@realpeteyb123",
+                "date": "Tue Nov 10 16:43:47 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "I'm incredibly bullish on AI, I think we haven't seen even 1% of the positive impact that it will have on the world, but",
+                "summary": "I'm incredibly bullish on AI, I think we haven't seen even 1% of the positive impact that it will have on the world, but I don't think this story is about taking away labor from humans. I think it's about making humans 100x more capable and more productive.",
+                "url": "https://x.com/OfirPress/status/2120195706837446989",
+                "source": "@OfirPress",
+                "date": "Tue Nov 10 16:43:42 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "4"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R14_out_of_scope_coding",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_coding",
+        "difficulty": "easy",
+        "what_it_tests": "Câu coding ngoài phạm vi research/news → KHÔNG gọi tool."
+      },
+      "input": "Viết giúp mình một hàm Python tính Fibonacci bằng recursion.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "Python Fibonacci recursion",
+              "topic": "general",
+              "max_results": 10,
+              "timeframe": "year"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": "unexpected_tool_call",
+        "failure_type": "out_of_scope",
+        "failures": [
+          "expected no tool call"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "Python Fibonacci recursion",
+            "topic": "general",
+            "max_results": 10,
+            "timeframe": "year"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "Python Fibonacci recursion",
+            "topic": "general",
+            "timeframe": "year",
+            "items": [
+              {
+                "title": "08: Fibonacci Series Using Recursion in Python | Step-by-Step Explanation",
+                "url": "https://www.youtube.com/watch?v=kfIsd_2_0CA",
+                "source": "youtube.com",
+                "summary": "[5:52] If n == 0: return 0 If n == 1: return 1 Then, for the recursive case:\n[6:03] return fibonacci(n - 1) + fibonacci(n - 2) Here, we have two recursive calls.\n[6:14] To get the next number in the series,  we need to add the previous two numbers. Right? Now let's take the input for n. It is an  integer input and represents the index.\n[6:32] Okay, we are done. Let's save this and execute it. If n is 5, the output is 5. [...] ### Transcript\n[0:00] Welcome to the channel. Today, in this tutorial,   let's write a Python program to print a number  in the Fibonacci series using recursion.\n[0:07] The Fibonacci sequence is a series of numbers   where each number is the sum of the two  preceding ones, usually starting from 0 and 1.\n[0:17] Okay, it is a series of numbers starting  from 0 and 1. We know the first two numbers,   and to calculate the next number in the series,  we need to add the previous two numbers. [...] ### Description\n462 views\nPosted: 2026-06-11\nIn this tutorial, you'll learn how to generate Fibonacci numbers using recursion in Python. We begin by understanding the Fibonacci sequence, derive the recursive formula, and then implement a recursive function to find the Fibonacci number at any given position. Finally, we see how to print the entire Fibonacci series up to a specified index.\n\nWhat You'll Learn",
+                "score": 0.8727061
+              },
+              {
+                "title": "15: How Recursive Fibonacci Works in Python | Call Stack Explained Step by Step",
+                "url": "https://www.youtube.com/watch?v=irIFdsXl4qk",
+                "source": "youtube.com",
+                "summary": "In this tutorial, we walk through the internal working of a recursive Fibonacci program in Python using the example `fib(3)`. The explanation begins by showing how execution starts, takes user input, and calls the recursive function. Every function call creates a stack frame, which is pushed onto the call stack. When the function reaches a base case (`n == 0` or `n == 1`), it returns a value, the corresponding stack frame is removed from the call stack, and execution resumes in the calling [...] [1:14] is equal to 1. No written Fibonacci of nus1 plus  of n minus 2. That is actually here you can see  \n[1:22] two function calls. First Python will execute  this function call. For this function call,   new stack frame is created and added to the call  stack. Now, Python will pause the execution of  \n[1:33] this and it will execute Fibonacci of here. Now,  n value is 1. N is equal to0. No, n is equal to [...] The tutorial demonstrates how `fib(3)` recursively calls `fib(2)` and `fib(1)`, and how `fib(2)` further calls `fib(1)` and `fib(0)`. As each recursive call completes, the returned values are added together until the final result, 2, is produced and printed. Finally, the tutorial explains that the maximum number of stack frames at any time is proportional to the input value `n`, resulting in a space complexity of O(n). This visual walkthrough helps beginners understand recursion, function",
+                "score": 0.8690161
+              },
+              {
+                "title": "Understanding the Fibonacci Series and Recursion",
+                "url": "https://medium.com/@thirupathireddybhureddygari/understanding-the-fibonacci-series-and-recursion-b3f09303fd86",
+                "source": "medium.com",
+                "summary": "## First 10 Fibonacci Numbers Using Recursion in Python\n\nBelow is a Python program to generate the first 10 Fibonacci numbers using recursion, followed by a code explanation and a hand-drawn stack trace.\n\n## Python Code\n\ndef fibonacci(n):  \n # Base cases  \n if n == 0:  \n return 0  \n if n == 1:  \n return 1  \n # Recursive case  \n return fibonacci(n-1) + fibonacci(n-2)# Generate first 10 Fibonacci numbers  \nfor i in range(10):  \n print(f\"F({i}) = {fibonacci(i)}\")\n## Code Explanation [...] 1.   Call to`fibonacci(3)`:\n\n   Enters recursive case: `fibonacci(2) + fibonacci(1)`\n   Call to`fibonacci(2)`:\n   Enters recursive case: `fibonacci(1) + fibonacci(0)`\n   Call to`fibonacci(1)`: Returns 1 (base case)\n   Call to`fibonacci(0)`: Returns 0 (base case)\n   Compute: `1 + 0 = 1`\n   Call to`fibonacci(1)`: Returns 1 (base case)\n   Compute: `1 + 1 = 2`\n\n1.   Call to`fibonacci(2)`: [...] Function Definition: The `fibonacci(n)` function computes the ( n )-th Fibonacci number.\n   Base Cases:\n   If ( n = 0 ), return 0 (( F(0) = 0 )).\n   If ( n = 1 ), return 1 (( F(1) = 1 )).\n   Recursive Case: For ( n \\geq 2 ), return the sum of `fibonacci(n-1)` and `fibonacci(n-2)`.\n   Loop: The `for` loop iterates from 0 to 9, calling `fibonacci(i)` to print each number.\n   Output:\n   `F(0) = 0 F(1) = 1 F(2) = 1 F(3) = 2 F(4) = 3 F(5) = 5 F(6) = 8 F(7) = 13 F(8) = 21 F(9) = 34`",
+                "score": 0.8674071
+              },
+              {
+                "title": "Recursive Fibonacci in Python: 4 Implementation Methods",
+                "url": "https://www.facebook.com/groups/pythoncoder/posts/28218697084394007",
+                "source": "facebook.com",
+                "summary": "You can implement the recursive Fibonacci sequence in Python using a simple function that calls itself. The function should return `n` if `n` is less than ...Read more",
+                "score": 0.81979275
+              },
+              {
+                "title": "Recursive Function in Python: Examples & Guide",
+                "url": "https://www.kaishclasses.com/blog/recursive-function-in-python",
+                "source": "kaishclasses.com",
+                "summary": "fibonacci(0) returns 0.\n fibonacci(1) returns 1.\n fibonacci(2) returns fibonacci(1) + fibonacci(0), which equals 1.\n fibonacci(3) returns fibonacci(2) + fibonacci(1), which equals 2.\n fibonacci(4) returns fibonacci(3) + fibonacci(2), which equals 3.\n\nThe base condition handles the first two values, while the recursive case calculates the remaining values.\n\n## Example 3: Factorial Using Recursion [...] ### Python Program\n\n```\ndef fibonacci(n): if n <= 1: return n return fibonacci(n - 1) + fibonacci(n - 2) terms = int(input(\"Enter the number of terms: \")) for i in range(terms): print(fibonacci(i), end=\" \")\n```\n\n### Output\n\n```\nEnter the number of terms: 10 0 1 1 2 3 5 8 13 21 34\n```\n\n### Understanding the Fibonacci Function\n\nThe function uses the following mathematical relationship:\n\nF(n) = F(n - 1) + F(n - 2) [...] ### Step-by-Step Explanation\n\n1. The function starts with n = 5.\n2. It prints 5 and calls countdown(4).\n3. The next calls print 4, 3, 2, and 1.\n4. When n becomes 0, the base condition executes.\n5. The function stops making new recursive calls.\n\n## Example 2: Fibonacci Series Using Recursion\n\nThe Fibonacci series is a sequence in which each number is the sum of the previous two numbers. The series starts with 0 and 1.\n\nExample: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34\n\n### Python Program",
+                "score": 0.8016413
+              },
+              {
+                "title": "10: Fibonacci Recursion Time and Space Complexity Explained | Python Tutorials",
+                "url": "https://www.youtube.com/watch?v=fhQRGPRpnBg",
+                "source": "youtube.com",
+                "summary": "Topics covered:\n\nRecursive Fibonacci algorithm\nTime complexity analysis\nRecursive call tree\nExponential growth of function calls\nWhy Fibonacci recursion is O(2^n)\nSpace complexity analysis\nWhy space complexity is O(n)\n\nThis tutorial is ideal for beginners learning recursion, algorithm analysis, and Big O notation in Python. [...] # 10: Fibonacci Recursion Time and Space Complexity Explained | Python Tutorials\n## Channel: Amulya's Academy\n224K subscribers\n5 likes\n\n### Description\n263 views\nPosted: 2026-06-21\nLearn how to analyze the time complexity and space complexity of the recursive Fibonacci algorithm in Python. In this tutorial, we break down the recursive call tree, understand why the number of function calls grows exponentially, and see how recursion affects memory usage through the call stack.\n\nTopics covered: [...] [0:49] Here, each call makes two more calls.  Here, we need to calculate how many   times this function is called  until it reaches the base case.\n[0:58] We can visualize the function call like this.  If I take n value as five, Fibonacci of five,   this function will call Fibonacci  of four and three. This will call...\n[1:24] So, we can represent this like this.  Every node splits into two new calls. Here, number of function calls grows like this.",
+                "score": 0.78963995
+              },
+              {
+                "title": "Python Program for nth Fibonacci number - GeeksforGeeks",
+                "url": "https://www.geeksforgeeks.org/python/python-program-for-n-th-fibonacci-number",
+                "source": "geeksforgeeks.org",
+                "summary": "Python  ````\n def fibonacci(n): if n< 0: return \"Incorrect input\" a, b = 0, 1 for _ in range(n): a, b = b, a + b return a print(fibonacci(9))\n```` \n\nOutput\n\n```\n34 \n```\n\nExplanation:\n\n a, b = 0, 1 stores first two values\n for \\_ in range(n) runs loop n times\n a, b = b, a + b shifts values to next pair\n return a returns required Fibonacci number\n\n## Recursion with Memoization [...] The sequence begins as: 0, 1, 1, 2, 3, 5, 8, 13, 21, ...\n\nExample: To calculate the nth fibonacci term we can directly apply the fibonacci formula using recursion. Each call creates two more calls, leading to repeated calculations until we find the targeted term.\n\n Python  ````\n def fibonacci(n): if n<= 1: return n return fibonacci(n - 1) + fibonacci(n - 2) print(fibonacci(9))\n```` \n\nOutput\n\n```\n34 \n``` [...] Python  ````\n def multiply(F, M): x = F M + F M y = F M + F M z = F M + F M w = F M + F M F, F, F, F = x, y, z, w def power(F, n): if n<= 1: return M = power(F, n// 2) multiply(F, F) if n % 2: multiply(F, M) def fib(n): if n == 0: return 0 F = power(F, n - 1) return F print(fib(9))\n```` \n\nOutput\n\n```\n34 \n```\n\nExplanation:",
+                "score": 0.7797419
+              },
+              {
+                "title": "Python Program to Display Fibonacci Sequence Using ...",
+                "url": "https://www.tutorialspoint.com/article/python-program-to-display-fibonacci-sequence-using-recursion",
+                "source": "tutorialspoint.com",
+                "summary": "Mar 25, 2026 — Fibonacci demonstrates the power of recursion by breaking complex problems into simpler subproblems.",
+                "score": 0.7043437
+              },
+              {
+                "title": "Fibonacci, recursion vs memoization",
+                "url": "https://www.facebook.com/61592827344125/videos/fibonacci-recursion-vs-fibonacci/1718496142580279",
+                "source": "facebook.com",
+                "summary": "An educational animation demonstrates how recursion works using the Fibonacci sequence as an example. It visualizes the process of calculating fib(4) in Python, ...Read more",
+                "score": 0.6922474
+              },
+              {
+                "title": "Nth Fibonacci Number - GeeksforGeeks",
+                "url": "https://www.geeksforgeeks.org/dsa/program-for-nth-fibonacci-number",
+                "source": "geeksforgeeks.org",
+                "summary": "// base case\n    if (n <= 1) {\n        return n;\n    }\n    \n    // sum of the two preceding \n    // Fibonacci numbers\n    return nthFibonacci(n - 1) + nthFibonacci(n - 2);\n}\n\n//Driver Code Starts\nlet n = 5;\nlet result = nthFibonacci(n);\nconsole.log(result);\n//Driver Code Ends\n\n````\n\nTime Complexity: O(2n), because each state requires answers from previous two states, and thus calls the function for both of those states recursively.  \nAuxiliary Space: O(n), due to recursion stack [...] static void matrixPower(int[][] mat1, int n) {\n      \n        // Base case for recursion\n        if (n == 0 || n == 1) return;\n\n        int[][] mat2 = {{1, 1}, {1, 0}};\n\n        matrixPower(mat1, n / 2);\n\n        multiply(mat1, mat1);\n\n        // If n is odd, multiply by the helper matrix mat2\n        if (n % 2 != 0) {\n            multiply(mat1, mat2);\n        }\n    }\n\n    static int nthFibonacci(int n) {\n        if (n <= 1) return n; [...] redirect icon\n\nTable of Content\n\n### [Naive Approach] Using Recursion\n\nWe can use recursion to solve this problem because any Fibonacci number n depends on previous two Fibonacci numbers. Therefore, this approach repeatedly breaks down the problem until it reaches the base cases.\n\nRecurrence relation:\n\n````\n//Driver Code Starts\n#include <iostream>\nusing namespace std;\n\n//Driver Code Ends\n\nint nthFibonacci(int n){\n\n    // base case\n    if (n <= 1){\n        return n;\n    }",
+                "score": 0.6672566
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M01_clarify_then_fill",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_clarify_fill",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: carry limit=5 từ lượt 1 + map tên Elon Musk thành handle elonmusk từ lượt 2."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tóm tắt 5 tweet mới nhất giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Của Elon Musk nhé"
+        },
+        {
+          "role": "user",
+          "content": "Giữ đúng 5 tweet, đừng đổi số lượng"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 5
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn cần tóm tắt 5 tweet mới nhất của Elon Musk, đúng không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call timeline",
+          "extra tool call clarify"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn cần tóm tắt 5 tweet mới nhất của Elon Musk, đúng không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn cần tóm tắt 5 tweet mới nhất của Elon Musk, đúng không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "M02_carryover_timeframe",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_carryover",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: chỉ xử lý latest turn, carry timeframe=day và topic=news, query robotics."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin AI hôm nay có gì?"
+        },
+        {
+          "role": "user",
+          "content": "Còn về robotics thì sao?"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tìm robotics thôi, vẫn là tin hôm nay"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "timeframe": "day",
+              "query": "robotics today",
+              "topic": "general"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "query: expected 'robotics', got 'robotics today'",
+          "topic: expected 'news', got 'general'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "timeframe": "day",
+            "query": "robotics today",
+            "topic": "general"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "robotics today",
+            "topic": "general",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Robotics Industry Breaking News and Press Releases",
+                "url": "https://www.businesswire.com/newsroom/industry/technology/robotics",
+                "source": "businesswire.com",
+                "summary": "COLUMBUS, Ohio--(BUSINESS WIRE)--Path Robotics, the global leader in physical AI for manufacturing, today announced $300 million in Series E financing at a post-money valuation of $2.45 billion, led by Georgian, an AI-focused growth equity firm. The round includes participation from existing investors Addition, Drive Capital, IronArc Ventures, Tiger Global, Yamaha Motor Ventures and its affiliates, and additional investors D. E. Shaw Ventures and NAVER Ventures. Emily Walsh, partner at [...] AUSTIN, Texas--(BUSINESS WIRE)--ACS, a precision robotics company for defense, today announced it has established a Directed Energy division, expanding its multi-product portfolio with the development of new high-energy laser capabilities for U.S. and allied governments. The company announced the appointment of Amanda Clark as Vice President, Directed Energy and John Mason as Program Director, High Energy Laser to lead the division. Clark and Mason join the company from U.S. Army Space and [...] SHANGHAI--(BUSINESS WIRE)--Robbyant, an embodied AI company within Ant Group, today announced the open-source release of LingBot-Touch, a tactile foundation model that gives robots a critical missing sense by enabling robust touch perception. Pre-trained on nearly 5,000 hours of real-world tactile data, the model covers three mainstream sensing modalities—magnetic tactile, visual tactile, and piezoresistive sensing—and translates their diverse signals into a unified tactile representation.",
+                "score": 0.75831425
+              },
+              {
+                "title": "Inside the Robot Data Factory: How Mecka Sensorizes Humans to Train Robots | Sequoia Capital",
+                "url": "https://sequoiacap.com/podcast/inside-the-robot-data-factory-how-mecka-sensorizes-humans-to-train-robots",
+                "source": "sequoiacap.com",
+                "summary": "Josh Gao: I think people underestimate how diverse robotics can be. Humanoids are incredibly popular, and they'll be a very popular terminal state of robotics as well. But beyond that, there are so many different form factors that exist in robotics today. Look at hotels in China or Southeast Asia, for example, where robots are doing services, doing cleaning, delivering from the front desk to your hotel room door after your Uber Eats arrives. That exists. Many of these bots are widely deployed [...] For Go, the rules of the game are the entire circumference of the world you operate in. In robotics, you have the incredibly rich detail of the physical world, and we don't have a world simulator that can recreate that today. So to close that gap, a lot of the egocentric data today is, one, helping us ground the basic physics and the basic behavior cloning you have to get to. It's also contributing to creating what a world simulator might look like. Somewhere along the way, I think we'll be [...] Josh Gao: I think we still have the luxury of a lot of things that were given to us by the internet, so we aren't starting from zero. You can see it across LLMs and LLM data: pre-training data was always driven by the labs, largely through web crawlers and things like that. It didn't become a large market. Today in robotics, we do see pre-training as quite a large market, and that can take several forms. It could be that we're teaching video models how to generate more physics-grounded",
+                "score": 0.70483154
+              },
+              {
+                "title": "AWS’s David Dorf on Where Robots Deliver Value Today: The RetailTouchPoints.com Q&A",
+                "url": "https://www.retailtouchpoints.com/features/awss-david-dorf-on-where-robots-deliver-value-today-the-retailtouchpoints-com-qa/621958",
+                "source": "retailtouchpoints.com",
+                "summary": "Dorf: The practical applications are the ones in structured, controlled spaces doing high-volume, repetitive work. That means sorting and mobile robots in distribution centers (DCs) come first, followed by goods-to-person picking. Autonomous forklifts and in-store restocking are real, but narrower and earlier. [...] _RetailTouchPoints.com: The report points to warehouse picking, automated sorting, autonomous forklifts, mobile robots and in-store restocking as key applications. Which of these are proving most practical__for retailers today, and why?_ [...] For retailers, this creates an opportunity to invest in workforce training on two fronts: reskilling existing employees to operate, maintain and work effectively alongside physical AI technologies, while preparing for new roles in areas such as robotics maintenance, operations and systems integration.\n\nEquipping employees with the skills to work with these technologies will be important as retailers bring physical AI into their operations.",
+                "score": 0.528753
+              },
+              {
+                "title": "10K views · 48 reactions | A humanoid robot has joined an Antarctic endurance race, but its battery didn’t last long. #9News | 9 News",
+                "url": "https://www.facebook.com/9News/videos/a-humanoid-robot-has-joined-an-antarctic-endurance-race-but-its-battery-didnt-la/1114114781615802",
+                "source": "facebook.com",
+                "summary": "[](\n\nPrime Minister Anthony Albanese has announced a new artificial intelligence safety regulator will be established after a major cyber security breach targeting Australian government websites. #9News\n\n9 News\n\n4.5K views\n\n · \n\n35m ago\n\nImage 26: Video thumbnail 2:32\n\n[](\n\nFederal Government unveils AI legislation\n\n9 News\n\n6.7K views\n\n · \n\n1h ago\n\nImage 27: Video thumbnail 0:22\n\n[]( [...] [](\n\nAmazon has signed a deal with Australia’s largest Christmas tree farm, set to deliver across Sydney, Melbourne and Brisbane\n\n9 News\n\n7.9K views\n\n · \n\n1h ago\n\nImage 28: Video thumbnail 2:35\n\n[](\n\nBeaconsfield mine survivor passes away\n\n9 News\n\n2.9K views\n\n · \n\n1h ago\n\nImage 29: Video thumbnail 1:27\n\n[](\n\nNew fallout in 'Sandpapergate'\n\n9 News\n\n2.3K views\n\n · \n\n1h ago\n\nPages\n\nInterest\n\nTV & Movies\n\nTV show\n\n9 News\n\nVideos [...] Image 19 9 News 16K\n\nImage 20 9 News 312K\n\n## Related videos\n\nImage 21: Video thumbnail 0:12\n\n[](\n\nOlympic champion Ariarne Titmus and her partner are expecting their first child | 9 News Australia\n\n9 News\n\n0 views\n\n · \n\n1m ago\n\nImage 22: Video thumbnail 2:22\n\n[](\n\nJust five seconds of your voice and a single photo are all it takes to create a digital clone of you, according to AI experts. #9News\n\n9 News\n\n2.5K views\n\n · \n\n29m ago\n\nImage 23: Video thumbnail 0:22\n\n[](",
+                "score": 0.19738291
+              },
+              {
+                "title": "i've been playing around with this model on some robotics ...",
+                "url": "https://x.com/cdngdev/status/2119971998776635555",
+                "source": "x.com",
+                "summary": "Fable 5.2 shows substantially improved skills in controlling physical robots, even on tasks it has never explicitly been trained to do. On RoboDojo, a benchmark",
+                "score": 0.13682763
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M03_correction_handle",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_correction",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: map tên thường, sửa Sam Altman→Andrej Karpathy, dùng handle karpathy và limit=3."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tweet mới nhất của Sam Altman"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, của Andrej Karpathy"
+        },
+        {
+          "role": "user",
+          "content": "Lấy 3 tweet mới nhất nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "karpathy",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn muốn lấy 3 tweet mới nhất của ai?",
+              "response_type": "choice",
+              "options": [
+                "Sam Altman",
+                "Andrej Karpathy"
+              ]
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "missing tool call timeline",
+          "extra tool call clarify"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn muốn lấy 3 tweet mới nhất của ai?",
+            "response_type": "choice",
+            "options": [
+              "Sam Altman",
+              "Andrej Karpathy"
+            ]
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn muốn lấy 3 tweet mới nhất của ai?",
+            "response_type": "choice",
+            "options": [
+              "Sam Altman",
+              "Andrej Karpathy"
+            ],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "M04_clarify_then_url",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_clarify_url",
+        "difficulty": "medium",
+        "what_it_tests": "3 turns: sau khi được cung cấp URL, latest turn xác nhận chỉ đọc link đó → read_url đúng url."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tóm tắt bài này hộ mình"
+        },
+        {
+          "role": "user",
+          "content": "https://anthropic.com/news/claude"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ đọc đúng link đó thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://anthropic.com/news/claude"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://anthropic.com/news/claude"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://anthropic.com/news/claude"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://anthropic.com/news/claude",
+            "items": [
+              {
+                "title": "https://anthropic.com/news/claude",
+                "url": "https://anthropic.com/news/claude",
+                "source": "anthropic.com",
+                "summary": "[Skip to main content](https://www.anthropic.com/news/claude#main-content)\n\nA 404 poem byClaude Fable 5.2Claude Opus 5.5Claude Sonnet 5.5Claude Haiku 5.5\n\nA baker moved away,"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M05_correction_limit",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_arg_correction",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: map tên Elon Musk, carry handle elonmusk, sửa limit 10→3."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Lấy 10 tweet mới nhất của Elon Musk"
+        },
+        {
+          "role": "user",
+          "content": "Cho mình 3 thôi"
+        },
+        {
+          "role": "user",
+          "content": "Vẫn của Elon Musk nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "elonmusk",
+            "limit": 3
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "elonmusk",
+            "items": [
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement",
+                "summary": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement learning and infer…",
+                "url": "https://x.com/elonmusk/status/2120102894817173862",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 442,
+                  "views": "606064"
+                }
+              },
+              {
+                "title": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the g",
+                "summary": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the ground, is also very well suited to training super intelligence",
+                "url": "https://x.com/elonmusk/status/2120102767624880364",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:24 +0000 2026",
+                "metrics": {
+                  "favorites": 59714,
+                  "retweets": 5015,
+                  "views": "3392198"
+                }
+              },
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure",
+                "summary": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure\n\nThe engineering behind Starl…",
+                "url": "https://x.com/elonmusk/status/2120101380144992635",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:28:53 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 217,
+                  "views": "536635"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M06_switch_tool",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_tool",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: explicitly bỏ Twitter, chuyển sang web_search news, giữ chủ đề OpenAI."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mọi người nói gì về OpenAI trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Bỏ Twitter, chuyển sang tìm trên web tin tức đi"
+        },
+        {
+          "role": "user",
+          "content": "Giữ chủ đề OpenAI"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "OpenAI",
+              "topic": "news"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text",
+              "question": "Bạn cần tìm thông tin gì về OpenAI?"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "missing tool call lookup",
+          "extra tool call clarify"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "response_type": "text",
+            "question": "Bạn cần tìm thông tin gì về OpenAI?"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn cần tìm thông tin gì về OpenAI?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    }
+  ]
+}

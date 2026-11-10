@@ -1,0 +1,72 @@
+{
+  "transcript_id": "v5_openrouter_20261110T144842298288",
+  "version": "v5",
+  "artifact_version": "v5+pfc14bea47ff2+td908e6fef2e2",
+  "prompt_hash": "fc14bea47ff20d008ba6b1bbe3f953c1e954cc1f555ae4a169b81b6695184359",
+  "tools_hash": "d908e6fef2e26d97791764f006890d9616c214f6cc358aa6bf807f179c5f5c02",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "artifacts\\versions\\v5\\system_prompt.md",
+  "tools": "artifacts\\versions\\v5\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T14:48:42",
+  "updated_at": "2026-11-10T14:48:57",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T14:48:52",
+      "user": "Tweet mới nhất của Sam Altman là gì?",
+      "status": "answered",
+      "assistant_text": "Hiện tại, mình không thể truy cập vào tweet mới nhất của Sam Altman. Bạn có muốn tìm thông tin khác không?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "timeline",
+              "args": {
+                "screenname": "sama"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "timeline",
+              "args": {
+                "screenname": "sama"
+              },
+              "result": {
+                "tool": "get_user_tweets",
+                "error": "RuntimeError",
+                "message": "Missing RAPIDAPI_KEY env var"
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "Hiện tại, mình không thể truy cập vào tweet mới nhất của Sam Altman. Bạn có muốn tìm thông tin khác không?",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "sama"
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "error": "RuntimeError",
+            "message": "Missing RAPIDAPI_KEY env var"
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T14:48:57"
+    }
+  ]
+}

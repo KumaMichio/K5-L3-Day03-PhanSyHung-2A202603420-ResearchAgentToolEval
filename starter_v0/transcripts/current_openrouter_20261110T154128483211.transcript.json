@@ -1,0 +1,151 @@
+{
+  "transcript_id": "current_openrouter_20261110T154128483211",
+  "version": "current",
+  "artifact_version": "current+pfc14bea47ff2+td908e6fef2e2",
+  "prompt_hash": "fc14bea47ff20d008ba6b1bbe3f953c1e954cc1f555ae4a169b81b6695184359",
+  "tools_hash": "d908e6fef2e26d97791764f006890d9616c214f6cc358aa6bf807f179c5f5c02",
+  "interface": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "artifacts\\system_prompt.md",
+  "tools": "artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T15:41:28",
+  "updated_at": "2026-11-10T15:41:51",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T15:41:39",
+      "user": "thời tiết hà nội",
+      "status": "answered",
+      "assistant_text": "Thời tiết Hà Nội hiện tại có một số thông tin đáng chú ý như sau:\n\n1. **Nhiệt độ**: Nhiệt độ trung bình khoảng 25°C, với độ ẩm khoảng 84%. \n2. **Dự báo thời tiết**: Có khả năng có mưa rào trong những ngày tới, đặc biệt là vào ngày 12 và 13 tháng 11, với nhiệt độ dao động từ 18°C đến 25°C.\n3. **Chất lượng không khí**: Chỉ số chất lượng không khí (AQI) tại Hà Nội có thể dao động, với một số thời điểm ghi nhận AQI ở mức 125, cho thấy không khí có thể không tốt cho sức khỏe.\n\nBạn có thể tham khảo thêm thông tin chi tiết về thời tiết Hà Nội tại các nguồn sau:\n- [Thời tiết Hà Nội 2026: Kinh nghiệm du lịch 4 mùa | Trip.com](https://vn.trip.com/guide/info/th%E1%BB%9Di-ti%E1%BA%BFt-h%C3%A0-n%E1%BB%99i.html)\n- [Chỉ số chất lượng không khí (AQI) tại Hà Nội | IQAir Việt Nam](https://www.iqair.com/vi/air-quality/vietnam/ha-noi/hanoi)\n\nNếu bạn cần thêm thông tin cụ thể hơn, hãy cho mình biết!",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "lookup",
+              "args": {
+                "query": "Hà Nội",
+                "topic": "general"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "lookup",
+              "args": {
+                "query": "Hà Nội",
+                "topic": "general"
+              },
+              "result": {
+                "tool": "web_search",
+                "query": "Hà Nội",
+                "topic": "general",
+                "timeframe": "week",
+                "items": [
+                  {
+                    "title": "Hà Nội – Wikipedia tiếng Việt",
+                    "url": "https://vi.wikipedia.org/wiki/H%C3%A0_N%E1%BB%99i",
+                    "source": "vi.wikipedia.org",
+                    "summary": "Hà Nội là thủ đô của nước Cộng hòa xã hội chủ nghĩa Việt Nam. Đy là thành phố trực thuộc trung ương \"Thành phố trực thuộc trung ương (Việt Nam)\") lớn thứ hai về quy mô dn số, được xếp loại đô thị đặc biệt, có vị trí là trung tm văn hóa, chính trị, một trong hai trung tm kinh tế, giáo dục quan trọng tại Việt Nam. Hà Nội nằm về phía Ty Bắc của trung tm vùng đồng bằng chu thổ sông Hồng, với địa hình bao gồm vùng đồng bằng trung tm và vùng đồi núi ở phía Bắc và phía Ty thành phố. Với diện tích [...] phố. Với diện tích 3.359,82 km², và dn số xấp xỉ 8,8 triệu người, Hà Nội là thành phố trực thuộc trung ương có diện tích lớn thứ sáu tại Việt Nam, đồng thời cũng là thành phố đông dn thứ hai và có mật độ dn số cao nhất trong 34 đơn vị hành chính cấp tỉnh của Việt Nam nhưng phn bố dn số không đồng đều. Hà Nội có 126 đơn vị hành chính cấp xã \"Đơn vị hành chính cấp xã (Việt Nam)\"), gồm 51 phường và 75 xã. Hà Nội đã sớm trở thành trung tm chính trị, kinh tế và văn hóa ngay từ những buổi đầu của [...] Trước khi có tên gọi như hiện nay, Hà Nội đã trải qua nhiều tên gọi khác nhau. Tên gọi \"Hà Nội\" bắt đầu được dùng làm địa danh ở Việt Nam từ năm Minh Mạng thứ 12 (1831) khi có 1 tỉnh có tên là tỉnh Hà Nội \"Hà Nội (tỉnh)\") được thành lập ở Bắc Thành. \"Hà Nội\" viết bằng chữ Hán là \"河內\", nghĩa là \"bao quanh bởi các con sông\", tên gọi này phản ánh vị trí địa lý của tỉnh Hà Nội. Tỉnh này nằm giữa hai con sông là sông Nhị ở phía Đông Bắc và sông Thanh Quyết ở phía Ty Nam.",
+                    "score": 0.91563576
+                  },
+                  {
+                    "title": "Hanoi Creative City",
+                    "url": "https://hanoicreativecity.com",
+                    "source": "hanoicreativecity.com",
+                    "summary": "### SỰ KIỆN NỔI BẬT\n\n, là biểu tượng cho sự tăng trưởng kinh tế của Việt Nam.\n \n\n  ##### Nhà hát Lớn Hà Nội\n\n  Là một công trình kiến trúc tại thành phố Hà Nội, Việt Nam. Nhà hát tọa lạc trên quảng trường Cách mạng tháng Tám, vị trí đầu phố Tràng Tiền, không xa hồ Hoàn Kiếm và Bảo tàng Lịch sử Việt Nam.\n\n### Tại sao đến với Hà Nội ?\n\n### Nơi giao thoa giữa Cổ kính và Hiện đại [...] ### Nơi tập trung các giá trị lịch sử\n\nHà Nội là thành phố có hệ thống bảo tàng đa dạng bậc nhất Việt Nam. Một phần lớn trong số đó là các bảo tàng lịch sử, như Bảo tàng Lịch sử Qun sự, Bảo tàng Lịch sử Việt Nam, Bảo tàng Chiến thắng B52, Bảo tàng Cách mạng... Các lĩnh vực khác có thể kể tới Bảo tàng Mỹ thuật Việt Nam, Bảo tàng Dn tộc học Việt Nam, Bảo tàng Phụ nữ Việt Nam. [...] Theo con số giữa năm 2008, toàn thành phố Hà Nội có 17 rạp hát, trong đó 12 rạp thuộc hai quận Hoàn Kiếm và Hai Bà Trưng. Nhà hát Lớn của thành phố, nằm tại số 1 phố Tràng Tiền, quận Hoàn kiếm do người Pháp xy dựng và hoàn thành vào năm 1911. Ngày nay, đy là nơi biểu diễn các loại hình nghệ thuật cổ điển như opera, nhạc thính phòng, kịch nói, cũng là trung tm của các hội nghị, gặp gỡ. Nằm tại số 91 phố Trần Hưng Đạo, Cung Văn hóa Hữu nghị Hà Nội cũng là một địa điểm biểu diễn quan trọng, nơi",
+                    "score": 0.51969254
+                  },
+                  {
+                    "title": "Bản tin thời sự 15h ngày 09/11: Hà Nội giải bài toán bãi đỗ xe với tầm nhìn đô thị đa tầng",
+                    "url": "https://www.youtube.com/watch?v=F-IdDSTsUVE",
+                    "source": "youtube.com",
+                    "summary": "[3:40] Nhân dịp kỷ niệm ngày di sản văn hóa Việt Nam, ngày văn hóa Việt Nam và hưởng ứng lễ hội thiết kế sáng tạo Hà Nội năm\n[3:47] 2026, không gian triển lãm và chuỗi hoạt động chuyên đề với chủ đề Chuyện tường xưa, truyện tuồng nay, phía sau vàng son, tương lai nào cho tuồng? Tại Trung\n[3:56] tâm giao lưu văn hóa phố cổ, Hà Nội số 50 Đào Duy Tử là một điểm nhấn đặc biệt. [...] ➡ Đây là Kênh Youtube chính thức của Cơ quan Báo và Phát thanh, truyền hình Hà Nội.\n➡ Click Theo dõi (Subscribe) để nhận thông tin tin tức kịp thời trên kênh Youtube của Cơ quan Báo và Phát thanh, truyền hình Hà Nội.\n\n👉 THÔNG TIN LIÊN HỆ: \nCơ quan Báo và Phát thanh, truyền hình Hà Nội:\n🔶 Địa chỉ: Số 3-5 Huỳnh Thúc Kháng, Đống Đa, Hà Nội\n📧 Email: ttnoidungso@daihanoi.vn\n\n#thoisuhanoi  #HanoiOnline #BaovaPhatthanhTruyenhinhHaNoi [...] [1:13] tổ chức triển khai phân bổ và giao dự toán ngân sách theo đúng quy định. Bảo đảm sử dụng nguồn lực tiết kiệm hiệu quả, công khai và minh bạch.\n[1:24] Nhằm đáp ứng sự mong đợi của độc giả và khán thính giả, sáng nay cơ quan báo và phát thanh truyền hình Hà Nội đã tổ chức buổi giao lưu trực tuyến cùng ban tổ chức và top 3 Hoa hậu Việt Nam năm 2026.",
+                    "score": 0.36114272
+                  },
+                  {
+                    "title": "Thời tiết Hà Nội 2026: Kinh nghiệm du lịch 4 mùa | Trip.com",
+                    "url": "https://vn.trip.com/guide/info/th%E1%BB%9Di-ti%E1%BA%BFt-h%C3%A0-n%E1%BB%99i.html",
+                    "source": "vn.trip.com",
+                    "summary": "Mình từng sống và làm việc tại Hà Nội một thời gian nên có cơ hội trải nghiệm thời tiết ở cả bốn mùa. Theo kinh nghiệm của mình, mùa thu (tháng 9–11) là thời điểm lý tưởng để du lịch Hà Nội nhờ tiết trời mát mẻ, dễ chịu và lượng mưa giảm. Trong khi đó, tháng 6–7 thường nắng nóng, kèm những cơn mưa dông vào chiều tối. Sự chênh lệch nhiệt độ giữa các mùa cũng có thể khiến du khách chưa quen khí hậu dễ mệt hoặc cảm lạnh, vì vậy bạn nên theo dõi dự báo thời tiết trước chuyến đi. [...] Điều gì khiến thời tiết Hà Nội luôn để lại nhiều thương nhớ trong lòng du khách? Đó là những con phố rợp lá mùa thu, sắc hoa xun len lỏi khắp góc phố, cái nắng rực rỡ của mùa hè hay những ngày đông se lạnh đặc trưng của thủ đô. Mỗi mùa đều mang đến một vẻ đẹp rất riêng, tạo nên sức hút khó quên. Hãy cùng Trip.com khám phá đặc trưng khí hậu và chọn thời điểm lý tưởng để ghé thăm Hà Nội nhé! [...] 19℃ / 25℃\n\n12, Tháng 11, 2026\n\nMưa Rào\n\n19℃ / 25℃\n\n13, Tháng 11, 2026\n\nMưa Rào\n\n18℃ / 19℃\n\nThời Tiết Hà Nội: Thời Gian Tuyệt Vời Nhất Để Tham Quan Hà Nội\n\n7, Tháng 11, 2026 Hà Nội; Thời tiết: Nhiều My, Gió đông bắc: 0-10 km/giờ, Độ ẩm: 67%, Mặt trời mọc/lặn: 06:02/17:18\n\nHà NộiLái xe: Thích hợp, Chạy: Thích hợp\n\nXem thêm\n\n## Tổng quan thời tiết Hà Nội: Nhiệt độ và lượng mưa các tháng\n\nThời tiết Hà Nội như thế nào?\n\nThời tiết Hà Nội như thế nào?",
+                    "score": 0.3215244
+                  },
+                  {
+                    "title": "Chỉ số chất lượng không khí (AQI) tại Hà Nội và Ô nhiễm không khí tại Việt Nam | IQAir Việt Nam",
+                    "url": "https://www.iqair.com/vi/air-quality/vietnam/ha-noi/hanoi",
+                    "source": "iqair.com",
+                    "summary": "Gió xoay 140 độ 10  km/h  Biểu tượng Độ ẩm 84% | 06:00  125  Biểu tượng thời tiết  25°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 134 độ 10  km/h  Biểu tượng Độ ẩm 86% | 07:00  130  Biểu tượng thời tiết  26°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 146 độ 12  km/h  Biểu tượng Độ ẩm 82% | 08:00  122  Biểu tượng thời tiết  28°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 158 độ 14  km/h  Biểu tượng Độ ẩm 74% | 09:00  115  Biểu tượng thời tiết  29°  Bản đồ Chất [...] 106  Biểu tượng thời tiết  30°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 138 độ 10  km/h  Biểu tượng Độ ẩm 62% | 18:00  101  Biểu tượng thời tiết  29°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 129 độ 13  km/h  Biểu tượng Độ ẩm 64% | 19:00  103  Biểu tượng thời tiết  28°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 131 độ 17  km/h  Biểu tượng Độ ẩm 69% | 20:00  96  Biểu tượng thời tiết  27°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 136 độ 15  km/h [...] 136 độ 15  km/h  Biểu tượng Độ ẩm 73% | 21:00  89  Biểu tượng thời tiết  27°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 141 độ 13  km/h  Biểu tượng Độ ẩm 76% | 22:00  82  Biểu tượng thời tiết  26°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 138 độ 11  km/h  Biểu tượng Độ ẩm 78% | 23:00  82  Biểu tượng thời tiết  26°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 139 độ 9  km/h  Biểu tượng Độ ẩm 80%  Thứ 6 | 00:00  82  Biểu tượng thời tiết 80%  26°  Bản đồ Chất lượng",
+                    "score": 0.27664703
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "Thời tiết Hà Nội hiện tại có một số thông tin đáng chú ý như sau:\n\n1. **Nhiệt độ**: Nhiệt độ trung bình khoảng 25°C, với độ ẩm khoảng 84%. \n2. **Dự báo thời tiết**: Có khả năng có mưa rào trong những ngày tới, đặc biệt là vào ngày 12 và 13 tháng 11, với nhiệt độ dao động từ 18°C đến 25°C.\n3. **Chất lượng không khí**: Chỉ số chất lượng không khí (AQI) tại Hà Nội có thể dao động, với một số thời điểm ghi nhận AQI ở mức 125, cho thấy không khí có thể không tốt cho sức khỏe.\n\nBạn có thể tham khảo thêm thông tin chi tiết về thời tiết Hà Nội tại các nguồn sau:\n- [Thời tiết Hà Nội 2026: Kinh nghiệm du lịch 4 mùa | Trip.com](https://vn.trip.com/guide/info/th%E1%BB%9Di-ti%E1%BA%BFt-h%C3%A0-n%E1%BB%99i.html)\n- [Chỉ số chất lượng không khí (AQI) tại Hà Nội | IQAir Việt Nam](https://www.iqair.com/vi/air-quality/vietnam/ha-noi/hanoi)\n\nNếu bạn cần thêm thông tin cụ thể hơn, hãy cho mình biết!",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "Hà Nội",
+            "topic": "general"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "Hà Nội",
+            "topic": "general",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "Hà Nội – Wikipedia tiếng Việt",
+                "url": "https://vi.wikipedia.org/wiki/H%C3%A0_N%E1%BB%99i",
+                "source": "vi.wikipedia.org",
+                "summary": "Hà Nội là thủ đô của nước Cộng hòa xã hội chủ nghĩa Việt Nam. Đy là thành phố trực thuộc trung ương \"Thành phố trực thuộc trung ương (Việt Nam)\") lớn thứ hai về quy mô dn số, được xếp loại đô thị đặc biệt, có vị trí là trung tm văn hóa, chính trị, một trong hai trung tm kinh tế, giáo dục quan trọng tại Việt Nam. Hà Nội nằm về phía Ty Bắc của trung tm vùng đồng bằng chu thổ sông Hồng, với địa hình bao gồm vùng đồng bằng trung tm và vùng đồi núi ở phía Bắc và phía Ty thành phố. Với diện tích [...] phố. Với diện tích 3.359,82 km², và dn số xấp xỉ 8,8 triệu người, Hà Nội là thành phố trực thuộc trung ương có diện tích lớn thứ sáu tại Việt Nam, đồng thời cũng là thành phố đông dn thứ hai và có mật độ dn số cao nhất trong 34 đơn vị hành chính cấp tỉnh của Việt Nam nhưng phn bố dn số không đồng đều. Hà Nội có 126 đơn vị hành chính cấp xã \"Đơn vị hành chính cấp xã (Việt Nam)\"), gồm 51 phường và 75 xã. Hà Nội đã sớm trở thành trung tm chính trị, kinh tế và văn hóa ngay từ những buổi đầu của [...] Trước khi có tên gọi như hiện nay, Hà Nội đã trải qua nhiều tên gọi khác nhau. Tên gọi \"Hà Nội\" bắt đầu được dùng làm địa danh ở Việt Nam từ năm Minh Mạng thứ 12 (1831) khi có 1 tỉnh có tên là tỉnh Hà Nội \"Hà Nội (tỉnh)\") được thành lập ở Bắc Thành. \"Hà Nội\" viết bằng chữ Hán là \"河內\", nghĩa là \"bao quanh bởi các con sông\", tên gọi này phản ánh vị trí địa lý của tỉnh Hà Nội. Tỉnh này nằm giữa hai con sông là sông Nhị ở phía Đông Bắc và sông Thanh Quyết ở phía Ty Nam.",
+                "score": 0.91563576
+              },
+              {
+                "title": "Hanoi Creative City",
+                "url": "https://hanoicreativecity.com",
+                "source": "hanoicreativecity.com",
+                "summary": "### SỰ KIỆN NỔI BẬT\n\n, là biểu tượng cho sự tăng trưởng kinh tế của Việt Nam.\n \n\n  ##### Nhà hát Lớn Hà Nội\n\n  Là một công trình kiến trúc tại thành phố Hà Nội, Việt Nam. Nhà hát tọa lạc trên quảng trường Cách mạng tháng Tám, vị trí đầu phố Tràng Tiền, không xa hồ Hoàn Kiếm và Bảo tàng Lịch sử Việt Nam.\n\n### Tại sao đến với Hà Nội ?\n\n### Nơi giao thoa giữa Cổ kính và Hiện đại [...] ### Nơi tập trung các giá trị lịch sử\n\nHà Nội là thành phố có hệ thống bảo tàng đa dạng bậc nhất Việt Nam. Một phần lớn trong số đó là các bảo tàng lịch sử, như Bảo tàng Lịch sử Qun sự, Bảo tàng Lịch sử Việt Nam, Bảo tàng Chiến thắng B52, Bảo tàng Cách mạng... Các lĩnh vực khác có thể kể tới Bảo tàng Mỹ thuật Việt Nam, Bảo tàng Dn tộc học Việt Nam, Bảo tàng Phụ nữ Việt Nam. [...] Theo con số giữa năm 2008, toàn thành phố Hà Nội có 17 rạp hát, trong đó 12 rạp thuộc hai quận Hoàn Kiếm và Hai Bà Trưng. Nhà hát Lớn của thành phố, nằm tại số 1 phố Tràng Tiền, quận Hoàn kiếm do người Pháp xy dựng và hoàn thành vào năm 1911. Ngày nay, đy là nơi biểu diễn các loại hình nghệ thuật cổ điển như opera, nhạc thính phòng, kịch nói, cũng là trung tm của các hội nghị, gặp gỡ. Nằm tại số 91 phố Trần Hưng Đạo, Cung Văn hóa Hữu nghị Hà Nội cũng là một địa điểm biểu diễn quan trọng, nơi",
+                "score": 0.51969254
+              },
+              {
+                "title": "Bản tin thời sự 15h ngày 09/11: Hà Nội giải bài toán bãi đỗ xe với tầm nhìn đô thị đa tầng",
+                "url": "https://www.youtube.com/watch?v=F-IdDSTsUVE",
+                "source": "youtube.com",
+                "summary": "[3:40] Nhân dịp kỷ niệm ngày di sản văn hóa Việt Nam, ngày văn hóa Việt Nam và hưởng ứng lễ hội thiết kế sáng tạo Hà Nội năm\n[3:47] 2026, không gian triển lãm và chuỗi hoạt động chuyên đề với chủ đề Chuyện tường xưa, truyện tuồng nay, phía sau vàng son, tương lai nào cho tuồng? Tại Trung\n[3:56] tâm giao lưu văn hóa phố cổ, Hà Nội số 50 Đào Duy Tử là một điểm nhấn đặc biệt. [...] ➡ Đây là Kênh Youtube chính thức của Cơ quan Báo và Phát thanh, truyền hình Hà Nội.\n➡ Click Theo dõi (Subscribe) để nhận thông tin tin tức kịp thời trên kênh Youtube của Cơ quan Báo và Phát thanh, truyền hình Hà Nội.\n\n👉 THÔNG TIN LIÊN HỆ: \nCơ quan Báo và Phát thanh, truyền hình Hà Nội:\n🔶 Địa chỉ: Số 3-5 Huỳnh Thúc Kháng, Đống Đa, Hà Nội\n📧 Email: ttnoidungso@daihanoi.vn\n\n#thoisuhanoi  #HanoiOnline #BaovaPhatthanhTruyenhinhHaNoi [...] [1:13] tổ chức triển khai phân bổ và giao dự toán ngân sách theo đúng quy định. Bảo đảm sử dụng nguồn lực tiết kiệm hiệu quả, công khai và minh bạch.\n[1:24] Nhằm đáp ứng sự mong đợi của độc giả và khán thính giả, sáng nay cơ quan báo và phát thanh truyền hình Hà Nội đã tổ chức buổi giao lưu trực tuyến cùng ban tổ chức và top 3 Hoa hậu Việt Nam năm 2026.",
+                "score": 0.36114272
+              },
+              {
+                "title": "Thời tiết Hà Nội 2026: Kinh nghiệm du lịch 4 mùa | Trip.com",
+                "url": "https://vn.trip.com/guide/info/th%E1%BB%9Di-ti%E1%BA%BFt-h%C3%A0-n%E1%BB%99i.html",
+                "source": "vn.trip.com",
+                "summary": "Mình từng sống và làm việc tại Hà Nội một thời gian nên có cơ hội trải nghiệm thời tiết ở cả bốn mùa. Theo kinh nghiệm của mình, mùa thu (tháng 9–11) là thời điểm lý tưởng để du lịch Hà Nội nhờ tiết trời mát mẻ, dễ chịu và lượng mưa giảm. Trong khi đó, tháng 6–7 thường nắng nóng, kèm những cơn mưa dông vào chiều tối. Sự chênh lệch nhiệt độ giữa các mùa cũng có thể khiến du khách chưa quen khí hậu dễ mệt hoặc cảm lạnh, vì vậy bạn nên theo dõi dự báo thời tiết trước chuyến đi. [...] Điều gì khiến thời tiết Hà Nội luôn để lại nhiều thương nhớ trong lòng du khách? Đó là những con phố rợp lá mùa thu, sắc hoa xun len lỏi khắp góc phố, cái nắng rực rỡ của mùa hè hay những ngày đông se lạnh đặc trưng của thủ đô. Mỗi mùa đều mang đến một vẻ đẹp rất riêng, tạo nên sức hút khó quên. Hãy cùng Trip.com khám phá đặc trưng khí hậu và chọn thời điểm lý tưởng để ghé thăm Hà Nội nhé! [...] 19℃ / 25℃\n\n12, Tháng 11, 2026\n\nMưa Rào\n\n19℃ / 25℃\n\n13, Tháng 11, 2026\n\nMưa Rào\n\n18℃ / 19℃\n\nThời Tiết Hà Nội: Thời Gian Tuyệt Vời Nhất Để Tham Quan Hà Nội\n\n7, Tháng 11, 2026 Hà Nội; Thời tiết: Nhiều My, Gió đông bắc: 0-10 km/giờ, Độ ẩm: 67%, Mặt trời mọc/lặn: 06:02/17:18\n\nHà NộiLái xe: Thích hợp, Chạy: Thích hợp\n\nXem thêm\n\n## Tổng quan thời tiết Hà Nội: Nhiệt độ và lượng mưa các tháng\n\nThời tiết Hà Nội như thế nào?\n\nThời tiết Hà Nội như thế nào?",
+                "score": 0.3215244
+              },
+              {
+                "title": "Chỉ số chất lượng không khí (AQI) tại Hà Nội và Ô nhiễm không khí tại Việt Nam | IQAir Việt Nam",
+                "url": "https://www.iqair.com/vi/air-quality/vietnam/ha-noi/hanoi",
+                "source": "iqair.com",
+                "summary": "Gió xoay 140 độ 10  km/h  Biểu tượng Độ ẩm 84% | 06:00  125  Biểu tượng thời tiết  25°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 134 độ 10  km/h  Biểu tượng Độ ẩm 86% | 07:00  130  Biểu tượng thời tiết  26°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 146 độ 12  km/h  Biểu tượng Độ ẩm 82% | 08:00  122  Biểu tượng thời tiết  28°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 158 độ 14  km/h  Biểu tượng Độ ẩm 74% | 09:00  115  Biểu tượng thời tiết  29°  Bản đồ Chất [...] 106  Biểu tượng thời tiết  30°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 138 độ 10  km/h  Biểu tượng Độ ẩm 62% | 18:00  101  Biểu tượng thời tiết  29°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 129 độ 13  km/h  Biểu tượng Độ ẩm 64% | 19:00  103  Biểu tượng thời tiết  28°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 131 độ 17  km/h  Biểu tượng Độ ẩm 69% | 20:00  96  Biểu tượng thời tiết  27°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 136 độ 15  km/h [...] 136 độ 15  km/h  Biểu tượng Độ ẩm 73% | 21:00  89  Biểu tượng thời tiết  27°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 141 độ 13  km/h  Biểu tượng Độ ẩm 76% | 22:00  82  Biểu tượng thời tiết  26°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 138 độ 11  km/h  Biểu tượng Độ ẩm 78% | 23:00  82  Biểu tượng thời tiết  26°  Bản đồ Chất lượng Không khí IQAir AirVisual Gió xoay 139 độ 9  km/h  Biểu tượng Độ ẩm 80%  Thứ 6 | 00:00  82  Biểu tượng thời tiết 80%  26°  Bản đồ Chất lượng",
+                "score": 0.27664703
+              }
+            ]
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T15:41:51"
+    }
+  ]
+}
