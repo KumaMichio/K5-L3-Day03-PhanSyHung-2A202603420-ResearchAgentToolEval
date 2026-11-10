@@ -22,3 +22,7 @@ arxiv_papers/
 Thumbs.db
 .idea/
 .vscode/
+
+# Streamlit secrets (API keys) - never commit
+.streamlit/secrets.toml
+**/.streamlit/secrets.toml
