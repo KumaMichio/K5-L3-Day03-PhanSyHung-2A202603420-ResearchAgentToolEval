@@ -238,7 +238,9 @@ def sidebar() -> dict[str, Any]:
     with st.sidebar:
         st.header("⚙️ Cấu hình")
         provider = st.selectbox("Provider", PROVIDERS, index=0)
-        default_model = getattr(make_provider(provider), "default_model", "")
+        # <PROVIDER>_MODEL in .env overrides the code default (e.g. OPENROUTER_MODEL when
+        # OPENROUTER_BASE_URL points at another OpenAI-compatible host such as Groq).
+        default_model = os.getenv(f"{provider.upper()}_MODEL") or getattr(make_provider(provider), "default_model", "")
         model = st.text_input("Model", value=default_model, help="Để trống để dùng model mặc định của provider.")
         version = st.text_input("Version label", value="v2", help="Nhãn ghi vào transcript, ví dụ v2, v3.")
         with st.expander("Nâng cao"):
