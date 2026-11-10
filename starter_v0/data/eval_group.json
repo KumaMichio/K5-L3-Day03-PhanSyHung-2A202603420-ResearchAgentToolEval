@@ -1,7 +1,7 @@
 {
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Case do NHÓM tự viết thêm: 5 single-turn + 5 multi-turn, kiểm tra định tuyến hn_search, citations, phân biệt Hacker News vs Twitter, và xử lý tham số.",
+  "description": "Case do NHÓM tự viết thêm: 10 single-turn + 7 multi-turn cho 4 tool mới (hn_search, citations, wiki, github_repo): định tuyến, phân biệt HN/Twitter, wiki/lookup, github_repo/fetch, và xử lý tham số.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
   "cases": [
     {
@@ -108,6 +108,75 @@
       "failure_type": "wrong_arg_value",
       "expect": {"tool_calls": [{"name": "citations", "args": {"paper": "2106.09685"}}]},
       "metadata": {"skill": "multiturn_citations_correction", "difficulty": "hard", "what_it_tests": "Multi-turn: đính chính arXiv id từ 1706.03762 thành 2106.09685."}
+    },
+    {
+      "id": "G06_wiki_person_background",
+      "phase": "B",
+      "suite": "group",
+      "query": "Andrej Karpathy là ai?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "wiki", "args": {"query": "Andrej Karpathy", "lang": "en"}}]},
+      "metadata": {"skill": "routing_wiki", "difficulty": "easy", "what_it_tests": "Hỏi lý lịch một người -> wiki (không phải timeline/lookup), lang=en vì user không yêu cầu Wikipedia tiếng Việt (vi không có bài về Karpathy)."}
+    },
+    {
+      "id": "G07_wiki_lang_vi",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tra Wikipedia tiếng Việt về trí tuệ nhân tạo",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "wiki", "args": {"lang": "vi"}}]},
+      "metadata": {"skill": "wiki_lang_arg", "difficulty": "medium", "what_it_tests": "User nói rõ Wikipedia tiếng Việt -> wiki với lang='vi'."}
+    },
+    {
+      "id": "G08_news_not_wiki",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tin tức mới nhất về OpenAI hôm nay là gì?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "OpenAI", "topic": "news", "timeframe": "day"}}]},
+      "metadata": {"skill": "boundary_wiki_vs_lookup", "difficulty": "medium", "what_it_tests": "Tin tức mới về một tổ chức -> lookup news, KHÔNG dùng wiki (wiki chỉ cho định nghĩa/lý lịch)."}
+    },
+    {
+      "id": "G09_github_repo_from_url",
+      "phase": "B",
+      "suite": "group",
+      "query": "Repo https://github.com/langchain-ai/langgraph có bao nhiêu sao?",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "github_repo", "args": {"repo": "langchain-ai/langgraph"}}]},
+      "metadata": {"skill": "github_repo_url_arg", "difficulty": "medium", "what_it_tests": "User đưa URL GitHub -> github_repo, chỉ truyền 'owner/name' chứ không truyền cả URL."}
+    },
+    {
+      "id": "G10_readme_fetch_not_github_repo",
+      "phase": "B",
+      "suite": "group",
+      "query": "Đọc README của https://github.com/openai/openai-python giúp mình",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "fetch", "args": {"url": "https://github.com/openai/openai-python"}}]},
+      "metadata": {"skill": "boundary_github_repo_vs_fetch", "difficulty": "hard", "what_it_tests": "Đọc nội dung/README -> fetch URL; github_repo chỉ cho số liệu (stars, release)."}
+    },
+    {
+      "id": "GM06_github_release_followup",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Repo vllm-project/vllm có bao nhiêu sao?"},
+        {"role": "user", "content": "Bản release mới nhất của nó là gì?"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "github_repo", "args": {"repo": "vllm-project/vllm"}}]},
+      "metadata": {"skill": "multiturn_github_repo_carryover", "difficulty": "medium", "what_it_tests": "Lượt 2 nói 'nó' -> vẫn github_repo với đúng repo của lượt 1."}
+    },
+    {
+      "id": "GM07_wiki_then_news",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Mixture of Experts là gì?"},
+        {"role": "user", "content": "Còn tin tức mới về nó trong tuần này thì sao?"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"topic": "news", "timeframe": "week"}}]},
+      "metadata": {"skill": "multiturn_wiki_to_lookup", "difficulty": "hard", "what_it_tests": "Lượt 1 là định nghĩa (wiki), lượt 2 hỏi tin tuần này -> chuyển sang lookup news, timeframe week."}
     }
   ]
 }
