@@ -33,15 +33,15 @@ from tools import load_tool_declarations, to_openai_tools
 from versioning import artifact_version_dict, build_artifact_version
 from eval_dashboard import (
     COMPARE_PROMPTS,
-    METRIC_LABELS,
     available_versions,
     case_calls,
     case_matrix,
     load_runs,
     load_version_log,
-    summary_rows,
+    version_note,
     version_paths,
 )
+import ui_parts as ui
 
 CURRENT = "current (artifacts/)"
 ROOT = Path(__file__).parent
@@ -186,9 +186,13 @@ def run_turn(user_text: str) -> None:
 
 # ---------------------------------------------------------------- rendering
 
+def html(markup: str) -> None:
+    st.markdown(markup, unsafe_allow_html=True)
+
+
 def render_tool_event(event: dict[str, Any]) -> None:
     result = event.get("result")
-    st.markdown(f"**🔧 `{event.get('tool')}`**({format_args(event.get('args') or {})}) · {result_badge(result)}")
+    st.markdown(f"**`{event.get('tool')}`**({format_args(event.get('args') or {})}) · {result_badge(result)}")
     if isinstance(result, dict) and isinstance(result.get("markdown"), str):
         with st.container(border=True):
             st.markdown(result["markdown"])
@@ -202,18 +206,19 @@ def render_tool_event(event: dict[str, Any]) -> None:
             if item.get("source"):
                 line += f" · _{item['source']}_"
             st.markdown(line)
-    st.code(json_preview(result), language="json")
+    with st.popover("JSON kết quả", use_container_width=False):
+        st.code(json_preview(result), language="json")
 
 
 def render_turn(turn: dict[str, Any], *, is_last: bool) -> None:
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar=":material/person:"):
         st.markdown(turn["user"])
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant", avatar=":material/auto_awesome:"):
         rounds = turn.get("rounds") or []
         n_calls = sum(len(r.get("tool_calls") or []) for r in rounds)
         if n_calls:
-            label = f"Tool calls: {n_calls} lời gọi trong {len(rounds)} vòng"
-            with st.expander(label, expanded=is_last):
+            label = f"Đã nghiên cứu · {n_calls} tool · {len(rounds)} vòng"
+            with st.expander(label, expanded=False, icon=":material/radio_button_checked:"):
                 for rnd in rounds:
                     st.caption(f"Vòng {rnd['round']}")
                     if rnd.get("assistant_text"):
@@ -223,7 +228,7 @@ def render_turn(turn: dict[str, Any], *, is_last: bool) -> None:
                     for event in rnd.get("tool_results") or []:
                         render_tool_event(event)
         else:
-            st.caption("Không gọi tool")
+            st.caption("Trả lời trực tiếp, không gọi tool")
 
         status = turn.get("status")
         if status == "provider_error":
@@ -249,223 +254,349 @@ def render_turn(turn: dict[str, Any], *, is_last: bool) -> None:
                         st.rerun()
 
 
-def sidebar() -> dict[str, Any]:
-    with st.sidebar:
-        st.header("⚙️ Cấu hình")
-        provider = st.selectbox("Provider", PROVIDERS, index=0)
-        # <PROVIDER>_MODEL in .env overrides the code default (e.g. OPENROUTER_MODEL when
-        # OPENROUTER_BASE_URL points at another OpenAI-compatible host such as Groq).
-        default_model = os.getenv(f"{provider.upper()}_MODEL") or getattr(make_provider(provider), "default_model", "")
-        model = st.text_input("Model", value=default_model, help="Để trống để dùng model mặc định của provider.")
+# ---------------------------------------------------------------- config + sidebar
 
-        # Each version's prompt/tools snapshot lives in artifacts/versions/<v>/.
-        # "current" = the working files in artifacts/ (what TV1 is editing now).
-        versions = available_versions()
-        choices = [*versions, CURRENT]
-        default_index = len(versions) - 1 if versions else 0
-        chosen = st.selectbox(
-            "Version prompt/tools", choices, index=default_index,
-            help="Chọn version để chat thử và so sánh hành vi. Đổi xong bấm Cuộc trò chuyện mới.",
-        )
-        if chosen == CURRENT:
-            default_prompt, default_tools = ARTIFACTS_DIR / "system_prompt.md", ARTIFACTS_DIR / "tools.yaml"
-            default_label = "current"
-        else:
-            default_prompt, default_tools = version_paths(chosen)
-            default_label = chosen
-        version = st.text_input("Version label", value=default_label, help="Nhãn ghi vào transcript.")
-        with st.expander("Nâng cao"):
-            system_prompt = st.text_input("System prompt", value=str(default_prompt))
-            tools = st.text_input("Tools YAML", value=str(default_tools))
-            history_window = st.number_input("History window (cặp lượt)", 0, 20, 5)
-            max_tool_rounds = st.number_input("Max tool rounds", 1, 10, 4)
+def version_choices() -> list[str]:
+    return [*available_versions(), CURRENT]
 
-        config = {
-            "provider": provider,
-            "model": model.strip(),
-            "version": version.strip() or "ui",
-            "system_prompt": system_prompt,
-            "tools": tools,
-            "history_window": int(history_window),
-            "max_tool_rounds": int(max_tool_rounds),
-        }
 
-        if st.button("🆕 Cuộc trò chuyện mới", use_container_width=True):
-            new_session(config)
+def version_label(choice: str) -> str:
+    if choice == CURRENT:
+        return "current · artifacts/"
+    return f"{choice} · {version_note(choice)['name']}"
+
+
+def build_config() -> dict[str, Any]:
+    """Read settings from session state. The version is chosen next to the chat
+    box, stored in a plain key so it survives pages where that widget is hidden."""
+    choices = version_choices()
+    st.session_state.setdefault("version_choice", choices[-2] if len(choices) > 1 else CURRENT)
+    choice = st.session_state.version_choice
+    if choice not in choices:
+        choice = st.session_state.version_choice = choices[-1]
+    if choice == CURRENT:
+        prompt, tools, label = ARTIFACTS_DIR / "system_prompt.md", ARTIFACTS_DIR / "tools.yaml", "current"
+    else:
+        prompt, tools = version_paths(choice)
+        label = choice
+    provider = st.session_state.get("provider", PROVIDERS[0])
+    return {
+        "provider": provider,
+        "model": (st.session_state.get("model") or default_model(provider)).strip(),
+        "version": label,
+        "system_prompt": str(prompt),
+        "tools": str(tools),
+        "history_window": int(st.session_state.get("history_window", 5)),
+        "max_tool_rounds": int(st.session_state.get("max_tool_rounds", 4)),
+    }
+
+
+def default_model(provider: str) -> str:
+    # <PROVIDER>_MODEL in .env overrides the code default.
+    return os.getenv(f"{provider.upper()}_MODEL") or getattr(make_provider(provider), "default_model", "")
+
+
+def recent_threads(limit: int = 5) -> list[dict[str, str]]:
+    if not TRANSCRIPTS_DIR.is_dir():
+        return []
+    files = sorted(TRANSCRIPTS_DIR.glob("*.transcript.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+    current = st.session_state.get("transcript", {}).get("transcript_id")
+    out = []
+    for path in files[: limit * 2]:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        turns = data.get("turns") or []
+        if not turns:
+            continue
+        tid = data.get("transcript_id") or path.stem
+        when = "Now" if tid == current else datetime.fromtimestamp(path.stat().st_mtime).strftime("%b %d · %H:%M")
+        out.append({"id": tid, "title": str(turns[0].get("user") or "(trống)"),
+                    "when": f"{data.get('artifact_version', '').split('+')[0] or '?'} · {when}"})
+        if len(out) >= limit:
+            break
+    return out
+
+
+def nav_button(label: str, page: str, icon: str) -> None:
+    on = st.session_state.get("page", "chat") == page
+    with st.container(key=f"{'navon' if on else 'navoff'}_{page}"):
+        if st.button(label, key=f"nav_{page}", icon=icon, use_container_width=True):
+            st.session_state.page = page
             st.rerun()
 
-        if "config" in st.session_state and st.session_state.config != config:
-            st.warning("Cấu hình đã đổi. Bấm **Cuộc trò chuyện mới** để áp dụng.")
 
-        st.divider()
-        st.subheader("🔑 API key")
-        st.markdown(f"- {PROVIDER_KEY_ENV[provider] or provider}: {env_status(PROVIDER_KEY_ENV[provider])}")
-        for tool_name, env in TOOL_KEY_ENV.items():
-            st.markdown(f"- `{tool_name}`: {env_status(env)}")
+def sidebar(config: dict[str, Any]) -> None:
+    with st.sidebar:
+        html(ui.brand_html("Research", "Agent"))
+        st.write("")
+        if st.button("New research", key="new_research", icon=":material/add:", use_container_width=True):
+            new_session(config)
+            st.session_state.page = "chat"
+            st.rerun()
+        st.write("")
+        nav_button("Research chat", "chat", ":material/chat:")
+        nav_button("Version evals", "evals", ":material/science:")
+
+        html('<div class="side-label">RECENT</div>')
+        current = st.session_state.get("transcript", {}).get("transcript_id")
+        html(ui.recent_html(recent_threads(), current))
+
+        html('<div class="side-label">SETTINGS</div>')
+        with st.expander("Provider, model, key", icon=":material/tune:"):
+            st.selectbox("Provider", PROVIDERS, key="provider")
+            provider = st.session_state.get("provider", PROVIDERS[0])
+            st.text_input("Model", key="model", placeholder=default_model(provider),
+                          help="Để trống để dùng model mặc định của provider.")
+            st.number_input("History window (cặp lượt)", 0, 20, 5, key="history_window")
+            st.number_input("Max tool rounds", 1, 10, 4, key="max_tool_rounds")
+            st.markdown("**API key**")
+            st.markdown(f"- {PROVIDER_KEY_ENV[provider] or provider}: {env_status(PROVIDER_KEY_ENV[provider])}")
+            for tool_name, env in TOOL_KEY_ENV.items():
+                st.markdown(f"- `{tool_name}`: {env_status(env)}")
 
         if "artifact_version" in st.session_state:
-            st.divider()
-            st.subheader("🧾 Phiên hiện tại")
-            av = st.session_state.artifact_version
-            st.code(av.artifact_version, language=None)
-            st.caption(f"{len(st.session_state.openai_tools)} tool được khai báo trong tools.yaml")
-            with st.expander("📝 System prompt đang dùng"):
+            with st.expander("Phiên hiện tại", icon=":material/receipt_long:"):
+                st.code(st.session_state.artifact_version.artifact_version, language=None)
+                st.caption(f"{len(st.session_state.openai_tools)} tool được khai báo")
                 st.code(st.session_state.system_prompt_text, language="markdown")
-            with st.expander("🛠️ Tool đang khai báo"):
-                for tool in st.session_state.openai_tools:
-                    fn = tool["function"]
-                    st.markdown(f"**`{fn['name']}`**: {fn.get('description', '')}")
-            st.caption(f"Transcript: `{display_path(st.session_state.transcript_path)}`")
-            if st.session_state.transcript_path.exists():
-                st.download_button(
-                    "⬇️ Tải transcript JSON",
-                    st.session_state.transcript_path.read_bytes(),
-                    file_name=st.session_state.transcript_path.name,
-                    mime="application/json",
-                    use_container_width=True,
-                )
-    return config
+                if st.session_state.transcript_path.exists():
+                    st.download_button(
+                        "Tải transcript JSON",
+                        st.session_state.transcript_path.read_bytes(),
+                        file_name=st.session_state.transcript_path.name,
+                        mime="application/json",
+                        use_container_width=True,
+                    )
+        cfg = st.session_state.get("config", config)
+        choice = st.session_state.get("version_choice", "")
+        html(ui.status_html(cfg["version"], version_note(choice)["name"] if choice != CURRENT else "artifacts/"))
 
 
-def markdown_table(rows: list[dict[str, Any]]) -> str:
-    """Render rows as a markdown table (st.dataframe needs pandas, whose DLLs
-    Windows Smart App Control may block)."""
-    if not rows:
-        return ""
-    headers = list(rows[0])
+# ---------------------------------------------------------------- chat page
 
-    def cell(value: Any) -> str:
-        return str(value if value is not None else "").replace("|", "\\|").replace("\n", " ")
-
-    lines = ["| " + " | ".join(headers) + " |", "|" + "---|" * len(headers)]
-    lines += ["| " + " | ".join(cell(r.get(h)) for h in headers) + " |" for r in rows]
-    return "\n".join(lines)
+def on_version_change() -> None:
+    picked = st.session_state.get("version_widget")
+    if picked:  # segmented control returns None when the active button is clicked again
+        st.session_state.version_choice = picked
 
 
-def render_eval_tab(runs: dict) -> None:
-    st.subheader("📊 Kết quả eval theo version")
-    if not runs:
-        st.info("Chưa có run nào trong `runs/`. Chạy `python run_eval.py ...` trước.")
-        return
-
-    base = {v: r for (v, s), r in runs.items() if s == "base"}
-    if base:
-        st.markdown("**Bộ base (case_accuracy)**")
-        versions = sorted(base, key=lambda v: available_versions().index(v) if v in available_versions() else 99)
-        cols = st.columns(len(versions))
-        previous = None
-        for col, version in zip(cols, versions):
-            s = base[version]["summary"]
-            acc = s.get("case_accuracy") or 0
-            delta = None if previous is None else f"{(acc - previous) * 100:+.0f} điểm"
-            col.metric(version, f"{acc:.0%}", delta=delta,
-                       help=f"{s.get('passed_cases')}/{s.get('total_cases')} case pass")
-            previous = acc
-
-    rows = summary_rows(runs)
-    for row in rows:
-        for label in METRIC_LABELS.values():
-            value = row.get(label)
-            row[label] = "—" if value is None else f"{value:.0%}"
-        row["Run file"] = f"`{row['Run file']}`"
-    st.markdown(markdown_table(rows))
-
-    log = {row["version"]: row for row in load_version_log()}
-    if log:
-        st.markdown("**Mỗi version đổi gì (từ `version_log.csv`)**")
-        for version, row in log.items():
-            with st.expander(f"{version} · đổi `{row.get('changed_artifact')}` · "
-                             f"{row.get('metric_before') or '—'} → {row.get('metric_after')}"):
-                st.markdown(f"**Lý do:** {row.get('reason')}")
-                st.markdown(f"**Giả thuyết:** {row.get('hypothesis')}")
-                st.caption(f"`{row.get('artifact_version')}` · `{row.get('run_file')}`")
-
-    st.markdown("**Case pass/fail qua các version**")
-    suites = sorted({s for (_, s) in runs})
-    c1, c2 = st.columns([1, 2])
-    suite = c1.selectbox("Bộ eval", suites, index=suites.index("base") if "base" in suites else 0)
-    only_changed = c2.toggle("Chỉ hiện case từng fail", value=True)
-    matrix = case_matrix(runs, suite, only_changed=only_changed)
-    if matrix:
-        st.markdown(markdown_table(matrix))
-    else:
-        st.success("Mọi case đều pass ở mọi version đã chạy.")
-
-
-def render_compare_tab(runs: dict) -> None:
-    st.subheader("🧪 Câu hỏi để thấy khác biệt giữa các version")
+def render_version_switch() -> None:
+    """One button per version. Switching starts a new conversation (see main)."""
+    choices = version_choices()
+    current = st.session_state.version_choice
+    st.session_state.version_widget = current  # keep the active button in sync
+    label_col, buttons_col = st.columns([0.55, 5], vertical_alignment="center")
+    label_col.markdown('<div class="eyebrow">Version</div>', unsafe_allow_html=True)
+    with buttons_col, st.container(key="version_switch"):
+        st.segmented_control(
+            "Version", choices, key="version_widget", on_change=on_version_change,
+            format_func=lambda c: "current" if c == CURRENT else c,
+            label_visibility="collapsed",
+        )
+    note = version_note(current) if current != CURRENT else {"name": "artifacts/", "summary": "File đang sửa trong artifacts/."}
     st.markdown(
-        "Cách thử: chọn version ở thanh bên → **🆕 Cuộc trò chuyện mới** → bấm **Gửi** dưới câu hỏi → "
-        "mở tab **💬 Chat** xem agent gọi tool gì. Đổi sang version khác rồi hỏi lại đúng câu đó.\n\n"
-        "Bảng dưới mỗi câu là tool call **thật** của từng version lúc chạy eval (từ `runs/*.json`)."
+        f'<div class="watch"><b>{ui.esc(note["name"])}</b> · {ui.esc(note["summary"])} '
+        f'<span class="meta">· {ui.esc(st.session_state.artifact_version.artifact_version)}</span></div>',
+        unsafe_allow_html=True,
     )
-    current = st.session_state.get("config", {}).get("version", "")
-    st.caption(f"Phiên chat hiện tại đang dùng: **{current}**")
-    for i, item in enumerate(COMPARE_PROMPTS):
-        with st.container(border=True):
-            st.markdown(f"**`{item['case']}`**")
-            for j, turn in enumerate(item["turns"]):
-                c1, c2 = st.columns([5, 1])
-                prefix = f"Lượt {j + 1}: " if len(item["turns"]) > 1 else ""
-                c1.markdown(f"{prefix}> {turn}")
-                if c2.button("Gửi", key=f"cmp_{i}_{j}", width="stretch"):
-                    st.session_state.pending = turn
-                    st.rerun()
-            st.markdown(f"👀 **Để ý:** {item['watch']}")
-            calls = case_calls(runs, item["case"])
-            if calls:
-                st.markdown(markdown_table(calls))
 
 
-def render_chat_tab() -> None:
-    st.caption(
-        "Agent tự chọn tool (tìm tin, đọc tweet, đọc URL, tìm paper, tra policy...), "
-        "gọi tool thật, rồi trả lời. Mở mục **Tool calls** để xem agent đã gọi gì."
-    )
-    turns = st.session_state.turns
-    if not turns:
-        st.markdown("**Thử nhanh một câu hỏi mẫu:**")
-        cols = st.columns(2)
-        for i, question in enumerate(SAMPLE_QUESTIONS):
-            if cols[i % 2].button(question, key=f"sample_{i}", use_container_width=True):
+def render_try_asking(questions: list[str], key: str) -> None:
+    html('<div class="eyebrow" style="margin:22px 0 10px">Try asking</div>')
+    with st.container(key=f"try_{key}"):
+        for question in questions:
+            i = SAMPLE_QUESTIONS.index(question)
+            if st.button(question, key=f"sample_{i}"):
                 st.session_state.pending = question
                 st.rerun()
 
-    for i, turn in enumerate(turns):
-        render_turn(turn, is_last=i == len(turns) - 1)
 
+def render_chat_page() -> None:
+    turns = st.session_state.turns
+    sources = ui.collect_sources(turns)
+    title = turns[0]["user"] if turns else "Nghiên cứu mới"
+    html(ui.thread_head_html(title if len(title) <= 70 else title[:67] + "…", len(turns), len(sources)))
+
+    left, right = st.columns([2.2, 1], gap="large")
+    with left:
+        render_version_switch()
+        if not turns:
+            st.markdown(
+                "Agent tự chọn tool (tìm tin, đọc tweet, đọc URL, tìm paper, tra Hacker News, policy…), "
+                "gọi tool thật rồi trả lời. Mở dòng **Đã nghiên cứu** dưới mỗi câu trả lời để xem agent đã gọi gì."
+            )
+            render_try_asking(SAMPLE_QUESTIONS, "all")
+        for i, turn in enumerate(turns):
+            render_turn(turn, is_last=i == len(turns) - 1)
+        live = st.container()
+        if turns and turns[-1].get("status") != "waiting_for_user":
+            asked = {t["user"] for t in turns}
+            render_try_asking([q for q in SAMPLE_QUESTIONS if q not in asked][:3], "more")
+
+    with right:
+        html(ui.sources_html(sources))
+
+    typed = st.chat_input("Hỏi một câu research…")
+    user_text = typed or st.session_state.pop("pending", None)
+    if user_text:
+        with live:
+            with st.chat_message("user", avatar=":material/person:"):
+                st.markdown(user_text)
+            with st.chat_message("assistant", avatar=":material/auto_awesome:"):
+                with st.spinner("Agent đang nghiên cứu và gọi tool…"):
+                    run_turn(user_text)
+        st.rerun()
+
+
+# ---------------------------------------------------------------- evals page
+
+TREND_METRICS = {
+    "Case accuracy": ("base", "case_accuracy"),
+    "Routing": ("base", "tool_routing_accuracy"),
+    "Args": ("base", "argument_accuracy"),
+    "Multi-turn": ("base", "multiturn_accuracy"),
+    "Group suite": ("group", "case_accuracy"),
+}
+
+
+def _metric(runs: dict, version: str, suite: str, key: str) -> float | None:
+    run = runs.get((version, suite))
+    return None if run is None else run["summary"].get(key)
+
+
+def _passed(runs: dict, version: str) -> tuple[int, int]:
+    passed = total = 0
+    for suite in ("base", "group"):
+        run = runs.get((version, suite))
+        if run:
+            passed += run["summary"].get("passed_cases", 0)
+            total += run["summary"].get("total_cases", 0)
+    return passed, total
+
+
+def render_evals_page() -> None:
+    runs = load_runs()
+    versions = sorted({v for (v, _s) in runs}, key=lambda v: (len(v), v))
+    if not versions:
+        st.info("Chưa có run nào trong `runs/`. Chạy `python run_eval.py ...` trước.")
+        return
+    latest = versions[-1]
+    latest_run = runs.get((latest, "base")) or next(r for (v, _s), r in runs.items() if v == latest)
+    n_cases = sum(_passed(runs, latest)[1:])
+    when = str(latest_run.get("generated_at", ""))[:10]
+
+    head, pick = st.columns([2.3, 1.5], vertical_alignment="bottom")
+    with head:
+        html(ui.hero_html(n_cases, latest_run.get("model") or "", when, len(versions)))
+    with pick:
+        a, b = st.columns(2)
+        start = a.selectbox("Từ", versions, index=0, format_func=version_label, key="cmp_from")
+        end = b.selectbox("Đến", versions, index=len(versions) - 1, format_func=version_label, key="cmp_to")
+
+    timeline = []
+    for v in versions:
+        run = runs.get((v, "base")) or {}
+        stamp = str(run.get("generated_at", ""))
+        timeline.append({"version": v, "name": version_note(v)["name"], "when": stamp[11:16]})
+    html(ui.timeline_html(timeline, start, end))
+
+    p_new, t_new = _passed(runs, end)
+    p_old, t_old = _passed(runs, start)
+    cards = [
+        {"label": label, "new": _metric(runs, end, suite, key), "old": _metric(runs, start, suite, key)}
+        for label, (suite, key) in TREND_METRICS.items()
+    ]
+    cards.append({"label": "Case pass (base + group)",
+                  "new": p_new / t_new if t_new else None, "old": p_old / t_old if t_old else None,
+                  "display": f"{p_new}/{t_new}", "was": f"{p_old}/{t_old}"})
+    html(ui.metric_cards_html(cards))
+    st.write("")
+
+    trend_col, change_col = st.columns([1.5, 1], gap="large")
+    with trend_col:
+        with st.container(border=True, key="trend_panel"):
+            html('<h3 style="font-size:30px;margin:0">Trend across versions</h3>'
+                 '<div class="eyebrow" style="margin:2px 0 8px">↑ higher is better · trục y từ 50%</div>')
+            choice = st.segmented_control("Metric", list(TREND_METRICS), default="Case accuracy",
+                                          key="trend_metric", label_visibility="collapsed") or "Case accuracy"
+            suite, key = TREND_METRICS[choice]
+            points = [(v, _metric(runs, v, suite, key)) for v in versions]
+            html(ui.trend_svg(points, start=start, end=end))
+    with change_col:
+        log = {row["version"]: row for row in load_version_log()}
+        lo, hi = sorted((versions.index(start), versions.index(end)))
+        releases = []
+        for i in range(lo + 1, hi + 1):
+            v = versions[i]
+            note = version_note(v)
+            releases.append({
+                "version": v, "name": note["name"], "summary": note["summary"], "chips": note["chips"],
+                "before": _metric(runs, versions[i - 1], "base", "case_accuracy"),
+                "after": _metric(runs, v, "base", "case_accuracy"),
+                "hypothesis": (log.get(v) or {}).get("hypothesis", ""),
+            })
+        html(ui.releases_html(releases, versions[lo], versions[hi]))
+
+    st.write("")
+    with st.container(border=True, key="matrix_panel"):
+        html('<h3 style="font-size:30px;margin:0 0 8px">Case pass/fail qua các version</h3>')
+        suites = sorted({s for (_, s) in runs})
+        c1, c2 = st.columns([1, 2])
+        suite = c1.selectbox("Bộ eval", suites, index=suites.index("base") if "base" in suites else 0)
+        only_changed = c2.toggle("Chỉ hiện case từng fail", value=True)
+        html(ui.matrix_html(case_matrix(runs, suite, only_changed=only_changed)))
+
+    st.write("")
+    html('<h3 style="font-size:30px;margin:8px 0 2px">Thử để thấy khác biệt</h3>'
+         '<div class="watch">Chọn version cạnh ô chat, bấm <b>Gửi</b>, rồi đổi version và hỏi lại đúng câu đó. '
+         'Bảng dưới mỗi câu là tool call thật của từng version lúc chạy eval.</div>')
+    cols = st.columns(2, gap="medium")
+    for i, item in enumerate(COMPARE_PROMPTS):
+        with cols[i % 2], st.container(border=True):
+            html(f'<div class="eyebrow">{ui.esc(item["case"])}</div>')
+            for j, turn in enumerate(item["turns"]):
+                q, b = st.columns([5, 1], vertical_alignment="center")
+                prefix = f"Lượt {j + 1}: " if len(item["turns"]) > 1 else ""
+                q.markdown(f'<div class="prompt-q">{prefix}{ui.esc(turn)}</div>', unsafe_allow_html=True)
+                if b.button("Gửi", key=f"cmp_{i}_{j}", use_container_width=True):
+                    st.session_state.pending = turn
+                    st.session_state.page = "chat"
+                    st.rerun()
+            html(f'<div class="watch">{ui.esc(item["watch"]).replace("`", "")}</div>')
+            html(ui.calls_html(case_calls(runs, item["case"])))
+
+
+# ---------------------------------------------------------------- main
 
 def main() -> None:
     st.set_page_config(page_title="Research Agent", page_icon="🔎", layout="wide")
-    config = sidebar()
+    html(ui.CSS)
+    # ?page=evals opens the eval dashboard directly (handy for demo links).
+    st.session_state.setdefault("page", "evals" if st.query_params.get("page") == "evals" else "chat")
+    config = build_config()
     if "config" not in st.session_state:
         try:
             new_session(config)
         except Exception as exc:
             st.error(f"Không đọc được prompt/tools: {type(exc).__name__}: {exc}")
             st.stop()
+    elif st.session_state.config != config:
+        had_turns = bool(st.session_state.turns)
+        try:
+            new_session(config)
+        except Exception as exc:
+            st.error(f"Không đọc được prompt/tools: {type(exc).__name__}: {exc}")
+            st.stop()
+        if had_turns:
+            st.toast(f"Đã chuyển sang {config['version']}: bắt đầu cuộc trò chuyện mới.")
 
-    st.title("🔎 Research Agent")
-    st.caption(f"Đang chat với version **{st.session_state.config['version']}** · "
-               f"`{st.session_state.artifact_version.artifact_version}`")
-
-    runs = load_runs()
-    tab_chat, tab_eval, tab_compare = st.tabs(["💬 Chat", "📊 Eval theo version", "🧪 So sánh version"])
-    with tab_eval:
-        render_eval_tab(runs)
-    with tab_compare:
-        render_compare_tab(runs)
-    with tab_chat:
-        render_chat_tab()
-        typed = st.chat_input("Hỏi agent...")
-        user_text = typed or st.session_state.pop("pending", None)
-        if user_text:
-            with st.chat_message("user"):
-                st.markdown(user_text)
-            with st.chat_message("assistant"):
-                with st.spinner("Agent đang suy nghĩ và gọi tool..."):
-                    run_turn(user_text)
-            st.rerun()
+    sidebar(config)
+    if st.session_state.page == "evals":
+        render_evals_page()
+    else:
+        render_chat_page()
 
 
 main()

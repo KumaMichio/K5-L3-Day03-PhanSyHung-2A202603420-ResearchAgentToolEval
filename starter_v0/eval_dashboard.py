@@ -25,6 +25,31 @@ METRIC_LABELS = {
     "multiturn_accuracy": "Multi-turn",
 }
 
+# Short label, one-line summary and chips per version for the UI timeline and
+# "What changed" panel. The full reason/hypothesis comes from version_log.csv.
+VERSION_NOTES: dict[str, dict[str, Any]] = {
+    "v0": {"name": "Baseline", "summary": "Prompt và tools của starter, chưa sửa gì.",
+           "chips": ["starter prompt", "starter tools.yaml"]},
+    "v1": {"name": "Prompt rules", "summary": "Viết lại system prompt: hỏi lại thay vì đoán, xác nhận trước khi gửi, giữ phạm vi.",
+           "chips": ["system_prompt.md", "clarify thay vì đoán", "send cần yes_no", "ngoài phạm vi: không tool"]},
+    "v2": {"name": "Tool docs", "summary": "Viết lại mô tả mọi tool và quy ước args; khai báo 4 tool mới.",
+           "chips": ["tools.yaml", "topic=news", "query chỉ là chủ đề", "+ wiki · github_repo · hn_search · citations"]},
+    "v3": {"name": "Follow the user", "summary": "Làm theo câu chữ của user: đăng/gửi luôn hỏi yes/no, bỏ nguồn thì không quay lại.",
+           "chips": ["system_prompt.md", "đăng/gửi → yes_no", "bỏ Twitter là bỏ"]},
+    "v4": {"name": "Scope guard", "summary": "Từ chối nhất quán mọi câu ngoài phạm vi bằng một câu mẫu.",
+           "chips": ["system_prompt.md", "kể cả 2+2, 1/0", "1 câu trả lời mẫu"]},
+    "v5": {"name": "HN sort scope", "summary": "sort=recent chỉ khi hỏi bài HN mới nhất; sửa bug search_by_date.",
+           "chips": ["tools.yaml", "hn_search.sort", "+ fix tool code"]},
+}
+
+
+def version_note(version: str) -> dict[str, Any]:
+    note = VERSION_NOTES.get(version)
+    if note:
+        return note
+    return {"name": version, "summary": "", "chips": []}
+
+
 # Prompts that behave differently across versions. `case` links to the eval case
 # whose real tool calls per version are shown next to the prompt.
 COMPARE_PROMPTS: list[dict[str, Any]] = [
