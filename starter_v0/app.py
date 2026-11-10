@@ -53,6 +53,22 @@ for _stream in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
+def load_streamlit_secrets() -> None:
+    """On Streamlit Community Cloud the API keys live in st.secrets (App settings ->
+    Secrets), not in .env. Copy root-level string secrets into os.environ so the
+    providers and tools, which read os.getenv, find them. Locally there is usually
+    no secrets.toml; that is fine and .env is used instead."""
+    try:
+        items = dict(st.secrets)
+    except Exception:  # no secrets file / not running under Streamlit
+        return
+    for key, value in items.items():
+        if isinstance(value, (str, int, float)) and str(value).strip() and not os.getenv(key):
+            os.environ[key] = str(value).strip()
+
+
+load_streamlit_secrets()
+
 CURRENT = "current (artifacts/)"
 ROOT = Path(__file__).parent
 ARTIFACTS_DIR = ROOT / "artifacts"
